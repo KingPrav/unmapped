@@ -1,0 +1,34 @@
+{
+  "dimensions": {
+    "fault_diagnosis": {
+      "label": "Fault Diagnosis & Problem Solving",
+      "description": "Identifying problems, diagnosing faults, and evaluating situations systematically with incomplete information",
+      "keywords": ["test", "diagnose", "inspect", "evaluate", "troubleshoot", "identify", "analyze", "examine", "detect", "assess", "determine", "investigate", "verify", "measure", "check fault", "find cause", "locate problem"],
+      "employer_signal": "Can identify root causes without supervision. Doesn't guess — thinks systematically."
+    },
+    "communication": {
+      "label": "Communication & Customer Handling",
+      "description": "Conveying technical or complex information clearly, managing customer expectations, and working effectively with others",
+      "keywords": ["explain", "inform", "communicate", "advise", "consult", "instruct", "report", "discuss", "present", "negotiate", "customer", "client", "respond", "clarify", "translate", "liaise"],
+      "employer_signal": "Handles clients independently. Can explain problems and set expectations without escalating."
+    },
+    "resource_judgment": {
+      "label": "Resource & Cost Judgment",
+      "description": "Making decisions about costs, materials, time, and resources under real constraints",
+      "keywords": ["budget", "cost", "purchase", "order", "estimate", "allocate", "procure", "price", "supply", "source", "afford", "calculate", "spend", "acquire", "negotiate price", "value for money"],
+      "employer_signal": "Makes sound decisions under resource constraints. Doesn't waste materials or overbuy."
+    },
+    "process_quality": {
+      "label": "Process & Quality Control",
+      "description": "Following or designing repeatable processes, catching errors before they compound, and maintaining consistent output quality",
+      "keywords": ["monitor", "quality", "procedure", "standard", "document", "record", "maintain", "follow", "ensure", "inspect output", "check work", "complete", "finish", "deliver", "consistent", "defect"],
+      "employer_signal": "Work is consistent. Catches their own errors. Doesn't need constant checking."
+    },
+    "operational_organization": {
+      "label": "Operational Organization",
+      "description": "Managing multiple tasks, jobs, or people simultaneously without a formal system — tracking what needs to happen and making sure it does",
+      "keywords": ["schedule", "coordinate", "manage", "prioritize", "organize", "plan", "track", "supervise", "assign", "delegate", "multiple", "sequence", "balance", "juggle", "workflow", "queue"],
+      "employer_signal": "Can handle volume without dropping things. Self-manages under pressure."
+    }
+  }
+}

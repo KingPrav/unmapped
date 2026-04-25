@@ -1,0 +1,169 @@
+{
+  "meta": {
+    "source": "O*NET 28.0 Detailed Work Activities via ISCO-08 crosswalk",
+    "note": "Seed data for demo mode. Real data loaded from data/processed/ when available.",
+    "occupations_count": 10
+  },
+  "occupations": {
+    "7421": {
+      "isco_code": "7421",
+      "isco_group": 7,
+      "title": "Electronics mechanics and servicers",
+      "onet_code": "49-2022.00",
+      "onet_title": "Telecommunications Equipment Installers and Repairers",
+      "common_names": ["phone repair", "electronics repair", "mobile technician", "device fixer", "phone fix"],
+      "dwas": [
+        {"id": "4.A.1.b.2", "text": "Test electronic equipment to ensure proper functioning", "dimension": "fault_diagnosis"},
+        {"id": "4.A.1.b.1", "text": "Inspect equipment to locate or identify electrical or mechanical problems", "dimension": "fault_diagnosis"},
+        {"id": "4.A.4.a.4", "text": "Explain technical information or instructions to customers", "dimension": "communication"},
+        {"id": "4.A.3.b.4", "text": "Order materials, supplies, or equipment for repairs", "dimension": "resource_judgment"},
+        {"id": "4.A.2.b.2", "text": "Document operational or maintenance activities", "dimension": "process_quality"},
+        {"id": "4.A.4.b.5", "text": "Manage multiple repair jobs to meet customer timelines", "dimension": "operational_organization"}
+      ]
+    },
+    "5211": {
+      "isco_code": "5211",
+      "isco_group": 5,
+      "title": "Stall and market salespersons",
+      "onet_code": "41-2031.00",
+      "onet_title": "Retail Salespersons",
+      "common_names": ["market seller", "trader", "vendor", "market stall", "sell at market", "hawker", "market woman", "market man"],
+      "dwas": [
+        {"id": "4.A.4.a.1", "text": "Greet customers and determine their needs and preferences", "dimension": "communication"},
+        {"id": "4.A.3.b.1", "text": "Estimate costs or prices of goods for customers", "dimension": "resource_judgment"},
+        {"id": "4.A.1.b.4", "text": "Assess stock levels and identify when restocking is needed", "dimension": "fault_diagnosis"},
+        {"id": "4.A.2.a.1", "text": "Record sales transactions and maintain daily accounts", "dimension": "process_quality"},
+        {"id": "4.A.4.b.3", "text": "Manage goods across multiple product lines or stalls", "dimension": "operational_organization"},
+        {"id": "4.A.3.b.2", "text": "Negotiate prices with suppliers to control costs", "dimension": "resource_judgment"}
+      ]
+    },
+    "7531": {
+      "isco_code": "7531",
+      "isco_group": 7,
+      "title": "Tailors, dressmakers, furriers and hatters",
+      "onet_code": "51-6052.00",
+      "onet_title": "Tailors, Dressmakers, and Custom Sewers",
+      "common_names": ["tailor", "seamstress", "dressmaker", "sew clothes", "fashion", "clothing maker", "alterations"],
+      "dwas": [
+        {"id": "4.A.1.b.3", "text": "Inspect garments or fabric for defects, stains, or damage", "dimension": "fault_diagnosis"},
+        {"id": "4.A.4.a.2", "text": "Consult with customers to understand garment specifications and preferences", "dimension": "communication"},
+        {"id": "4.A.3.b.3", "text": "Estimate fabric and material requirements and costs for orders", "dimension": "resource_judgment"},
+        {"id": "4.A.2.b.1", "text": "Follow pattern instructions and standard measurements to ensure quality", "dimension": "process_quality"},
+        {"id": "4.A.4.b.1", "text": "Schedule and prioritize multiple customer orders by deadline", "dimension": "operational_organization"},
+        {"id": "4.A.1.a.1", "text": "Evaluate finished garments against customer specifications", "dimension": "fault_diagnosis"}
+      ]
+    },
+    "7112": {
+      "isco_code": "7112",
+      "isco_group": 7,
+      "title": "Bricklayers and related workers",
+      "onet_code": "47-2021.00",
+      "onet_title": "Brickmasons, Blockmasons, Stonemasons",
+      "common_names": ["mason", "bricklayer", "builder", "construction", "plasterer", "block layer", "building worker"],
+      "dwas": [
+        {"id": "4.A.1.b.5", "text": "Examine structures or sites to assess condition and identify problems", "dimension": "fault_diagnosis"},
+        {"id": "4.A.3.b.5", "text": "Calculate material quantities needed and estimate costs for a job", "dimension": "resource_judgment"},
+        {"id": "4.A.4.a.3", "text": "Communicate progress and issues to clients or site supervisors", "dimension": "communication"},
+        {"id": "4.A.2.b.3", "text": "Follow building specifications and standards during construction", "dimension": "process_quality"},
+        {"id": "4.A.4.b.2", "text": "Coordinate tasks across workers on a construction site", "dimension": "operational_organization"},
+        {"id": "4.A.1.a.2", "text": "Check completed work for structural integrity and alignment", "dimension": "fault_diagnosis"}
+      ]
+    },
+    "5141": {
+      "isco_code": "5141",
+      "isco_group": 5,
+      "title": "Hairdressers, barbers and related workers",
+      "onet_code": "39-5011.00",
+      "onet_title": "Barbers",
+      "common_names": ["barber", "hairdresser", "hair stylist", "salon", "cut hair", "braider", "hair"],
+      "dwas": [
+        {"id": "4.A.4.a.5", "text": "Consult with clients to understand desired hair style or treatment", "dimension": "communication"},
+        {"id": "4.A.1.b.6", "text": "Assess hair and scalp condition to determine appropriate treatment", "dimension": "fault_diagnosis"},
+        {"id": "4.A.3.b.6", "text": "Manage product inventory and control supply costs", "dimension": "resource_judgment"},
+        {"id": "4.A.2.b.4", "text": "Follow hygiene and sanitation procedures consistently between clients", "dimension": "process_quality"},
+        {"id": "4.A.4.b.4", "text": "Manage client appointments and walk-ins to minimize wait times", "dimension": "operational_organization"},
+        {"id": "4.A.1.a.3", "text": "Evaluate completed style against client expectations", "dimension": "fault_diagnosis"}
+      ]
+    },
+    "7411": {
+      "isco_code": "7411",
+      "isco_group": 7,
+      "title": "Building electricians",
+      "onet_code": "47-2111.00",
+      "onet_title": "Electricians",
+      "common_names": ["electrician", "electrical", "wiring", "electrical work", "install wiring", "power"],
+      "dwas": [
+        {"id": "4.A.1.b.7", "text": "Test electrical systems and circuits to identify faults", "dimension": "fault_diagnosis"},
+        {"id": "4.A.4.a.6", "text": "Explain electrical problems and repair options to clients in plain terms", "dimension": "communication"},
+        {"id": "4.A.3.b.7", "text": "Estimate materials and labor costs before starting a job", "dimension": "resource_judgment"},
+        {"id": "4.A.2.b.5", "text": "Follow wiring standards and safety procedures on every installation", "dimension": "process_quality"},
+        {"id": "4.A.4.b.6", "text": "Coordinate multiple electrical jobs across different sites", "dimension": "operational_organization"},
+        {"id": "4.A.1.a.4", "text": "Inspect completed electrical work against safety specifications", "dimension": "fault_diagnosis"}
+      ]
+    },
+    "8322": {
+      "isco_code": "8322",
+      "isco_group": 8,
+      "title": "Motorcycle drivers",
+      "onet_code": "53-3058.00",
+      "onet_title": "Passenger Vehicle Drivers",
+      "common_names": ["boda boda", "okada", "motorcycle taxi", "motorbike rider", "dispatch rider", "courier"],
+      "dwas": [
+        {"id": "4.A.1.b.8", "text": "Inspect motorcycle for mechanical issues before trips", "dimension": "fault_diagnosis"},
+        {"id": "4.A.4.a.7", "text": "Communicate route, timing and fare clearly to passengers", "dimension": "communication"},
+        {"id": "4.A.3.b.8", "text": "Manage fuel and maintenance costs against daily earnings", "dimension": "resource_judgment"},
+        {"id": "4.A.2.b.6", "text": "Follow traffic rules and safety procedures consistently", "dimension": "process_quality"},
+        {"id": "4.A.4.b.7", "text": "Manage multiple delivery or passenger requests efficiently", "dimension": "operational_organization"},
+        {"id": "4.A.1.a.5", "text": "Assess route conditions and adjust for safety or efficiency", "dimension": "fault_diagnosis"}
+      ]
+    },
+    "6111": {
+      "isco_code": "6111",
+      "isco_group": 6,
+      "title": "Field crop and vegetable growers",
+      "onet_code": "45-2092.00",
+      "onet_title": "Farmworkers and Laborers, Crop",
+      "common_names": ["farmer", "grow crops", "agriculture", "farming", "cultivate", "grow food", "gardener", "crop farmer"],
+      "dwas": [
+        {"id": "4.A.1.b.9", "text": "Identify signs of plant disease, pest infestation, or nutrient deficiency", "dimension": "fault_diagnosis"},
+        {"id": "4.A.4.a.8", "text": "Communicate harvest yields and quality to buyers or aggregators", "dimension": "communication"},
+        {"id": "4.A.3.b.9", "text": "Estimate seed, fertilizer, and input costs against expected yield", "dimension": "resource_judgment"},
+        {"id": "4.A.2.b.7", "text": "Follow planting, irrigation, and harvesting schedules consistently", "dimension": "process_quality"},
+        {"id": "4.A.4.b.8", "text": "Coordinate labor and tasks across the farming season", "dimension": "operational_organization"},
+        {"id": "4.A.1.a.6", "text": "Evaluate crop health and yield quality before harvest", "dimension": "fault_diagnosis"}
+      ]
+    },
+    "7422": {
+      "isco_code": "7422",
+      "isco_group": 7,
+      "title": "Cabinetmakers and related workers",
+      "onet_code": "51-7011.00",
+      "onet_title": "Cabinetmakers and Bench Carpenters",
+      "common_names": ["carpenter", "joiner", "furniture maker", "woodwork", "cabinet", "wood"],
+      "dwas": [
+        {"id": "4.A.1.b.10", "text": "Inspect wood or materials for defects that could affect the finished piece", "dimension": "fault_diagnosis"},
+        {"id": "4.A.4.a.9", "text": "Discuss design specifications and dimensions with clients", "dimension": "communication"},
+        {"id": "4.A.3.b.10", "text": "Estimate wood quantities and costs for custom orders", "dimension": "resource_judgment"},
+        {"id": "4.A.2.b.8", "text": "Follow joinery measurements and finishing standards throughout production", "dimension": "process_quality"},
+        {"id": "4.A.4.b.9", "text": "Manage multiple furniture orders at different stages simultaneously", "dimension": "operational_organization"},
+        {"id": "4.A.1.a.7", "text": "Evaluate finished pieces for structural integrity and finish quality", "dimension": "fault_diagnosis"}
+      ]
+    },
+    "5131": {
+      "isco_code": "5131",
+      "isco_group": 5,
+      "title": "Waiters and related workers",
+      "onet_code": "35-3031.00",
+      "onet_title": "Waiters and Waitresses",
+      "common_names": ["cook", "food seller", "chop bar", "street food", "food vendor", "caterer", "restaurant", "canteen"],
+      "dwas": [
+        {"id": "4.A.1.b.11", "text": "Identify when food quality or freshness does not meet standard", "dimension": "fault_diagnosis"},
+        {"id": "4.A.4.a.10", "text": "Take and confirm customer orders accurately and courteously", "dimension": "communication"},
+        {"id": "4.A.3.b.11", "text": "Estimate daily ingredient quantities needed to minimize waste and cost", "dimension": "resource_judgment"},
+        {"id": "4.A.2.b.9", "text": "Follow food preparation, hygiene, and service standards consistently", "dimension": "process_quality"},
+        {"id": "4.A.4.b.10", "text": "Manage multiple customer orders simultaneously during peak hours", "dimension": "operational_organization"},
+        {"id": "4.A.1.a.8", "text": "Assess taste, presentation, and temperature before serving food", "dimension": "fault_diagnosis"}
+      ]
+    }
+  }
+}

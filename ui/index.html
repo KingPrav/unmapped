@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UNMAPPED — Skills Visibility</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo { font-size: 20px; font-weight: 800; letter-spacing: 3px; color: #6366f1; }
+    .logo span { color: #94a3b8; font-weight: 400; font-size: 13px; letter-spacing: 1px; margin-left: 12px; }
+
+    .region-selector select {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* ── Screens ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── Start screen ── */
+    .hero {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: #f1f5f9;
+      margin-bottom: 12px;
+    }
+    .hero p {
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .amara-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .amara-card .name { color: #6366f1; font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+    .amara-card p { color: #94a3b8; font-size: 14px; line-height: 1.6; }
+
+    .input-group { margin-bottom: 16px; }
+    .input-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 8px; }
+    .input-group input {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f1f5f9;
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-group input:focus { border-color: #6366f1; }
+    .input-group input::placeholder { color: #475569; }
+
+    .btn {
+      width: 100%;
+      background: #6366f1;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #4f46e5; }
+    .btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
+
+    /* ── Occupation confirm ── */
+    .confirm-card {
+      background: #1e293b;
+      border: 1px solid #6366f1;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .confirm-card .isco { font-size: 11px; color: #6366f1; font-weight: 700; letter-spacing: 1px; margin-bottom: 6px; }
+    .confirm-card h2 { font-size: 20px; color: #f1f5f9; margin-bottom: 8px; }
+    .confirm-card .meta { font-size: 13px; color: #64748b; }
+    .confidence-bar { height: 4px; background: #334155; border-radius: 2px; margin-top: 12px; }
+    .confidence-fill { height: 4px; background: #6366f1; border-radius: 2px; }
+
+    .btn-row { display: flex; gap: 12px; }
+    .btn-secondary {
+      flex: 1;
+      background: transparent;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn-primary { flex: 2; }
+
+    /* ── Assessment screen ── */
+    .progress-bar-wrap { margin-bottom: 32px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: #64748b; margin-bottom: 8px; }
+    .progress-bar { height: 4px; background: #1e293b; border-radius: 2px; }
+    .progress-fill { height: 4px; background: #6366f1; border-radius: 2px; transition: width 0.4s ease; }
+
+    .dimension-tag {
+      display: inline-block;
+      background: #1e293b;
+      border: 1px solid #6366f1;
+      color: #a5b4fc;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+
+    .tier-badge {
+      display: inline-block;
+      background: #312e81;
+      color: #c7d2fe;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+
+    .challenge-box {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #e2e8f0;
+    }
+
+    textarea {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f1f5f9;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      min-height: 120px;
+      outline: none;
+      font-family: inherit;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    textarea:focus { border-color: #6366f1; }
+
+    /* ── Evaluation feedback ── */
+    .eval-card {
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .eval-card.passed { background: #052e16; border: 1px solid #166534; }
+    .eval-card.failed { background: #1c1917; border: 1px solid #44403c; }
+    .eval-score { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+    .eval-score.passed { color: #4ade80; }
+    .eval-score.failed { color: #f97316; }
+    .eval-feedback { color: #94a3b8; line-height: 1.5; }
+
+    /* ── Profile screen ── */
+    .profile-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .profile-header h2 { font-size: 24px; font-weight: 800; color: #f1f5f9; margin-bottom: 8px; }
+    .profile-header p { color: #64748b; font-size: 14px; }
+
+    .overall-score {
+      background: #1e293b;
+      border: 1px solid #6366f1;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .overall-score .score-num { font-size: 48px; font-weight: 900; color: #6366f1; }
+    .overall-score .score-label { font-size: 13px; color: #64748b; }
+
+    .profile-text {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 24px;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #cbd5e1;
+      margin-bottom: 24px;
+      white-space: pre-wrap;
+    }
+
+    .dimension-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .dimension-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .dimension-card .dim-label { font-size: 11px; color: #6366f1; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .dimension-card .dim-tier { font-size: 16px; font-weight: 800; color: #f1f5f9; margin-bottom: 4px; }
+    .dimension-card .dim-signal { font-size: 11px; color: #64748b; line-height: 1.4; }
+
+    .data-sources {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 12px;
+      color: #475569;
+      margin-bottom: 24px;
+    }
+    .data-sources strong { color: #64748b; }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #6366f1;
+    }
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #1e293b;
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading p { color: #64748b; font-size: 14px; }
+
+    .error-msg { color: #f87171; font-size: 13px; margin-top: 8px; text-align: center; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">UNMAPPED <span>Skills Visibility Infrastructure</span></div>
+  <div class="region-selector">
+    <select id="regionSelect">
+      <option value="ghana_urban">Ghana — Urban Informal</option>
+      <option value="kenya_mixed">Kenya — Mixed Economy</option>
+    </select>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ── SCREEN: Start ── -->
+  <div id="screen-start" class="screen active">
+    <div class="hero">
+      <h1>What do you do?</h1>
+      <p>Tell us in your own words. No certificates needed — just describe your work.</p>
+    </div>
+
+    <div class="amara-card">
+      <div class="name">Meet Amara</div>
+      <p>She's 22, runs a phone repair business, speaks 3 languages, and taught herself coding from YouTube. By any measure, she has skills. But to the formal economy — she doesn't exist. UNMAPPED changes that.</p>
+    </div>
+
+    <div class="input-group">
+      <label>Describe your work</label>
+      <input type="text" id="descInput" placeholder="e.g. I fix phones, I sell at the market, I cut hair..." />
+    </div>
+    <div id="startError" class="error-msg" style="display:none"></div>
+    <button class="btn" id="startBtn" onclick="startAssessment()">Start Skills Assessment →</button>
+  </div>
+
+  <!-- ── SCREEN: Confirm Occupation ── -->
+  <div id="screen-confirm" class="screen">
+    <div class="confirm-card">
+      <div class="isco">ISCO-08 · O*NET Classification</div>
+      <h2 id="confirmTitle"></h2>
+      <div class="meta" id="confirmMeta"></div>
+      <div class="confidence-bar"><div class="confidence-fill" id="confidenceFill"></div></div>
+    </div>
+    <p style="color:#64748b; font-size:13px; margin-bottom:20px;">We've matched your work to a standard occupation code used by employers and labor agencies globally. Does this look right?</p>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goBack()">← Try again</button>
+      <button class="btn btn-primary" onclick="beginChallenges()">Yes, begin assessment →</button>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: Assessment ── -->
+  <div id="screen-assess" class="screen">
+    <div class="progress-bar-wrap">
+      <div class="progress-label">
+        <span id="progressText">Question 1 of 5</span>
+        <span id="tierText">Tier 1 — Entry</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+
+    <div id="evalFeedback" style="display:none"></div>
+
+    <div class="dimension-tag" id="dimensionTag"></div>
+    <div class="challenge-box" id="challengeText"></div>
+
+    <div class="input-group" id="answerGroup">
+      <label>Your answer</label>
+      <textarea id="answerInput" placeholder="Describe what you would do in this situation..."></textarea>
+    </div>
+    <div id="assessError" class="error-msg" style="display:none"></div>
+    <button class="btn" id="submitBtn" onclick="submitAnswer()">Submit Answer →</button>
+    <button class="btn" id="nextBtn" onclick="goToNextQuestion()" style="display:none; margin-top:12px; background:#1e293b; border:1px solid #6366f1; color:#a5b4fc;">Next Question →</button>
+  </div>
+
+  <!-- ── SCREEN: Loading ── -->
+  <div id="screen-loading" class="screen">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p id="loadingMsg">Processing...</p>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: Profile ── -->
+  <div id="screen-profile" class="screen">
+    <div class="profile-header">
+      <h2>Your Skill Profile</h2>
+      <p id="profileSubtitle"></p>
+    </div>
+
+    <div class="overall-score">
+      <div class="score-num" id="overallScore"></div>
+      <div class="score-label">Overall Score · <span id="profileRegion"></span></div>
+    </div>
+
+    <div class="profile-text" id="profileText"></div>
+
+    <div class="dimension-grid" id="dimensionGrid"></div>
+
+    <div class="data-sources" id="dataSources"></div>
+
+    <button class="btn" onclick="resetApp()">Start New Assessment</button>
+  </div>
+
+</div>
+
+<script>
+  const API = '';
+  let state = {
+    sessionId: null,
+    occupation: null,
+    challengeData: null,
+    currentQuestion: 0,
+    totalQuestions: 0
+  };
+
+  const TIER_LABELS = { 1: 'Entry', 2: 'Functional', 3: 'Mastery' };
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+  }
+
+  function showLoading(msg) {
+    document.getElementById('loadingMsg').textContent = msg;
+    showScreen('loading');
+  }
+
+  function goBack() {
+    showScreen('start');
+  }
+
+  async function startAssessment() {
+    const description = document.getElementById('descInput').value.trim();
+    if (!description) return;
+
+    const region = document.getElementById('regionSelect').value;
+    document.getElementById('startError').style.display = 'none';
+    document.getElementById('startBtn').disabled = true;
+    showLoading('Identifying your occupation...');
+
+    try {
+      const res = await fetch(`${API}/assess/start`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description, region })
+      });
+
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+
+      state.sessionId = data.session_id;
+      state.occupation = data.occupation;
+      state.challengeData = data.challenge;
+      state.currentQuestion = 1;
+      state.totalQuestions = data.assessment.total_dimensions;
+
+      // Show confirmation screen
+      document.getElementById('confirmTitle').textContent = data.occupation.title;
+      document.getElementById('confirmMeta').textContent =
+        `ISCO ${data.occupation.isco_code} · Matched on: ${data.occupation.matched_on}`;
+      document.getElementById('confidenceFill').style.width =
+        Math.round(data.occupation.confidence * 100) + '%';
+
+      showScreen('confirm');
+    } catch (e) {
+      document.getElementById('startBtn').disabled = false;
+      document.getElementById('startError').style.display = 'block';
+      document.getElementById('startError').textContent = 'Could not classify occupation. Please try again.';
+      showScreen('start');
+    }
+  }
+
+  function beginChallenges() {
+    renderChallenge(state.challengeData);
+    showScreen('assess');
+  }
+
+  function renderChallenge(challenge) {
+    document.getElementById('dimensionTag').textContent = challenge.dimension_label.toUpperCase();
+    document.getElementById('challengeText').textContent = challenge.question;
+    document.getElementById('answerInput').value = '';
+    document.getElementById('answerInput').disabled = false;
+    document.getElementById('evalFeedback').style.display = 'none';
+
+    const tier = TIER_LABELS[challenge.tier] || 'Entry';
+    document.getElementById('tierText').textContent = `Tier ${challenge.tier} — ${tier}`;
+
+    const pct = Math.round(((state.currentQuestion - 1) / state.totalQuestions) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent =
+      `Question ${state.currentQuestion} of ${state.totalQuestions}`;
+
+    document.getElementById('submitBtn').style.display = 'block';
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('nextBtn').style.display = 'none';
+    document.getElementById('assessError').style.display = 'none';
+  }
+
+  function renderEvalFeedback(evaluation) {
+    const passed = evaluation.passed;
+    const el = document.getElementById('evalFeedback');
+    el.innerHTML = `
+      <div class="eval-card ${passed ? 'passed' : 'failed'}">
+        <div class="eval-score ${passed ? 'passed' : 'failed'}">${evaluation.score}/100</div>
+        <div class="eval-feedback">${evaluation.feedback}</div>
+      </div>`;
+    el.style.display = 'block';
+  }
+
+  async function submitAnswer() {
+    const answer = document.getElementById('answerInput').value.trim();
+    if (!answer) return;
+
+    document.getElementById('submitBtn').disabled = true;
+    document.getElementById('assessError').style.display = 'none';
+    showLoading('Evaluating your answer...');
+
+    try {
+      const res = await fetch(`${API}/assess/answer`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id: state.sessionId, answer })
+      });
+
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+
+      if (data.assessment_complete) {
+        showScreen('assess');
+        renderEvalFeedback(data.evaluation);
+        // Lock answer area, show "View Profile" instead of Next
+        document.getElementById('answerInput').disabled = true;
+        document.getElementById('submitBtn').style.display = 'none';
+        const nextBtn = document.getElementById('nextBtn');
+        nextBtn.textContent = 'View My Skill Profile →';
+        nextBtn.style.background = '#6366f1';
+        nextBtn.style.color = 'white';
+        nextBtn.style.border = 'none';
+        nextBtn.style.display = 'block';
+        nextBtn.onclick = async () => {
+          showLoading('Building your skill profile...');
+          await loadProfile();
+        };
+      } else {
+        state.currentQuestion++;
+        state.challengeData = data.next_challenge;
+        showScreen('assess');
+        // Lock answer area and show feedback
+        document.getElementById('answerInput').disabled = true;
+        document.getElementById('submitBtn').style.display = 'none';
+        renderEvalFeedback(data.evaluation);
+        // Show Next Question button — user controls when to advance
+        const nextBtn = document.getElementById('nextBtn');
+        nextBtn.textContent = 'Next Question →';
+        nextBtn.style.background = '#1e293b';
+        nextBtn.style.color = '#a5b4fc';
+        nextBtn.style.border = '1px solid #6366f1';
+        nextBtn.style.display = 'block';
+        nextBtn.onclick = goToNextQuestion;
+      }
+    } catch (e) {
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('assessError').style.display = 'block';
+      document.getElementById('assessError').textContent = 'Error submitting answer. Please try again.';
+      showScreen('assess');
+    }
+  }
+
+  function goToNextQuestion() {
+    renderChallenge(state.challengeData);
+  }
+
+  async function loadProfile() {
+    try {
+      const res = await fetch(`${API}/assess/profile/${state.sessionId}`);
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      renderProfile(data.profile);
+      showScreen('profile');
+    } catch (e) {
+      showScreen('assess');
+    }
+  }
+
+  function renderProfile(profile) {
+    document.getElementById('profileSubtitle').textContent =
+      `${profile.occupation_title} · ${profile.location}`;
+    document.getElementById('overallScore').textContent = profile.overall_score;
+    document.getElementById('profileRegion').textContent = profile.region;
+    document.getElementById('profileText').textContent = profile.profile_text;
+
+    // Dimension cards
+    const grid = document.getElementById('dimensionGrid');
+    grid.innerHTML = '';
+    profile.dimension_summary.forEach(dim => {
+      const card = document.createElement('div');
+      card.className = 'dimension-card';
+      card.innerHTML = `
+        <div class="dim-label">${dim.label.toUpperCase()}</div>
+        <div class="dim-tier">${dim.tier_label} · ${dim.score}/100</div>
+        <div class="dim-signal">${dim.employer_signal}</div>`;
+      grid.appendChild(card);
+    });
+
+    // Data sources
+    const sources = profile.data_sources;
+    document.getElementById('dataSources').innerHTML = `
+      <strong>Data sources:</strong> ${sources.labor_market || ''} &nbsp;·&nbsp; ${sources.skills_taxonomy || ''} &nbsp;·&nbsp; ${sources.localisation || ''}`;
+  }
+
+  function resetApp() {
+    state = { sessionId: null, occupation: null, challengeData: null, currentQuestion: 0, totalQuestions: 0 };
+    document.getElementById('descInput').value = '';
+    document.getElementById('startBtn').disabled = false;
+    showScreen('start');
+  }
+
+  // Allow Enter key to start
+  document.getElementById('descInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') startAssessment();
+  });
+</script>
+</body>
+</html>

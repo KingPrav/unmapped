@@ -1,0 +1,18 @@
+# Environment — never commit your API key
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Data — raw downloads are too large for git
+data/raw/
+data/processed/
+
+# OS
+.DS_Store
+Thumbs.db

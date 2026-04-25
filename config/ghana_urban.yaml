@@ -1,0 +1,59 @@
+# UNMAPPED — Country Configuration
+# Region: Ghana, Urban Informal Economy (Primary)
+
+region_id: ghana_urban
+region_name: "Ghana — Urban Informal Economy"
+country: Ghana
+country_code: GHA
+
+# Language settings
+language: en
+language_name: English
+language_register: "Standard English with Ghanaian informal register"
+
+# Location context injected into challenge generator prompts
+location_context: "informal urban market, Accra, Ghana"
+city: Accra
+currency: "Ghanaian cedi (GHS)"
+local_tools: "basic hand tools, shared workshop space, mobile toolkit"
+local_examples:
+  - "Suame Magazine (auto repair cluster)"
+  - "Kantamanto market"
+  - "Tema industrial area"
+
+# ISCO-08 groups dominant in Ghanaian informal urban economy
+# Source: ILOSTAT — Employment by occupation, Ghana
+isco_priority_groups:
+  - code: 5
+    label: "Service and Sales Workers"
+    informal_share: 0.41
+  - code: 7
+    label: "Craft and Related Trades Workers"
+    informal_share: 0.28
+  - code: 9
+    label: "Elementary Occupations"
+    informal_share: 0.19
+  - code: 6
+    label: "Skilled Agricultural Workers"
+    informal_share: 0.08
+  - code: 8
+    label: "Plant and Machine Operators"
+    informal_share: 0.04
+
+# ESCO localisation
+esco_language: en
+esco_version: "1.2.1"
+
+# Opportunity types surfaced to workers
+opportunity_types:
+  - self_employment
+  - informal_employment
+  - gig
+  - training_pathway
+  - micro_enterprise
+
+# Econometric data sources used for this config
+data_sources:
+  labor_market: "ILOSTAT — Ghana Employment by Occupation (ISCO-08), 2022"
+  skills_taxonomy: "O*NET 28.0 via ISCO-08 crosswalk"
+  localisation: "ESCO v1.2.1 — English"
