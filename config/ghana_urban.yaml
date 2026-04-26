@@ -10,6 +10,21 @@ country_code: GHA
 language: en
 language_name: English
 language_register: "Standard English with Ghanaian informal register"
+default_voice_language: en-GH
+
+education_levels:
+  - value: none
+    label: No formal education
+  - value: primary
+    label: Primary school
+  - value: jhs
+    label: JHS / Lower secondary
+  - value: shs
+    label: SHS / Upper secondary
+  - value: vocational
+    label: Vocational / Technical
+  - value: tertiary
+    label: Tertiary / University
 
 # Location context injected into challenge generator prompts
 location_context: "informal urban market, Accra, Ghana"

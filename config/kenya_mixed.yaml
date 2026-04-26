@@ -10,6 +10,21 @@ country_code: KEN
 language: en
 language_name: English
 language_register: "Standard English with Kenyan informal register (Sheng influences)"
+default_voice_language: en-KE
+
+education_levels:
+  - value: none
+    label: No formal education
+  - value: primary
+    label: Primary school
+  - value: junior_secondary
+    label: Junior secondary
+  - value: senior_secondary
+    label: Senior secondary
+  - value: tvet
+    label: TVET / Vocational
+  - value: tertiary
+    label: College / University
 
 # Location context injected into challenge generator prompts
 location_context: "mixed urban-rural economy, Nairobi and peri-urban Kenya"

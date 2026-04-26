@@ -1,0 +1,175 @@
+{
+  "meta": {
+    "region": "pakistan_urban",
+    "country": "Pakistan",
+    "currency": "PKR",
+    "econometric_sources": {
+      "wage_floor": "ILOSTAT — Pakistan Labour Force Survey 2022, median monthly earnings by occupation",
+      "employer_demand": "World Bank Enterprise Survey (WBES) Pakistan 2022 — % firms reporting difficulty finding qualified workers by sector",
+      "sector_growth": "ILOSTAT — Pakistan sectoral employment growth rate 2019-2022"
+    }
+  },
+  "opportunities": [
+    {
+      "id": "pk_001",
+      "title": "Mobile Repair Technician",
+      "type": "self_employment",
+      "type_label": "Self-Employment",
+      "isco_groups": [7],
+      "required_dimensions": {
+        "fault_diagnosis": 2,
+        "communication": 1,
+        "resource_judgment": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 52000,
+        "wage_ceiling_monthly": 125000,
+        "currency": "PKR",
+        "employer_demand_pct": 71,
+        "sector_growth_pct": 4.9,
+        "sector_label": "Repair & Maintenance Services"
+      },
+      "honest_description": "Strong demand in dense urban markets where quick repair is cheaper than replacement. Work quality depends on diagnosis and trust, not branding. Parts sourcing and customer follow-up are key to repeat business.",
+      "bridge": {
+        "ready_if": "Fault Diagnosis at Functional level or above",
+        "gap_to_close": "If at Entry: supervised repair practice on common faults closes the gap",
+        "training_option": "TEVTA / vocational repair course — 6-12 months"
+      },
+      "tags": ["technical", "repair", "urban", "repeat-customers"]
+    },
+    {
+      "id": "pk_002",
+      "title": "Tailoring / Stitching Operator",
+      "type": "self_employment",
+      "type_label": "Self-Employment",
+      "isco_groups": [7],
+      "required_dimensions": {
+        "communication": 1,
+        "process_quality": 1,
+        "resource_judgment": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 42000,
+        "wage_ceiling_monthly": 95000,
+        "currency": "PKR",
+        "employer_demand_pct": 64,
+        "sector_growth_pct": 3.5,
+        "sector_label": "Garment & Textile Services"
+      },
+      "honest_description": "Accessible through home-based work, shared machine shops, or small neighborhood units. Demand stays steady for alterations, uniforms, and custom stitching. The strongest workers manage deadlines and customer fit well.",
+      "bridge": {
+        "ready_if": "Communication and Process Quality at Entry or above",
+        "gap_to_close": "2-4 months apprenticeship makes the entry path practical",
+        "training_option": "Vocational garment construction course"
+      },
+      "tags": ["home-based", "custom", "steady", "low-capital"]
+    },
+    {
+      "id": "pk_003",
+      "title": "Construction Helper / Finishing Worker",
+      "type": "informal_employment",
+      "type_label": "Informal Employment",
+      "isco_groups": [7, 9],
+      "required_dimensions": {
+        "process_quality": 1,
+        "operational_organization": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 45000,
+        "wage_ceiling_monthly": 98000,
+        "currency": "PKR",
+        "employer_demand_pct": 67,
+        "sector_growth_pct": 5.1,
+        "sector_label": "Construction"
+      },
+      "honest_description": "Entry-level construction roles are common around urban expansion zones and housing growth corridors. Work is physical and project-based, with inconsistent pay between projects. Reliability and willingness to learn matter a lot.",
+      "bridge": {
+        "ready_if": "Process Quality and Operational Organization at Entry level or above",
+        "gap_to_close": "On-site orientation is usually enough for first roles",
+        "training_option": "Construction safety short course — 1-2 weeks"
+      },
+      "tags": ["physical", "project-based", "urban", "demand"]
+    },
+    {
+      "id": "pk_004",
+      "title": "Ride-Share / Delivery Rider",
+      "type": "gig",
+      "type_label": "Gig / Platform Work",
+      "isco_groups": [8],
+      "required_dimensions": {
+        "communication": 1,
+        "operational_organization": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 48000,
+        "wage_ceiling_monthly": 110000,
+        "currency": "PKR",
+        "employer_demand_pct": 79,
+        "sector_growth_pct": 9.2,
+        "sector_label": "Digital Logistics & Transport"
+      },
+      "honest_description": "Platform delivery and ride work continues to expand in large cities. Earnings depend on vehicle access, fuel costs, and platform ratings. The most reliable workers communicate clearly and keep schedules tight.",
+      "bridge": {
+        "ready_if": "Communication and Operational Organization at any level",
+        "gap_to_close": "Driver onboarding and phone-based route management are the main steps",
+        "training_option": "Platform onboarding / driving-school support"
+      },
+      "tags": ["platform", "mobile", "flexible", "urban"]
+    },
+    {
+      "id": "pk_005",
+      "title": "Technical Training Pathway / Vocational Certificate",
+      "type": "training_pathway",
+      "type_label": "Training Pathway",
+      "isco_groups": [7, 8],
+      "required_dimensions": {
+        "fault_diagnosis": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": null,
+        "wage_ceiling_monthly": null,
+        "currency": "PKR",
+        "employer_demand_pct": 70,
+        "sector_growth_pct": 4.9,
+        "sector_label": "Technical Trades",
+        "post_training_wage_floor": 60000,
+        "training_duration_months": 12,
+        "training_cost_pkr": 20000
+      },
+      "honest_description": "A vocational certificate can make informal skill visible to employers and training providers. It is especially useful when the worker already does the task but lacks formal proof. The goal is legibility, not just learning.",
+      "bridge": {
+        "ready_if": "Any skill level — this is a development pathway",
+        "gap_to_close": "No prerequisite. Prior work experience can count in some institutes.",
+        "training_option": "TEVTA / NAVTTC route — varies by province"
+      },
+      "tags": ["credential", "portable", "formal-pathway", "trade"]
+    },
+    {
+      "id": "pk_006",
+      "title": "Street Food / Small Catering Operator",
+      "type": "self_employment",
+      "type_label": "Self-Employment",
+      "isco_groups": [5],
+      "required_dimensions": {
+        "communication": 1,
+        "process_quality": 1,
+        "resource_judgment": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 38000,
+        "wage_ceiling_monthly": 85000,
+        "currency": "PKR",
+        "employer_demand_pct": 59,
+        "sector_growth_pct": 3.2,
+        "sector_label": "Food Services & Informal Retail"
+      },
+      "honest_description": "A common entry point for youth and families, especially near transport hubs and dense neighborhoods. Demand is stable, but hygiene, timing, and low waste management decide the margin. Micro-capital is usually the main barrier.",
+      "bridge": {
+        "ready_if": "Communication and Process Quality at Entry or above",
+        "gap_to_close": "Food safety and stock discipline raise success rates quickly",
+        "training_option": "Local food safety / microenterprise course"
+      },
+      "tags": ["accessible", "food", "microenterprise", "steady"]
+    }
+  ]
+}

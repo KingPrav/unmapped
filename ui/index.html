@@ -90,6 +90,17 @@
     }
     .input-group input:focus { border-color: #6366f1; }
     .input-group input::placeholder { color: #475569; }
+    .input-group select {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f1f5f9;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+    .input-group select:focus { border-color: #6366f1; }
 
     .btn {
       width: 100%;
@@ -432,17 +443,194 @@
       line-height: 1.6;
     }
     .sources-footer strong { color: #475569; display: block; margin-bottom: 4px; }
+
+    /* ── Module 02 — Risk Screen ── */
+    .risk-gauge-wrap {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 28px 24px;
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .risk-gauge-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .risk-pct { font-size: 64px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+    .risk-label { font-size: 13px; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+    .risk-subtitle { font-size: 12px; color: #64748b; line-height: 1.5; max-width: 360px; margin: 0 auto; }
+
+    .risk-bar-track {
+      height: 8px;
+      background: #1e293b;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 16px 0 4px;
+    }
+    .risk-bar-fill { height: 8px; border-radius: 4px; transition: width 0.8s ease; }
+
+    .resilience-card {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .resilience-score-circle {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 24px; font-weight: 900;
+      border: 3px solid;
+    }
+
+    .task-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #1e293b;
+    }
+    .task-row:last-child { border-bottom: none; }
+    .task-durable-badge {
+      font-size: 9px; font-weight: 800; letter-spacing: 1px;
+      padding: 2px 7px; border-radius: 3px; flex-shrink: 0;
+    }
+    .task-bar-track {
+      flex: 1; height: 4px; background: #1e293b; border-radius: 2px; overflow: hidden;
+    }
+    .task-bar-fill { height: 4px; border-radius: 2px; }
+    .task-exposure-pct { font-size: 11px; font-weight: 700; flex-shrink: 0; width: 32px; text-align: right; }
+
+    .witt-box {
+      background: #0c1628;
+      border: 1px solid #1e3a5f;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+    }
+    .witt-header { font-size: 10px; color: #3b82f6; font-weight: 700; letter-spacing: 2px; margin-bottom: 10px; }
+    .witt-numbers { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .witt-pct-box { text-align: center; }
+    .witt-pct { font-size: 28px; font-weight: 900; color: #60a5fa; }
+    .witt-pct-label { font-size: 10px; color: #3b82f6; margin-top: 2px; }
+    .witt-arrow { font-size: 20px; color: #1d4ed8; }
+    .witt-text { font-size: 12px; color: #64748b; line-height: 1.6; }
+    .witt-source { font-size: 10px; color: #1e3a5f; margin-top: 8px; }
+
+    .action-card {
+      background: #1e293b;
+      border-left: 3px solid #6366f1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+    }
+    .action-priority {
+      font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
+      margin-bottom: 4px;
+    }
+    .action-text { font-size: 13px; color: #cbd5e1; line-height: 1.5; }
+    .action-why { font-size: 11px; color: #475569; margin-top: 4px; line-height: 1.4; }
+
+    /* ── Config-diff panel ── */
+    .config-diff-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 100;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 60px;
+    }
+    .config-diff-overlay.open { display: flex; }
+    .config-diff-panel {
+      background: #1e293b;
+      border: 1px solid #6366f1;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 640px;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 28px;
+    }
+    .config-diff-panel h3 { font-size: 16px; font-weight: 800; color: #f1f5f9; margin-bottom: 4px; }
+    .config-diff-subtitle { font-size: 12px; color: #64748b; margin-bottom: 20px; }
+    .diff-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid #334155;
+      font-size: 12px;
+    }
+    .diff-label { color: #64748b; font-weight: 700; }
+    .diff-from { color: #f97316; }
+    .diff-to   { color: #4ade80; }
+    .infra-note {
+      margin-top: 16px;
+      padding: 14px;
+      background: #0f172a;
+      border-left: 3px solid #6366f1;
+      border-radius: 0 8px 8px 0;
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+    .unchanged-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .unchanged-tag {
+      font-size: 10px;
+      background: #052e16;
+      color: #4ade80;
+      border: 1px solid #166534;
+      border-radius: 4px;
+      padding: 2px 8px;
+    }
   </style>
 </head>
 <body>
 
+<!-- ── Config-diff overlay ── -->
+<div class="config-diff-overlay" id="configDiffOverlay" onclick="closeConfigDiff(event)">
+  <div class="config-diff-panel">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+      <div>
+        <div style="font-size:10px; color:#6366f1; font-weight:700; letter-spacing:2px; margin-bottom:4px;">INFRASTRUCTURE DEMO</div>
+        <h3 id="configDiffTitle">Reconfiguring from Ghana → Kenya</h3>
+        <div class="config-diff-subtitle" id="configDiffSubtitle">Switching country context — no code changes</div>
+      </div>
+      <button onclick="closeConfigDiff()" style="background:transparent; border:1px solid #334155; color:#64748b; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px;">✕ Close</button>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; padding:8px 0; font-size:10px; font-weight:700; color:#475569; letter-spacing:1px;">
+      <div>FIELD</div><div style="color:#f97316">FROM</div><div style="color:#4ade80">→ TO</div>
+    </div>
+    <div id="configDiffRows"><!-- populated by JS --></div>
+
+    <div style="margin-top:16px;">
+      <div style="font-size:10px; color:#22c55e; font-weight:700; letter-spacing:1px; margin-bottom:6px;">UNCHANGED — THE PROTOCOL</div>
+      <div class="unchanged-tags" id="unchangedTags"></div>
+    </div>
+
+    <div class="infra-note" id="infraNote"></div>
+  </div>
+</div>
+
 <header>
   <div class="logo">UNMAPPED <span>Skills Visibility Infrastructure</span></div>
-  <div class="region-selector">
-    <select id="regionSelect">
-      <option value="ghana_urban">Ghana — Urban Informal</option>
-      <option value="kenya_mixed">Kenya — Mixed Economy</option>
-    </select>
+    <div class="region-selector" style="display:flex; align-items:center; gap:10px;">
+    <select id="regionSelect" onchange="onRegionChange()"></select>
+    <button id="configDiffBtn" onclick="showConfigDiff()" style="background:transparent; border:1px solid #334155; color:#64748b; padding:5px 10px; border-radius:5px; font-size:11px; cursor:pointer; white-space:nowrap;">View Config Diff ↗</button>
   </div>
 </header>
 
@@ -451,8 +639,8 @@
   <!-- ── SCREEN: Start ── -->
   <div id="screen-start" class="screen active">
     <div class="hero">
-      <h1>What do you do?</h1>
-      <p>Tell us in your own words. No certificates needed — just describe your work.</p>
+      <h1 id="heroTitle">What do you do?</h1>
+      <p id="heroSubtitle">Tell us in your own words. No certificates needed — just describe your work.</p>
     </div>
 
     <div class="amara-card">
@@ -460,14 +648,40 @@
       <p>She's 22, runs a phone repair business, speaks 3 languages, and taught herself coding from YouTube. By any measure, she has skills. But to the formal economy — she doesn't exist. UNMAPPED changes that.</p>
     </div>
 
+    <div id="regionContextCard" style="background:#0f172a; border:1px solid #1e293b; border-radius:12px; padding:16px; margin-bottom:18px; display:none;">
+      <div style="font-size:10px; color:#6366f1; font-weight:700; letter-spacing:1px; margin-bottom:6px;">ACTIVE COUNTRY CONTEXT</div>
+      <div style="font-size:14px; color:#f1f5f9; font-weight:700;" id="regionContextTitle"></div>
+      <div style="font-size:12px; color:#94a3b8; margin-top:4px;" id="regionContextMeta"></div>
+      <div style="font-size:12px; color:#64748b; margin-top:8px; line-height:1.6;" id="regionContextExamples"></div>
+    </div>
+
     <div class="input-group">
-      <label>Describe your work</label>
+      <label id="descLabel">Describe your work</label>
       <input type="text" id="descInput" placeholder="e.g. I fix phones, I sell at the market, I cut hair..." />
+      <div style="display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap;">
+        <select id="voiceLanguage" style="max-width:260px;">
+          <option value="en-US">English (US)</option>
+          <option value="en-GB">English (UK)</option>
+          <option value="en-KE">English (Kenya)</option>
+          <option value="en-GH">English (Ghana)</option>
+          <option value="en-IN">English (India)</option>
+          <option value="fr-FR">French</option>
+          <option value="sw-KE">Swahili</option>
+          <option value="ha-NG">Hausa</option>
+          <option value="ak-GH">Akan / Twi</option>
+          <option value="hi-IN">Hindi</option>
+          <option value="ur-PK">Urdu</option>
+          <option value="es-MX">Spanish (Mexico)</option>
+          <option value="ar-SA">Arabic</option>
+        </select>
+        <button type="button" class="btn-secondary" id="voiceBtn" onclick="toggleVoiceInput()" style="flex:0 0 auto; min-width:150px; padding:12px 16px;">🎙 Speak</button>
+      </div>
+      <div id="voiceStatus" style="font-size:11px; color:#64748b; margin-top:6px; line-height:1.5;">Speak in your language if typing is hard. We transcribe it into the same skills form.</div>
     </div>
 
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
       <div class="input-group" style="margin-bottom:0">
-        <label>Highest education level</label>
+        <label id="educationLabel">Highest education level</label>
         <select id="educationLevel" style="width:100%; background:#1e293b; border:1px solid #334155; color:#f1f5f9; padding:13px 16px; border-radius:8px; font-size:14px; outline:none;">
           <option value="none">No formal education</option>
           <option value="primary">Primary school</option>
@@ -478,15 +692,22 @@
         </select>
       </div>
       <div class="input-group" style="margin-bottom:0">
-        <label>Years doing this work</label>
+        <label id="experienceLabel">Years doing this work</label>
         <input type="number" id="experienceYears" min="0" max="50" value="2"
           style="width:100%; background:#1e293b; border:1px solid #334155; color:#f1f5f9; padding:13px 16px; border-radius:8px; font-size:14px; outline:none;" />
       </div>
     </div>
 
     <div class="input-group" style="margin-top:12px;">
-      <label>Other skills or things you've taught yourself <span style="color:#475569">(optional)</span></label>
+      <label id="otherSkillsLabel">Other skills or things you've taught yourself <span style="color:#475569">(optional)</span></label>
       <input type="text" id="otherSkills" placeholder="e.g. basic coding, speak 3 languages, run a small business..." />
+    </div>
+
+    <div class="input-group" style="margin-top:12px;">
+      <label id="videoLabel">Short work video <span style="color:#475569">(optional, 2-3 minutes)</span></label>
+      <input type="file" id="workVideoInput" accept="video/*"
+        style="width:100%; background:#1e293b; border:1px solid #334155; color:#cbd5e1; padding:12px 14px; border-radius:8px; font-size:14px; outline:none;" />
+      <div id="videoHelp" style="font-size:11px; color:#64748b; margin-top:6px; line-height:1.5;">Useful for hands-on work like agriculture, electrical work, mechanics, repairs, or tailoring.</div>
     </div>
 
     <div id="startError" class="error-msg" style="display:none"></div>
@@ -499,6 +720,7 @@
       <div class="isco">ISCO-08 · O*NET Classification</div>
       <h2 id="confirmTitle"></h2>
       <div class="meta" id="confirmMeta"></div>
+      <div id="evidenceNote" style="margin-top:10px; font-size:12px; color:#94a3b8; line-height:1.5;"></div>
       <div class="confidence-bar"><div class="confidence-fill" id="confidenceFill"></div></div>
     </div>
     <p style="color:#64748b; font-size:13px; margin-bottom:20px;">We've matched your work to a standard occupation code used by employers and labor agencies globally. Does this look right?</p>
@@ -541,7 +763,7 @@
   <!-- ── SCREEN: Profile ── -->
   <div id="screen-profile" class="screen">
     <div class="profile-header">
-      <h2>Your Skills Card</h2>
+      <h2 id="profileTitle">Your One-Page CV</h2>
       <p id="profileSubtitle"></p>
     </div>
 
@@ -552,7 +774,7 @@
       <div style="background:#312e81; padding:20px 24px;">
         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
           <div>
-            <div style="font-size:10px; color:#a5b4fc; font-weight:700; letter-spacing:2px; margin-bottom:6px;">UNMAPPED SKILLS CARD</div>
+            <div style="font-size:10px; color:#a5b4fc; font-weight:700; letter-spacing:2px; margin-bottom:6px;">UNMAPPED ONE-PAGE CV</div>
             <div style="font-size:20px; font-weight:800; color:#f1f5f9;" id="cardOccupation"></div>
             <div style="font-size:12px; color:#818cf8; margin-top:4px;" id="cardIsco"></div>
           </div>
@@ -596,6 +818,12 @@
         </div>
       </div>
 
+      <!-- Evidence -->
+      <div id="evidencePanel" style="display:none; padding:16px 24px; border-bottom:1px solid #334155; background:#0f172a;">
+        <div style="font-size:10px; color:#6366f1; font-weight:700; letter-spacing:1px; margin-bottom:6px;">EVIDENCE</div>
+        <div style="font-size:13px; color:#e2e8f0; line-height:1.6;" id="evidenceText"></div>
+      </div>
+
       <!-- Summary -->
       <div style="padding:16px 24px; border-bottom:1px solid #334155;">
         <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:8px;">SUMMARY</div>
@@ -626,7 +854,7 @@
     </div>
 
     <div style="display:flex; flex-direction:column; gap:10px; margin-top:4px;">
-      <button class="btn" id="oppBtn" onclick="goToOpportunities()">See Your Matched Opportunities →</button>
+      <button class="btn" id="riskBtn" onclick="goToRisk()">See AI Risk & Displacement Lens →</button>
       <button class="btn" id="shareCardBtn" onclick="shareCard()" style="background:transparent; border:1px solid #6366f1; color:#a5b4fc; display:none;">
         Share Verified Card 🔗
       </button>
@@ -634,11 +862,95 @@
     </div>
   </div>
 
+  <!-- ── SCREEN: Risk (Module 02) ── -->
+  <div id="screen-risk" class="screen">
+    <div style="margin-bottom:24px;">
+      <div style="font-size:11px; color:#6366f1; font-weight:700; letter-spacing:2px; margin-bottom:6px;">MODULE 02 — AI READINESS & DISPLACEMENT RISK</div>
+      <h2 id="riskTitle" style="font-size:22px; font-weight:800; color:#f1f5f9; margin-bottom:6px;">How AI affects your work</h2>
+      <p style="font-size:13px; color:#64748b;" id="riskSubtitle">Calibrated for your occupation and local context · 2025–2035 horizon</p>
+    </div>
+
+    <!-- Automation Probability Gauge -->
+    <div class="risk-gauge-wrap" id="riskGaugeWrap">
+      <div style="font-size:10px; color:#64748b; font-weight:700; letter-spacing:2px; margin-bottom:12px;">AUTOMATION EXPOSURE — LMIC ADJUSTED</div>
+      <div class="risk-pct" id="riskPct">—</div>
+      <div class="risk-label" id="riskLabel">—</div>
+      <div style="max-width:300px; margin:10px auto 0;">
+        <div class="risk-bar-track">
+          <div class="risk-bar-fill" id="riskBarFill" style="width:0%"></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:9px; color:#334155; margin-top:4px;">
+          <span>0% — Fully durable</span><span>100% — Highly exposed</span>
+        </div>
+      </div>
+      <div class="risk-subtitle" id="riskHeadline" style="margin-top:16px;"></div>
+      <div style="margin-top:12px; font-size:10px; color:#334155;">
+        Raw score (Frey &amp; Osborne): <span id="riskRawPct" style="color:#475569;"></span> · LMIC-adjusted: <span id="riskLMICPct" style="color:#475569;"></span>
+      </div>
+    </div>
+
+    <!-- Resilience Score -->
+    <div class="resilience-card">
+      <div class="resilience-score-circle" id="resilienceCircle">
+        <span id="resilienceScore">—</span>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:10px; font-weight:700; letter-spacing:1.5px; color:#64748b; margin-bottom:4px;">SKILL RESILIENCE SCORE</div>
+        <div style="font-size:15px; font-weight:800; color:#f1f5f9; margin-bottom:4px;" id="resilienceLabel"></div>
+        <div style="font-size:12px; color:#64748b; line-height:1.5;">Based on your assessed performance in durable vs. at-risk skill dimensions. Higher = better protected against displacement.</div>
+      </div>
+    </div>
+
+    <!-- Task-level breakdown -->
+    <div style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:20px 24px; margin-bottom:20px;">
+      <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1.5px; margin-bottom:16px;">TASK-LEVEL AUTOMATION EXPOSURE — PER SKILL DIMENSION</div>
+      <div id="taskBreakdown"></div>
+      <div style="margin-top:12px; font-size:10px; color:#334155; line-height:1.5;">
+        Source: ILO (2023). Task Content of Jobs in Low- and Middle-Income Countries. Task types: non-routine cognitive (analytical/interpersonal), routine cognitive, routine manual.
+      </div>
+    </div>
+
+    <!-- Wittgenstein education projection -->
+    <div class="witt-box">
+      <div class="witt-header">EDUCATION LANDSCAPE — WITTGENSTEIN CENTRE 2025–2035</div>
+      <div class="witt-numbers">
+        <div class="witt-pct-box">
+          <div class="witt-pct" id="witt2025">—</div>
+          <div class="witt-pct-label">TERTIARY 2025</div>
+        </div>
+        <div class="witt-arrow">→</div>
+        <div class="witt-pct-box">
+          <div class="witt-pct" id="witt2035">—</div>
+          <div class="witt-pct-label">TERTIARY 2035</div>
+        </div>
+      </div>
+      <div class="witt-text" id="wittText"></div>
+      <div class="witt-source" id="wittSource"></div>
+    </div>
+
+    <!-- Recommended actions -->
+    <div style="margin-bottom:20px;">
+      <div style="font-size:10px; color:#6366f1; font-weight:700; letter-spacing:1.5px; margin-bottom:12px;">RECOMMENDED ACTIONS FOR YOUR PROFILE</div>
+      <div id="riskActions"></div>
+    </div>
+
+    <!-- Data sources -->
+    <div style="background:#0f172a; border:1px solid #1e293b; border-radius:8px; padding:14px 16px; margin-bottom:24px; font-size:11px; color:#334155; line-height:1.8;">
+      <div style="font-weight:700; color:#475569; margin-bottom:6px;">DATA SOURCES — MODULE 02</div>
+      <div id="riskDataSources"></div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button class="btn" onclick="goToOpportunities()">See Your Matched Opportunities →</button>
+      <button class="btn" onclick="showScreen('profile')" style="background:transparent; border:1px solid #334155; color:#64748b;">← Back to Skills Card</button>
+    </div>
+  </div>
+
   <!-- ── SCREEN: Opportunities ── -->
   <div id="screen-opportunities" class="screen">
     <div style="margin-bottom:28px;">
       <div style="font-size:11px; color:#6366f1; font-weight:700; letter-spacing:2px; margin-bottom:6px;">MODULE 03 — OPPORTUNITY MATCHING</div>
-      <h2 style="font-size:22px; font-weight:800; color:#f1f5f9; margin-bottom:6px;">What's available to you</h2>
+      <h2 id="oppTitle" style="font-size:22px; font-weight:800; color:#f1f5f9; margin-bottom:6px;">What's available to you</h2>
       <p style="font-size:13px; color:#64748b;" id="oppSubtitle"></p>
     </div>
 
@@ -672,7 +984,7 @@
     <div id="oppSources" class="sources-footer"></div>
 
     <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
-      <button class="btn" onclick="showScreen('profile')" style="background:transparent; border:1px solid #334155; color:#64748b;">← Back to Skills Card</button>
+      <button class="btn" onclick="showScreen('risk')" style="background:transparent; border:1px solid #334155; color:#64748b;">← Back to AI Risk</button>
       <button class="btn" onclick="resetApp()" style="background:transparent; border:1px solid #1e293b; color:#475569;">Start New Assessment</button>
     </div>
   </div>
@@ -681,6 +993,101 @@
 
 <script>
   const API = '';
+  let regionCatalog = [];
+  const UI_TEXT_PACKS = {
+    en: {
+      pageTitle: 'UNMAPPED - Skills Visibility',
+      heroTitle: 'What do you do?',
+      heroSubtitle: 'Tell us in your own words. No certificates needed — just describe your work.',
+      descLabel: 'Describe your work',
+      educationLabel: 'Highest education level',
+      experienceLabel: 'Years doing this work',
+      otherSkillsLabel: "Other skills or things you've taught yourself",
+      videoLabel: 'Short work video',
+      videoHelp: 'Useful for hands-on work like agriculture, electrical work, mechanics, repairs, or tailoring.',
+      startBtn: 'Start Skills Assessment →',
+      profileTitle: 'Your One-Page CV',
+      riskTitle: 'How AI affects your work',
+      oppTitle: "What's available to you",
+      speakBtn: '🎙 Speak',
+      stopBtn: '■ Stop listening',
+      voiceDefault: 'Speak in your language if typing is hard. We transcribe it into the same skills form.',
+      voiceListening: 'Listening... speak naturally in your language.',
+      voiceCaptured: 'Voice captured. You can edit the text if needed.',
+      voiceUnsupported: 'Voice input is not supported in this browser. You can still type or upload a short video.',
+      voiceStartError: 'Could not start voice input. Try again or type your work.',
+      noLanguageSupport: 'Speak in your language if typing is hard. We transcribe it into the same skills form.'
+    },
+    hi: {
+      pageTitle: 'UNMAPPED - कौशल दृश्यता',
+      heroTitle: 'आप क्या करते हैं?',
+      heroSubtitle: 'अपने शब्दों में बताइए। किसी प्रमाणपत्र की जरूरत नहीं — बस अपना काम बताइए।',
+      descLabel: 'अपना काम बताइए',
+      educationLabel: 'उच्चतम शिक्षा स्तर',
+      experienceLabel: 'इस काम में कितने वर्ष',
+      otherSkillsLabel: 'अन्य कौशल या जो आपने खुद सीखा है',
+      videoLabel: 'काम का छोटा वीडियो',
+      videoHelp: 'कृषि, बिजली का काम, मरम्मत, मैकेनिक या सिलाई जैसे हाथ से किए जाने वाले काम के लिए उपयोगी।',
+      startBtn: 'कौशल मूल्यांकन शुरू करें →',
+      profileTitle: 'आपका एक-पेज CV',
+      riskTitle: 'AI आपके काम को कैसे प्रभावित करती है',
+      oppTitle: 'आपके लिए क्या उपलब्ध है',
+      speakBtn: '🎙 बोलें',
+      stopBtn: '■ सुनना बंद करें',
+      voiceDefault: 'अगर टाइप करना कठिन है, तो अपनी भाषा में बोलिए। हम उसे उसी कौशल फॉर्म में लिख देंगे।',
+      voiceListening: 'सुन रहे हैं... अपनी भाषा में आराम से बोलिए।',
+      voiceCaptured: 'आपकी आवाज़ रिकॉर्ड हो गई है। चाहें तो टेक्स्ट बदल सकते हैं।',
+      voiceUnsupported: 'इस ब्राउज़र में वॉइस इनपुट उपलब्ध नहीं है। आप टाइप कर सकते हैं या छोटा वीडियो अपलोड कर सकते हैं।',
+      voiceStartError: 'वॉइस इनपुट शुरू नहीं हो सका। फिर कोशिश करें या अपना काम टाइप करें।',
+      noLanguageSupport: 'अगर टाइप करना कठिन है, तो अपनी भाषा में बोलिए। हम उसे उसी कौशल फॉर्म में लिख देंगे।'
+    },
+    ur: {
+      pageTitle: 'UNMAPPED - مہارت کی نمائش',
+      heroTitle: 'آپ کیا کرتے ہیں؟',
+      heroSubtitle: 'اپنے الفاظ میں بتائیں۔ کسی سند کی ضرورت نہیں - بس اپنا کام بتائیں۔',
+      descLabel: 'اپنا کام بتائیں',
+      educationLabel: 'تعلیم کی سب سے اعلیٰ سطح',
+      experienceLabel: 'اس کام میں کتنے سال',
+      otherSkillsLabel: 'دیگر مہارتیں یا وہ چیزیں جو آپ نے خود سیکھیں',
+      videoLabel: 'کام کی مختصر ویڈیو',
+      videoHelp: 'زراعت، بجلی کا کام، مرمت، مکینک یا سلائی جیسے ہاتھ سے کیے جانے والے کام کے لیے مفید۔',
+      startBtn: 'مہارت کا جائزہ شروع کریں →',
+      profileTitle: 'آپ کا ایک صفحے کا CV',
+      riskTitle: 'AI آپ کے کام کو کیسے متاثر کرتی ہے',
+      oppTitle: 'آپ کے لیے کیا دستیاب ہے',
+      speakBtn: '🎙 بولیں',
+      stopBtn: '■ سننا بند کریں',
+      voiceDefault: 'اگر ٹائپ کرنا مشکل ہو تو اپنی زبان میں بولیں۔ ہم اسے اسی مہارت فارم میں لکھ دیں گے۔',
+      voiceListening: 'سن رہے ہیں... اپنی زبان میں آرام سے بولیں۔',
+      voiceCaptured: 'آواز محفوظ ہو گئی ہے۔ چاہیں تو متن میں تبدیلی کر سکتے ہیں۔',
+      voiceUnsupported: 'اس براؤزر میں وائس ان پٹ دستیاب نہیں ہے۔ آپ ٹائپ کر سکتے ہیں یا مختصر ویڈیو اپ لوڈ کر سکتے ہیں۔',
+      voiceStartError: 'وائس ان پٹ شروع نہیں ہو سکا۔ دوبارہ کوشش کریں یا اپنا کام ٹائپ کریں۔',
+      noLanguageSupport: 'اگر ٹائپ کرنا مشکل ہو تو اپنی زبان میں بولیں۔ ہم اسے اسی مہارت فارم میں لکھ دیں گے۔'
+    },
+    es: {
+      pageTitle: 'UNMAPPED - Visibilidad de habilidades',
+      heroTitle: '¿Qué haces?',
+      heroSubtitle: 'Cuéntanos con tus propias palabras. No necesitas certificados, solo describe tu trabajo.',
+      descLabel: 'Describe tu trabajo',
+      educationLabel: 'Nivel educativo más alto',
+      experienceLabel: 'Años haciendo este trabajo',
+      otherSkillsLabel: 'Otras habilidades o cosas que aprendiste por tu cuenta',
+      videoLabel: 'Video corto de tu trabajo',
+      videoHelp: 'Útil para trabajo manual como agricultura, electricidad, mecánica, reparaciones o costura.',
+      startBtn: 'Comenzar evaluación de habilidades →',
+      profileTitle: 'Tu CV de una página',
+      riskTitle: 'Cómo afecta la IA a tu trabajo',
+      oppTitle: 'Qué hay disponible para ti',
+      speakBtn: '🎙 Hablar',
+      stopBtn: '■ Detener',
+      voiceDefault: 'Si te cuesta escribir, habla en tu idioma. Lo transcribimos al mismo formulario de habilidades.',
+      voiceListening: 'Escuchando... habla con naturalidad en tu idioma.',
+      voiceCaptured: 'Voz capturada. Puedes editar el texto si hace falta.',
+      voiceUnsupported: 'La entrada de voz no es compatible con este navegador. También puedes escribir o subir un video corto.',
+      voiceStartError: 'No se pudo iniciar la entrada de voz. Inténtalo de nuevo o escribe tu trabajo.',
+      noLanguageSupport: 'Si te cuesta escribir, habla en tu idioma. Lo transcribimos al mismo formulario de habilidades.'
+    }
+  };
   let state = {
     sessionId: null,
     occupation: null,
@@ -690,6 +1097,8 @@
     educationLevel: null,
     experienceYears: null,
     otherSkills: null,
+    workVideoFile: null,
+    spokenLanguage: 'en-US',
     selectedOption: null,
     profileId: null
   };
@@ -706,8 +1115,196 @@
     showScreen('loading');
   }
 
+  function getUiPack(regionOrId) {
+    const region = typeof regionOrId === 'string'
+      ? regionCatalog.find(r => r.id === regionOrId)
+      : regionOrId;
+    const code = ((region && (region.language_code || region.language)) || 'en').toLowerCase().split('-')[0];
+    return UI_TEXT_PACKS[code] || UI_TEXT_PACKS.en;
+  }
+
+  function applyUiText(regionOrId) {
+    const pack = getUiPack(regionOrId);
+    const set = (id, value) => {
+      const el = document.getElementById(id);
+      if (el && value) el.textContent = value;
+    };
+
+    document.title = pack.pageTitle || document.title;
+    set('heroTitle', pack.heroTitle);
+    set('heroSubtitle', pack.heroSubtitle);
+    set('descLabel', pack.descLabel);
+    set('educationLabel', pack.educationLabel);
+    set('experienceLabel', pack.experienceLabel);
+    set('otherSkillsLabel', pack.otherSkillsLabel);
+    set('videoLabel', pack.videoLabel);
+    set('videoHelp', pack.videoHelp);
+    set('startBtn', pack.startBtn);
+    set('profileTitle', pack.profileTitle);
+    set('riskTitle', pack.riskTitle);
+    set('oppTitle', pack.oppTitle);
+    set('voiceBtn', pack.speakBtn);
+    if (!voiceListening) {
+      set('voiceStatus', pack.voiceDefault);
+    }
+  }
+
   function goBack() {
     showScreen('start');
+  }
+
+  async function loadRegions() {
+    try {
+      const res = await fetch(`${API}/regions`);
+      if (!res.ok) return;
+      const data = await res.json();
+      regionCatalog = data.regions || [];
+
+      const select = document.getElementById('regionSelect');
+      select.innerHTML = regionCatalog.map(region => `
+        <option value="${region.id}">${region.country} — ${region.name.replace(`${region.country} — `, '')}</option>
+      `).join('');
+
+      const preferred = regionCatalog.find(r => r.id === 'ghana_urban') || regionCatalog[0];
+      if (preferred) {
+        select.value = preferred.id;
+        updateRegionContext(preferred.id);
+        renderEducationOptions(preferred);
+        applyRegionLanguage(preferred);
+        _prevRegion = preferred.id;
+      }
+    } catch (err) {
+      // Keep the UI usable even if the catalog request fails.
+    }
+  }
+
+  function updateRegionContext(regionId) {
+    const region = regionCatalog.find(r => r.id === regionId);
+    const card = document.getElementById('regionContextCard');
+    if (!region) {
+      card.style.display = 'none';
+      return;
+    }
+
+    card.style.display = 'block';
+    document.getElementById('regionContextTitle').textContent = region.name;
+    document.getElementById('regionContextMeta').textContent =
+      `${region.currency || 'Currency not set'} · ${region.language || 'Language not set'} · ${region.location_context || ''}`;
+    const examples = (region.local_examples || []).slice(0, 3).join(' · ');
+    const oppTypes = (region.opportunity_types || []).join(', ');
+    document.getElementById('regionContextExamples').textContent =
+      `Local examples: ${examples || 'Not provided'} · Opportunity types: ${oppTypes || 'Not provided'}`;
+  }
+
+  function renderEducationOptions(regionOrId) {
+    const region = typeof regionOrId === 'string'
+      ? regionCatalog.find(r => r.id === regionOrId)
+      : regionOrId;
+    const select = document.getElementById('educationLevel');
+    if (!select || !region) return;
+
+    const current = select.value;
+    const levels = region.education_levels || [];
+    if (!levels.length) return;
+
+    select.innerHTML = levels.map(l => `<option value="${l.value}">${l.label}</option>`).join('');
+    select.value = levels.some(l => l.value === current) ? current : levels[0].value;
+  }
+
+  function applyRegionLanguage(regionOrId) {
+    const region = typeof regionOrId === 'string'
+      ? regionCatalog.find(r => r.id === regionOrId)
+      : regionOrId;
+    if (!region) return;
+
+    const languageCode = region.default_voice_language || 'en-US';
+    const voiceSelect = document.getElementById('voiceLanguage');
+    if (voiceSelect) {
+      const exists = Array.from(voiceSelect.options).some(opt => opt.value === languageCode);
+      voiceSelect.value = exists ? languageCode : 'en-US';
+      state.spokenLanguage = voiceSelect.value;
+    }
+
+    document.documentElement.lang = region.language_code || 'en';
+    const status = document.getElementById('voiceStatus');
+    if (status) {
+      status.textContent = `Speak in ${region.language_name || region.language || 'your local language'}. We transcribe it into the same skills form.`;
+    }
+  }
+
+  function getSpeechRecognition() {
+    return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+  }
+
+  let voiceRecognition = null;
+  let voiceListening = false;
+
+  function setVoiceStatus(message, isError = false) {
+    const el = document.getElementById('voiceStatus');
+    el.textContent = message;
+    el.style.color = isError ? '#f87171' : '#64748b';
+  }
+
+  function syncVoiceButton() {
+    const btn = document.getElementById('voiceBtn');
+    btn.textContent = voiceListening ? '■ Stop listening' : '🎙 Speak';
+  }
+
+  function toggleVoiceInput() {
+    const SpeechRecognition = getSpeechRecognition();
+    const lang = document.getElementById('voiceLanguage').value;
+    state.spokenLanguage = lang;
+
+    if (!SpeechRecognition) {
+      setVoiceStatus('Voice input is not supported in this browser. You can still type or upload a short video.', true);
+      return;
+    }
+
+    if (!voiceRecognition) {
+      voiceRecognition = new SpeechRecognition();
+      voiceRecognition.continuous = false;
+      voiceRecognition.interimResults = true;
+      voiceRecognition.maxAlternatives = 1;
+
+      voiceRecognition.onresult = event => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        const existing = document.getElementById('descInput').value.trim();
+        document.getElementById('descInput').value = transcript.trim() || existing;
+      };
+
+      voiceRecognition.onstart = () => {
+        voiceListening = true;
+        syncVoiceButton();
+        setVoiceStatus('Listening... speak naturally in your language.');
+      };
+
+      voiceRecognition.onend = () => {
+        voiceListening = false;
+        syncVoiceButton();
+        setVoiceStatus('Voice captured. You can edit the text if needed.');
+      };
+
+      voiceRecognition.onerror = event => {
+        voiceListening = false;
+        syncVoiceButton();
+        setVoiceStatus(`Voice input stopped: ${event.error}`, true);
+      };
+    }
+
+    if (voiceListening) {
+      voiceRecognition.stop();
+      return;
+    }
+
+    voiceRecognition.lang = lang;
+    try {
+      voiceRecognition.start();
+    } catch (err) {
+      setVoiceStatus('Could not start voice input. Try again or type your work.', true);
+    }
   }
 
   async function startAssessment() {
@@ -718,10 +1315,14 @@
     const education_level = document.getElementById('educationLevel').value;
     const experience_years = parseInt(document.getElementById('experienceYears').value) || 0;
     const other_skills = document.getElementById('otherSkills').value.trim();
+    const workVideoFile = document.getElementById('workVideoInput').files?.[0] || null;
+    const spoken_language = document.getElementById('voiceLanguage').value;
 
     state.educationLevel = education_level;
     state.experienceYears = experience_years;
     state.otherSkills = other_skills;
+    state.workVideoFile = workVideoFile;
+    state.spokenLanguage = spoken_language;
 
     document.getElementById('startError').style.display = 'none';
     document.getElementById('startBtn').disabled = true;
@@ -731,7 +1332,7 @@
       const res = await fetch(`${API}/assess/start`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ description, region, education_level, experience_years, other_skills })
+        body: JSON.stringify({ description, region, education_level, experience_years, other_skills, spoken_language })
       });
 
       if (!res.ok) throw new Error(await res.text());
@@ -743,10 +1344,30 @@
       state.currentQuestion = 1;
       state.totalQuestions = data.assessment.total_dimensions;
 
+      let evidenceNote = 'No video evidence uploaded.';
+      if (workVideoFile) {
+        showLoading('Uploading your work video...');
+        try {
+          const form = new FormData();
+          form.append('session_id', state.sessionId);
+          form.append('file', workVideoFile);
+          const uploadRes = await fetch(`${API}/assess/evidence/video`, {
+            method: 'POST',
+            body: form
+          });
+          if (!uploadRes.ok) throw new Error(await uploadRes.text());
+          const uploadData = await uploadRes.json();
+          evidenceNote = `Video evidence attached: ${uploadData.filename}`;
+        } catch (uploadErr) {
+          evidenceNote = 'Video evidence could not be uploaded, but the assessment will continue.';
+        }
+      }
+
       // Show confirmation screen
       document.getElementById('confirmTitle').textContent = data.occupation.title;
       document.getElementById('confirmMeta').textContent =
         `ISCO ${data.occupation.isco_code} · Matched on: ${data.occupation.matched_on}`;
+      document.getElementById('evidenceNote').textContent = evidenceNote;
       document.getElementById('confidenceFill').style.width =
         Math.round(data.occupation.confidence * 100) + '%';
 
@@ -927,6 +1548,20 @@
     document.getElementById('cardExperience').textContent =
       profile.experience_years ? `${profile.experience_years} years` : '—';
     document.getElementById('cardRegion').textContent = profile.region;
+    if (profile.spoken_language) {
+      document.getElementById('profileSubtitle').textContent =
+        `${profile.occupation_title} · ${profile.location} · Voice input: ${profile.spoken_language}`;
+    }
+
+    // Evidence
+    const evidence = profile.evidence || profile.skills_card?.evidence || {};
+    const evidencePanel = document.getElementById('evidencePanel');
+    const evidenceText = document.getElementById('evidenceText');
+    const evidenceLabel = evidence.video_name
+      ? `Short work video uploaded: ${evidence.video_name}${evidence.video_size_bytes ? ` (${Math.round(evidence.video_size_bytes / 1024)} KB)` : ''}`
+      : 'No uploaded video evidence on this profile.';
+    evidenceText.textContent = evidenceLabel;
+    evidencePanel.style.display = 'block';
 
     // Summary
     document.getElementById('cardSummary').textContent = profile.summary || '';
@@ -1003,6 +1638,95 @@
     }
   }
 
+  async function goToRisk() {
+    showLoading('Analysing AI risk and skill durability...');
+    try {
+      const res = await fetch(`${API}/assess/risk/${state.sessionId}`);
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      renderRisk(data.risk_profile);
+      showScreen('risk');
+    } catch(e) {
+      showScreen('profile');
+    }
+  }
+
+  function renderRisk(risk) {
+    const color = risk.exposure_color || '#eab308';
+
+    // Gauge
+    document.getElementById('riskPct').textContent = risk.automation_probability + '%';
+    document.getElementById('riskPct').style.color = color;
+    document.getElementById('riskLabel').textContent = risk.exposure_display;
+    document.getElementById('riskLabel').style.color = color;
+    const fill = document.getElementById('riskBarFill');
+    fill.style.width = risk.automation_probability + '%';
+    fill.style.background = color;
+    document.getElementById('riskHeadline').textContent = risk.headline;
+    document.getElementById('riskRawPct').textContent = risk.frey_osborne_raw_pct + '% (global average)';
+    document.getElementById('riskLMICPct').textContent = risk.automation_probability + '% (SSA informal economy)';
+    document.getElementById('riskGaugeWrap').style.borderColor = color + '44';
+
+    // Resilience
+    const rs = risk.resilience_score;
+    const rColor = rs >= 70 ? '#22c55e' : rs >= 45 ? '#eab308' : '#ef4444';
+    const circle = document.getElementById('resilienceCircle');
+    circle.style.borderColor = rColor;
+    circle.style.background = rColor + '18';
+    document.getElementById('resilienceScore').textContent = rs;
+    document.getElementById('resilienceScore').style.color = rColor;
+    document.getElementById('resilienceLabel').textContent = risk.resilience_label;
+    document.getElementById('resilienceLabel').style.color = rColor;
+
+    // Task breakdown
+    const tbEl = document.getElementById('taskBreakdown');
+    tbEl.innerHTML = (risk.task_breakdown || []).map(t => {
+      const c = t.exposure_color || '#eab308';
+      const badgeStyle = t.is_durable
+        ? 'background:#052e16; color:#4ade80; border:1px solid #166534;'
+        : 'background:#450a0a; color:#fca5a5; border:1px solid #991b1b;';
+      return `
+        <div class="task-row">
+          <div style="flex:1; min-width:0;">
+            <div style="font-size:13px; color:#e2e8f0; font-weight:600; margin-bottom:2px;">${t.dimension_label}</div>
+            <div style="font-size:10px; color:#475569;">${t.ilo_task_type}</div>
+          </div>
+          <span class="task-durable-badge" style="${badgeStyle}">${t.is_durable ? '🛡 DURABLE' : '⚠ AT RISK'}</span>
+          <div style="width:80px;">
+            <div class="task-bar-track">
+              <div class="task-bar-fill" style="width:${t.exposure_score}%; background:${c};"></div>
+            </div>
+          </div>
+          <div class="task-exposure-pct" style="color:${c};">${t.exposure_score}%</div>
+        </div>
+        <div style="padding:6px 0 10px; border-bottom:1px solid #1e293b; font-size:11px; color:#475569; line-height:1.5;">${t.horizon_note}</div>`;
+    }).join('');
+
+    // Wittgenstein
+    const w = risk.wittgenstein_signal || {};
+    document.getElementById('witt2025').textContent = (w.tertiary_2025_pct || '—') + '%';
+    document.getElementById('witt2035').textContent = (w.tertiary_2035_pct || '—') + '%';
+    document.getElementById('wittText').textContent = w.implication || w.interpretation || '';
+    document.getElementById('wittSource').textContent = w.source || '';
+
+    // Actions
+    const actEl = document.getElementById('riskActions');
+    const priorityColors = { HIGH: '#ef4444', MEDIUM: '#f97316', LOW: '#64748b' };
+    actEl.innerHTML = (risk.recommended_actions || []).map(a => `
+      <div class="action-card">
+        <div class="action-priority" style="color:${priorityColors[a.priority] || '#64748b'}">${a.priority} PRIORITY · ${a.dimension}</div>
+        <div class="action-text">${a.action}</div>
+        ${a.why ? `<div class="action-why">${a.why}</div>` : ''}
+      </div>`).join('');
+
+    // Data sources
+    const dsEl = document.getElementById('riskDataSources');
+    const ds = risk.data_sources || {};
+    dsEl.innerHTML = Object.entries(ds).map(([k, v]) =>
+      `<div><strong style="color:#475569;">${k.replace(/_/g,' ').toUpperCase()}:</strong> ${v}</div>`
+    ).join('');
+  }
+
   async function goToOpportunities() {
     showLoading('Matching your skills to local opportunities...');
     try {
@@ -1012,7 +1736,7 @@
       renderOpportunities(data);
       showScreen('opportunities');
     } catch(e) {
-      showScreen('profile');
+      showScreen('risk');
     }
   }
 
@@ -1148,18 +1872,190 @@
       sessionId: null, occupation: null, challengeData: null,
       currentQuestion: 0, totalQuestions: 0,
       educationLevel: null, experienceYears: null, otherSkills: null,
-      selectedOption: null, profileId: null
+      selectedOption: null, profileId: null, workVideoFile: null, spokenLanguage: 'en-US'
     };
     document.getElementById('descInput').value = '';
+    document.getElementById('workVideoInput').value = '';
+    document.getElementById('voiceStatus').textContent = 'Speak in your language if typing is hard. We transcribe it into the same skills form.';
     document.getElementById('startBtn').disabled = false;
     document.getElementById('shareCardBtn').style.display = 'none';
     showScreen('start');
+  }
+
+  // ── Config-diff panel ────────────────────────────────────────────────────
+  let _prevRegion = document.getElementById('regionSelect').value;
+
+  function onRegionChange() {
+    const newRegion = document.getElementById('regionSelect').value;
+    updateRegionContext(newRegion);
+    renderEducationOptions(newRegion);
+    applyRegionLanguage(newRegion);
+    if (newRegion !== _prevRegion) {
+      showConfigDiff(_prevRegion, newRegion);
+      _prevRegion = newRegion;
+    }
+  }
+
+  async function showConfigDiff(fromRegion, toRegion) {
+    fromRegion = fromRegion || document.getElementById('regionSelect').value;
+    const regions = Array.from(document.getElementById('regionSelect').options)
+      .map(o => o.value)
+      .filter(v => v !== fromRegion);
+    toRegion = toRegion || regions[0];
+
+    try {
+      const res = await fetch(`${API}/config-diff?from_region=${fromRegion}&to_region=${toRegion}`);
+      if (!res.ok) return;
+      const data = await res.json();
+
+      document.getElementById('configDiffTitle').textContent =
+        `Reconfiguring: ${data.from_region} → ${data.to_region}`;
+      document.getElementById('configDiffSubtitle').textContent =
+        `${data.total_changes} parameters change · 0 lines of code change`;
+
+      const rowsEl = document.getElementById('configDiffRows');
+      rowsEl.innerHTML = (data.changed_fields || []).map(d => `
+        <div class="diff-row">
+          <div class="diff-label">${d.field}</div>
+          <div class="diff-from">${Array.isArray(d.from_value) ? d.from_value.join(', ') : d.from_value}</div>
+          <div class="diff-to">${Array.isArray(d.to_value) ? d.to_value.join(', ') : d.to_value}</div>
+        </div>`).join('');
+
+      // ISCO shifts
+      if (data.isco_priority_shifts && data.isco_priority_shifts.length > 0) {
+        rowsEl.innerHTML += `<div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; padding:10px 0 4px;">ISCO PRIORITY GROUP SHIFTS</div>`;
+        rowsEl.innerHTML += data.isco_priority_shifts.map(s => `
+          <div class="diff-row">
+            <div class="diff-label">Group ${s.isco_group} — ${s.label}</div>
+            <div class="diff-from">${(s.from_share * 100).toFixed(0)}% informal share</div>
+            <div class="diff-to">${(s.to_share * 100).toFixed(0)}% informal share</div>
+          </div>`).join('');
+      }
+
+      const tagsEl = document.getElementById('unchangedTags');
+      tagsEl.innerHTML = (data.unchanged || []).map(u =>
+        `<span class="unchanged-tag">✓ ${u}</span>`).join('');
+
+      document.getElementById('infraNote').textContent = data.infrastructure_note || '';
+      document.getElementById('configDiffOverlay').classList.add('open');
+    } catch(e) { /* silent fail */ }
+  }
+
+  function closeConfigDiff(e) {
+    if (!e || e.target === document.getElementById('configDiffOverlay')) {
+      document.getElementById('configDiffOverlay').classList.remove('open');
+    }
   }
 
   // Allow Enter key to start
   document.getElementById('descInput').addEventListener('keypress', e => {
     if (e.key === 'Enter') startAssessment();
   });
+
+  document.getElementById('voiceLanguage').value = navigator.language || 'en-US';
+  loadRegions();
+
+  function applyRegionLanguage(regionOrId) {
+    const region = typeof regionOrId === 'string'
+      ? regionCatalog.find(r => r.id === regionOrId)
+      : regionOrId;
+    if (!region) return;
+
+    const languageCode = region.default_voice_language || 'en-US';
+    const voiceSelect = document.getElementById('voiceLanguage');
+    if (voiceSelect) {
+      const exists = Array.from(voiceSelect.options).some(opt => opt.value === languageCode);
+      voiceSelect.value = exists ? languageCode : 'en-US';
+      state.spokenLanguage = voiceSelect.value;
+    }
+
+    const uiLang = ((region.language_code || 'en') + '').toLowerCase().split('-')[0];
+    document.documentElement.lang = uiLang;
+    document.documentElement.dir = (uiLang === 'ur' || uiLang === 'ar') ? 'rtl' : 'ltr';
+    applyUiText(region);
+
+    const status = document.getElementById('voiceStatus');
+    if (status) status.textContent = getUiPack(region).voiceDefault;
+  }
+
+  function syncVoiceButton() {
+    const btn = document.getElementById('voiceBtn');
+    const pack = getUiPack(document.getElementById('regionSelect').value);
+    btn.textContent = voiceListening ? (pack.stopBtn || '■ Stop listening') : (pack.speakBtn || '🎙 Speak');
+  }
+
+  function toggleVoiceInput() {
+    const SpeechRecognition = getSpeechRecognition();
+    const lang = document.getElementById('voiceLanguage').value;
+    const pack = getUiPack(document.getElementById('regionSelect').value);
+    state.spokenLanguage = lang;
+
+    if (!SpeechRecognition) {
+      setVoiceStatus(pack.voiceUnsupported, true);
+      return;
+    }
+
+    if (!voiceRecognition) {
+      voiceRecognition = new SpeechRecognition();
+      voiceRecognition.continuous = false;
+      voiceRecognition.interimResults = true;
+      voiceRecognition.maxAlternatives = 1;
+
+      voiceRecognition.onresult = event => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        const existing = document.getElementById('descInput').value.trim();
+        document.getElementById('descInput').value = transcript.trim() || existing;
+      };
+
+      voiceRecognition.onstart = () => {
+        voiceListening = true;
+        syncVoiceButton();
+        setVoiceStatus(pack.voiceListening);
+      };
+
+      voiceRecognition.onend = () => {
+        voiceListening = false;
+        syncVoiceButton();
+        setVoiceStatus(pack.voiceCaptured);
+      };
+
+      voiceRecognition.onerror = event => {
+        voiceListening = false;
+        syncVoiceButton();
+        setVoiceStatus(`${pack.voiceStartError}: ${event.error}`, true);
+      };
+    }
+
+    if (voiceListening) {
+      voiceRecognition.stop();
+      return;
+    }
+
+    voiceRecognition.lang = lang;
+    try {
+      voiceRecognition.start();
+    } catch (err) {
+      setVoiceStatus(pack.voiceStartError, true);
+    }
+  }
+
+  function resetApp() {
+    state = {
+      sessionId: null, occupation: null, challengeData: null,
+      currentQuestion: 0, totalQuestions: 0,
+      educationLevel: null, experienceYears: null, otherSkills: null,
+      selectedOption: null, profileId: null, workVideoFile: null, spokenLanguage: 'en-US'
+    };
+    document.getElementById('descInput').value = '';
+    document.getElementById('workVideoInput').value = '';
+    document.getElementById('startBtn').disabled = false;
+    document.getElementById('shareCardBtn').style.display = 'none';
+    applyRegionLanguage(document.getElementById('regionSelect').value);
+    showScreen('start');
+  }
 </script>
 </body>
 </html>

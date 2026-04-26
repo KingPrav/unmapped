@@ -94,7 +94,12 @@ def _serialize(session: AssessmentSession) -> dict:
         "_education_level": getattr(session, "_education_level", "upper_secondary"),
         "_experience_years":getattr(session, "_experience_years", 0),
         "_other_skills":    getattr(session, "_other_skills",    ""),
+        "_spoken_language": getattr(session, "_spoken_language", ""),
         "_profile_id":      getattr(session, "_profile_id",      None),
+        "_evidence_video_name": getattr(session, "_evidence_video_name", None),
+        "_evidence_video_path": getattr(session, "_evidence_video_path", None),
+        "_evidence_video_type": getattr(session, "_evidence_video_type", None),
+        "_evidence_video_size": getattr(session, "_evidence_video_size", None),
         "_current_challenge":getattr(session,"_current_challenge",None),
     }
 
@@ -117,7 +122,12 @@ def _deserialize(data: dict) -> AssessmentSession:
     session._education_level  = data.get("_education_level", "upper_secondary")
     session._experience_years = data.get("_experience_years", 0)
     session._other_skills     = data.get("_other_skills", "")
+    session._spoken_language  = data.get("_spoken_language", "")
     session._profile_id       = data.get("_profile_id", None)
+    session._evidence_video_name = data.get("_evidence_video_name", None)
+    session._evidence_video_path = data.get("_evidence_video_path", None)
+    session._evidence_video_type = data.get("_evidence_video_type", None)
+    session._evidence_video_size = data.get("_evidence_video_size", None)
     session._current_challenge= data.get("_current_challenge", None)
     return session
 

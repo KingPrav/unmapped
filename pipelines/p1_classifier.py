@@ -1,13 +1,13 @@
 """
-PIPELINE 1 — Occupation Classifier
+PIPELINE 1 - Occupation Classifier
 Data source: ISCO-08 taxonomy (seed data + real data from data/processed/)
-Takes user's natural language description → returns ISCO-08 occupation code
+Takes user's natural language description -> returns ISCO-08 occupation code
 """
 
 import json
-import os
-from openai import OpenAI
 from pathlib import Path
+
+from app.services.llm import chat_json, has_llm_credentials
 
 BASE_DIR = Path(__file__).parent.parent
 SEED_PATH = BASE_DIR / "data" / "seed" / "seed_data.json"
@@ -16,13 +16,15 @@ SEED_PATH = BASE_DIR / "data" / "seed" / "seed_data.json"
 with open(SEED_PATH) as f:
     SEED_DATA = json.load(f)
 
-# Build occupation context for LLM prompt
+
 def _build_occupation_list() -> str:
+    """Build occupation context for the classifier prompt."""
     lines = []
     for code, occ in SEED_DATA["occupations"].items():
         keywords = ", ".join(occ["common_names"])
         lines.append(f"- ISCO {code}: {occ['title']} (also known as: {keywords})")
     return "\n".join(lines)
+
 
 OCCUPATION_LIST = _build_occupation_list()
 
@@ -48,16 +50,6 @@ Return this exact JSON format:
 }}"""
 
 
-def _parse_json_response(text: str) -> dict:
-    """Safely parse JSON from OpenAI — strips markdown code blocks if present."""
-    text = text.strip()
-    # Strip markdown code fences OpenAI sometimes wraps around JSON
-    if text.startswith("```"):
-        lines = text.split("\n")
-        text = "\n".join(lines[1:-1]) if lines[-1].strip() == "```" else "\n".join(lines[1:])
-    return json.loads(text.strip())
-
-
 def classify_occupation(user_description: str) -> dict:
     """
     Pipeline 1: Maps free-text occupation description to ISCO-08 code.
@@ -68,34 +60,23 @@ def classify_occupation(user_description: str) -> dict:
     Returns:
         dict with isco_code, title, confidence, matched_on, and full occupation data
     """
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key:
-        raise ValueError("OPENAI_API_KEY not set in environment. Check your .env file.")
-
-    client = OpenAI(api_key=api_key)
+    if not has_llm_credentials():
+        raise ValueError("No LLM API key found. Set GROQ_API_KEY or OPENAI_API_KEY in your .env file.")
 
     prompt = CLASSIFY_PROMPT.format(
         occupation_list=OCCUPATION_LIST,
-        user_description=user_description
+        user_description=user_description,
     )
 
-    message = client.chat.completions.create(
-        model="gpt-4o-mini",
+    result = chat_json(
+        system="You are a helpful assistant that always responds with valid JSON only.",
+        user=prompt,
         max_tokens=256,
-        response_format={"type": "json_object"},
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant that always responds with valid JSON only."},
-            {"role": "user", "content": prompt}
-        ]
+        temperature=0.1,
+        preferred_openai_model="gpt-4o-mini",
     )
-
-    result = _parse_json_response(message.choices[0].message.content)
     isco_code = result["isco_code"]
 
     # Attach full occupation data from seed
-    if isco_code in SEED_DATA["occupations"]:
-        result["occupation_data"] = SEED_DATA["occupations"][isco_code]
-    else:
-        result["occupation_data"] = None
-
+    result["occupation_data"] = SEED_DATA["occupations"].get(isco_code)
     return result

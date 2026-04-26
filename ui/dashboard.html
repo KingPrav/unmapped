@@ -415,10 +415,7 @@
 <header>
   <div class="logo">UNMAPPED <span>Policymaker Dashboard</span></div>
   <div class="header-right">
-    <div class="pill-switcher">
-      <button class="pill-btn active" id="btnGhana" onclick="switchRegion('ghana_urban')">Ghana</button>
-      <button class="pill-btn" id="btnKenya" onclick="switchRegion('kenya_mixed')">Kenya</button>
-    </div>
+    <div class="pill-switcher" id="regionButtons"></div>
     <a href="/" class="portal-link">Worker Portal →</a>
   </div>
 </header>
@@ -650,6 +647,7 @@
   const API = '';
   let currentRegion = 'ghana_urban';
   let dashData = null;
+  let regionCatalog = [];
 
   const ISCO_LABELS = {
     1: 'Group 1 — Managers',
@@ -756,9 +754,34 @@
 
   function switchRegion(region) {
     currentRegion = region;
-    document.getElementById('btnGhana').classList.toggle('active', region === 'ghana_urban');
-    document.getElementById('btnKenya').classList.toggle('active', region === 'kenya_mixed');
+    renderRegionButtons();
     loadDashboard(region);
+  }
+
+  function renderRegionButtons() {
+    const wrap = document.getElementById('regionButtons');
+    if (!wrap || !regionCatalog.length) return;
+    wrap.innerHTML = regionCatalog.map(region => `
+      <button class="pill-btn ${region.id === currentRegion ? 'active' : ''}" onclick="switchRegion('${region.id}')">${region.country}</button>
+    `).join('');
+  }
+
+  async function loadRegions() {
+    try {
+      const res = await fetch(`${API}/regions`);
+      if (!res.ok) return;
+      const data = await res.json();
+      regionCatalog = data.regions || [];
+      if (!regionCatalog.length) return;
+      if (!regionCatalog.find(r => r.id === currentRegion)) {
+        currentRegion = regionCatalog[0].id;
+      }
+      const current = regionCatalog.find(r => r.id === currentRegion);
+      if (current) document.getElementById('heroRegion').textContent = current.name;
+      renderRegionButtons();
+    } catch (e) {
+      // keep static fallback if the catalog fails
+    }
   }
 
   function sortBy(field) {
@@ -1040,7 +1063,7 @@
   }
 
   // Initial load
-  loadDashboard(currentRegion);
+  loadRegions().then(() => loadDashboard(currentRegion));
 </script>
 </body>
 </html>

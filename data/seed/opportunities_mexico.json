@@ -1,0 +1,175 @@
+{
+  "meta": {
+    "region": "mexico_urban",
+    "country": "Mexico",
+    "currency": "MXN",
+    "econometric_sources": {
+      "wage_floor": "ILOSTAT — Mexico Labour Force Survey 2022, median monthly earnings by occupation",
+      "employer_demand": "World Bank Enterprise Survey (WBES) Mexico 2022 — % firms reporting difficulty finding qualified workers by sector",
+      "sector_growth": "ILOSTAT — Mexico sectoral employment growth rate 2019-2022"
+    }
+  },
+  "opportunities": [
+    {
+      "id": "mx_001",
+      "title": "Mobile Repair Technician",
+      "type": "self_employment",
+      "type_label": "Self-Employment",
+      "isco_groups": [7],
+      "required_dimensions": {
+        "fault_diagnosis": 2,
+        "communication": 1,
+        "resource_judgment": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 9000,
+        "wage_ceiling_monthly": 22000,
+        "currency": "MXN",
+        "employer_demand_pct": 68,
+        "sector_growth_pct": 4.0,
+        "sector_label": "Repair & Maintenance Services"
+      },
+      "honest_description": "Urban repair demand is steady where replacement devices are expensive. Trust, speed, and diagnosis matter more than formal branding. Repairs are strongest in dense neighborhoods and market corridors.",
+      "bridge": {
+        "ready_if": "Fault Diagnosis at Functional level or above",
+        "gap_to_close": "If at Entry: 3-6 months supervised practice closes the gap",
+        "training_option": "CONALEP / technical repair course"
+      },
+      "tags": ["technical", "urban", "repair", "steady"]
+    },
+    {
+      "id": "mx_002",
+      "title": "Street Food / Catering Operator",
+      "type": "self_employment",
+      "type_label": "Self-Employment",
+      "isco_groups": [5],
+      "required_dimensions": {
+        "communication": 1,
+        "process_quality": 1,
+        "resource_judgment": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 8000,
+        "wage_ceiling_monthly": 20000,
+        "currency": "MXN",
+        "employer_demand_pct": 63,
+        "sector_growth_pct": 3.7,
+        "sector_label": "Food Services & Informal Retail"
+      },
+      "honest_description": "Common in dense cities and transit-linked neighborhoods. Income depends on product quality, foot traffic, and repeat customers. Permissions and micro-capital can matter as much as skill.",
+      "bridge": {
+        "ready_if": "Communication and Process Quality at Entry or above",
+        "gap_to_close": "Food safety and stock discipline make the difference",
+        "training_option": "Local food handling / microenterprise course"
+      },
+      "tags": ["accessible", "food", "microenterprise", "urban"]
+    },
+    {
+      "id": "mx_003",
+      "title": "Construction Finishing Worker",
+      "type": "informal_employment",
+      "type_label": "Informal Employment",
+      "isco_groups": [7, 9],
+      "required_dimensions": {
+        "process_quality": 1,
+        "operational_organization": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 9500,
+        "wage_ceiling_monthly": 24000,
+        "currency": "MXN",
+        "employer_demand_pct": 66,
+        "sector_growth_pct": 4.6,
+        "sector_label": "Construction"
+      },
+      "honest_description": "Urban construction needs finishers, helpers, and site support workers. Work is project-based and can shift quickly with the building cycle. Dependability and safety awareness are key entry signals.",
+      "bridge": {
+        "ready_if": "Process Quality and Operational Organization at Entry level or above",
+        "gap_to_close": "On-site orientation is often enough to start",
+        "training_option": "Construction safety and finishing short course"
+      },
+      "tags": ["physical", "project-based", "urban", "demand"]
+    },
+    {
+      "id": "mx_004",
+      "title": "Gig Delivery / Field Service Worker",
+      "type": "gig",
+      "type_label": "Gig / Platform Work",
+      "isco_groups": [5, 8],
+      "required_dimensions": {
+        "communication": 1,
+        "operational_organization": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 8500,
+        "wage_ceiling_monthly": 23000,
+        "currency": "MXN",
+        "employer_demand_pct": 81,
+        "sector_growth_pct": 8.8,
+        "sector_label": "Digital Logistics & Services"
+      },
+      "honest_description": "Delivery and field-service apps expand where smartphone access and dense routes exist. Earnings are variable and depend on ratings, timing, and fuel or vehicle access. The best workers are punctual and easy to communicate with.",
+      "bridge": {
+        "ready_if": "Communication and Operational Organization at any level",
+        "gap_to_close": "Platform onboarding and route familiarity are the main steps",
+        "training_option": "Platform onboarding / route navigation support"
+      },
+      "tags": ["platform", "mobile", "flexible", "urban"]
+    },
+    {
+      "id": "mx_005",
+      "title": "Technical Training Pathway / Certificate",
+      "type": "training_pathway",
+      "type_label": "Training Pathway",
+      "isco_groups": [7, 8],
+      "required_dimensions": {
+        "fault_diagnosis": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": null,
+        "wage_ceiling_monthly": null,
+        "currency": "MXN",
+        "employer_demand_pct": 70,
+        "sector_growth_pct": 4.0,
+        "sector_label": "Technical Trades",
+        "post_training_wage_floor": 14000,
+        "training_duration_months": 12,
+        "training_cost_mxn": 5000
+      },
+      "honest_description": "A certificate can turn informal experience into a signal employers can verify. It matters most when the worker already knows the task but lacks formal proof. The point is legibility and portability.",
+      "bridge": {
+        "ready_if": "Any skill level — this is a development pathway",
+        "gap_to_close": "No prerequisite. Prior experience can be recognized in some programs.",
+        "training_option": "CONALEP / CETIS / technical pathway"
+      },
+      "tags": ["credential", "portable", "formal-pathway", "trade"]
+    },
+    {
+      "id": "mx_006",
+      "title": "Tailoring / Alterations Operator",
+      "type": "self_employment",
+      "type_label": "Self-Employment",
+      "isco_groups": [7],
+      "required_dimensions": {
+        "communication": 1,
+        "process_quality": 1,
+        "resource_judgment": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 7500,
+        "wage_ceiling_monthly": 18000,
+        "currency": "MXN",
+        "employer_demand_pct": 57,
+        "sector_growth_pct": 2.9,
+        "sector_label": "Garment Repair & Personal Services"
+      },
+      "honest_description": "Custom alterations and repair services stay useful where fit and speed matter. The work is practical, local, and low-capital. A good reputation and reliability matter more than branding.",
+      "bridge": {
+        "ready_if": "Communication and Process Quality at Entry or above",
+        "gap_to_close": "2-3 months apprenticeship is enough to start earning",
+        "training_option": "Tailoring / garment construction short course"
+      },
+      "tags": ["community-based", "low-capital", "custom", "stable"]
+    }
+  ]
+}

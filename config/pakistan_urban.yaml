@@ -1,0 +1,70 @@
+# UNMAPPED — Country Configuration
+# Region: Pakistan, Urban Informal Economy
+
+region_id: pakistan_urban
+region_name: "Pakistan — Urban Informal Economy"
+country: Pakistan
+country_code: PAK
+
+language: ur
+language_name: Urdu / English
+language_register: "Urdu-market register with simple English support"
+default_voice_language: ur-PK
+
+education_levels:
+  - value: none
+    label: No schooling
+  - value: primary
+    label: Primary school
+  - value: middle
+    label: Middle school
+  - value: matric
+    label: Matric / Secondary
+  - value: intermediate
+    label: Intermediate / Higher secondary
+  - value: technical_vocational
+    label: Technical / Vocational
+  - value: graduate
+    label: Graduate / University
+
+location_context: "urban informal economy, Karachi and Lahore"
+city: Karachi
+currency: "Pakistani rupee (PKR)"
+local_tools: "basic hand tools, shared workshop space, mobile phone, low-cost repair kit"
+local_examples:
+  - "Karachi workshops"
+  - "Lahore market lanes"
+  - "Rawalpindi service bazaars"
+
+isco_priority_groups:
+  - code: 7
+    label: "Craft and Related Trades Workers"
+    informal_share: 0.34
+  - code: 5
+    label: "Service and Sales Workers"
+    informal_share: 0.29
+  - code: 9
+    label: "Elementary Occupations"
+    informal_share: 0.18
+  - code: 6
+    label: "Skilled Agricultural Workers"
+    informal_share: 0.10
+  - code: 8
+    label: "Plant and Machine Operators"
+    informal_share: 0.06
+
+esco_language: en
+esco_version: "1.2.1"
+
+opportunity_types:
+  - self_employment
+  - informal_employment
+  - gig
+  - training_pathway
+  - micro_enterprise
+  - cooperative
+
+data_sources:
+  labor_market: "ILOSTAT — Pakistan Employment by Occupation (ISCO-08), 2022"
+  skills_taxonomy: "O*NET 28.0 via ISCO-08 crosswalk"
+  localisation: "ESCO v1.2.1 — English"

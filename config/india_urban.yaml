@@ -1,0 +1,72 @@
+# UNMAPPED — Country Configuration
+# Region: India, Urban Informal Economy
+
+region_id: india_urban
+region_name: "India — Urban Informal Economy"
+country: India
+country_code: IND
+
+language: hi
+language_name: Hindi / English
+language_register: "Urban Hindi-English register with local market speech"
+default_voice_language: hi-IN
+
+education_levels:
+  - value: none
+    label: No schooling
+  - value: primary
+    label: Primary school
+  - value: upper_primary
+    label: Upper primary
+  - value: secondary
+    label: Secondary / Class 10
+  - value: higher_secondary
+    label: Higher secondary / Class 12
+  - value: iti_vocational
+    label: ITI / Vocational
+  - value: diploma
+    label: Diploma / Polytechnic
+  - value: graduate
+    label: Graduate / University
+
+location_context: "urban informal economy, Delhi and nearby city clusters"
+city: Delhi
+currency: "Indian rupee (INR)"
+local_tools: "basic hand tools, shared workshop space, mobile phone, low-cost power tools"
+local_examples:
+  - "Delhi repair markets"
+  - "Mumbai roadside workshops"
+  - "Bengaluru service lanes"
+
+isco_priority_groups:
+  - code: 5
+    label: "Service and Sales Workers"
+    informal_share: 0.36
+  - code: 7
+    label: "Craft and Related Trades Workers"
+    informal_share: 0.31
+  - code: 9
+    label: "Elementary Occupations"
+    informal_share: 0.16
+  - code: 6
+    label: "Skilled Agricultural Workers"
+    informal_share: 0.09
+  - code: 8
+    label: "Plant and Machine Operators"
+    informal_share: 0.08
+
+esco_language: en
+esco_version: "1.2.1"
+
+opportunity_types:
+  - self_employment
+  - informal_employment
+  - gig
+  - training_pathway
+  - micro_enterprise
+  - cooperative
+
+data_sources:
+  labor_market: "ILOSTAT — India Employment by Occupation (ISCO-08), 2022"
+  skills_taxonomy: "O*NET 28.0 via ISCO-08 crosswalk"
+  localisation: "ESCO v1.2.1 — English"

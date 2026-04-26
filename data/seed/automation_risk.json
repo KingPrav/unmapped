@@ -1,0 +1,232 @@
+{
+  "meta": {
+    "sources": {
+      "frey_osborne": "Frey, C.B. & Osborne, M.A. (2013/2017). The Future of Employment. Oxford Martin Programme on Technology and Employment.",
+      "ilo_task_indices": "ILO (2023). Task Content of Jobs in Low- and Middle-Income Countries. Working Paper. Geneva: International Labour Office.",
+      "wittgenstein": "Wittgenstein Centre for Demography and Global Human Capital (2024). WC-IIASA Human Capital Data Explorer 2025-2035 Projections.",
+      "lmic_adjustment": "World Bank STEP Skills Measurement Survey + ILO infrastructure calibration for Sub-Saharan Africa, East Africa"
+    },
+    "lmic_adjustment_note": "Raw Frey-Osborne scores reflect US labor market task composition. LMIC-adjusted scores account for: lower routine-task automation penetration due to infrastructure gaps, lower capital intensity of production, higher share of interpersonal and physical tasks in informal sector jobs, and slower technology adoption curves. Adjustment factor: 0.65-0.80x raw score for SSA informal economy.",
+    "horizon": "2025-2035",
+    "notes": "Task-level risk is calibrated at dimension level (fault_diagnosis, communication, resource_judgment, process_quality, operational_organization) not just ISCO code. This reflects the reality that Amara's fault diagnosis is more durable than her routine inventory tracking, even within the same occupation."
+  },
+
+  "dimension_risk_profiles": {
+    "fault_diagnosis": {
+      "ilo_task_type": "non-routine cognitive — analytical",
+      "automation_exposure": "LOW",
+      "automation_exposure_score": 0.18,
+      "rationale": "Fault diagnosis in informal LMIC contexts requires physical inspection, contextual pattern recognition, and improvisation with incomplete information. AI diagnostic tools exist but require connectivity and standardised equipment that is absent in most informal repair situations.",
+      "resilience_rationale": "Diagnosing faults on heterogeneous, aging, and counterfeit equipment — common in Sub-Saharan informal markets — is a fundamentally non-routine task. High durability.",
+      "durable": true,
+      "horizon_note": "Remains durable through 2035 in LMIC informal contexts. Risk increases if formal repair chains (e.g. branded service centres) displace independent repairers."
+    },
+    "communication": {
+      "ilo_task_type": "non-routine interpersonal",
+      "automation_exposure": "LOW",
+      "automation_exposure_score": 0.12,
+      "rationale": "Customer-facing interpersonal work in informal markets is highly context-dependent, requires trust-building, and operates in multilingual, low-literacy environments. These are among the least automatable task types identified in ILO 2023 task content analysis.",
+      "resilience_rationale": "Cross-language, community-embedded customer relationships are a form of social capital that AI cannot replicate in informal LMIC contexts.",
+      "durable": true,
+      "horizon_note": "Remains highly durable. Communication in informal settings is a structural buffer against automation."
+    },
+    "resource_judgment": {
+      "ilo_task_type": "non-routine cognitive — judgment under constraint",
+      "automation_exposure": "MODERATE",
+      "automation_exposure_score": 0.35,
+      "rationale": "Cost and resource estimation in informal settings involves judgment under significant uncertainty and with incomplete price data. This reduces but does not eliminate automation exposure. Basic inventory and pricing management tools are already reaching informal markets via mobile apps.",
+      "resilience_rationale": "The judgment component is durable; the routine record-keeping component is at moderate risk from mobile-first accounting tools.",
+      "durable": true,
+      "horizon_note": "The judgment element stays durable. Routine costing/record-keeping aspects face moderate displacement by 2030 from low-cost mobile tools (M-Pawa, Wave, etc.)."
+    },
+    "process_quality": {
+      "ilo_task_type": "routine cognitive / routine manual",
+      "automation_exposure": "MODERATE-HIGH",
+      "automation_exposure_score": 0.52,
+      "rationale": "Following standard procedures and quality checks is the most automatable task type in the ILO framework. However, in LMIC informal contexts, the physical nature of the work and variability of inputs reduces near-term risk. The documentation aspect (records, checklists) is more exposed.",
+      "resilience_rationale": "Physical process adherence in informal settings is less exposed than in formal manufacturing. However, workers should build skills beyond procedural compliance.",
+      "durable": false,
+      "horizon_note": "Moderate risk by 2030-2035 as quality control tooling (visual inspection AI, mobile checklists) becomes accessible. Workers relying only on this dimension should diversify."
+    },
+    "operational_organization": {
+      "ilo_task_type": "non-routine cognitive — coordination",
+      "automation_exposure": "MODERATE",
+      "automation_exposure_score": 0.31,
+      "rationale": "Managing multiple concurrent jobs without formal systems is a human coordination task. Scheduling apps exist but require smartphone access and literacy. In informal LMIC markets, the human judgment and relationship-based coordination component is durable.",
+      "resilience_rationale": "Coordinating across informal networks (suppliers, sub-contractors, customers) requires social and contextual intelligence that automation tools cannot replicate in the 2025-2035 window.",
+      "durable": true,
+      "horizon_note": "Durable through 2035 in informal contexts. Risk increases as platform work formalises scheduling (e.g., gig platforms may automate job allocation)."
+    }
+  },
+
+  "occupation_automation": {
+    "7421": {
+      "title": "Electronics mechanics and servicers",
+      "frey_osborne_raw": 0.56,
+      "lmic_adjusted": 0.39,
+      "lmic_adjustment_factor": 0.70,
+      "exposure_label": "MODERATE",
+      "primary_risk_source": "Routine testing and documentation components are exposed. Physical fault diagnosis and customer interaction are durable.",
+      "primary_resilience_source": "Non-routine diagnostic reasoning on heterogeneous, informal-market devices. Customer trust relationships.",
+      "at_risk_dimensions": ["process_quality"],
+      "durable_dimensions": ["fault_diagnosis", "communication", "resource_judgment", "operational_organization"]
+    },
+    "5211": {
+      "title": "Stall and market salespersons",
+      "frey_osborne_raw": 0.77,
+      "lmic_adjusted": 0.52,
+      "lmic_adjustment_factor": 0.68,
+      "exposure_label": "MODERATE-HIGH",
+      "primary_risk_source": "Routine transactions and price-checking are exposed to mobile payment platforms and e-commerce. Physical market presence provides some buffer.",
+      "primary_resilience_source": "Community relationships, multilingual negotiation, contextual product knowledge of informal markets.",
+      "at_risk_dimensions": ["process_quality", "resource_judgment"],
+      "durable_dimensions": ["communication", "operational_organization", "fault_diagnosis"]
+    },
+    "7531": {
+      "title": "Tailors, dressmakers, furriers and hatters",
+      "frey_osborne_raw": 0.60,
+      "lmic_adjusted": 0.42,
+      "lmic_adjustment_factor": 0.70,
+      "exposure_label": "MODERATE",
+      "primary_risk_source": "Routine stitching and pattern-following face long-term risk from low-cost manufacturing. Custom and repair work is more durable.",
+      "primary_resilience_source": "Custom fitting, client relationship, local style knowledge. Fast fashion disruption is market-level, not task-level.",
+      "at_risk_dimensions": ["process_quality"],
+      "durable_dimensions": ["communication", "fault_diagnosis", "resource_judgment", "operational_organization"]
+    },
+    "7112": {
+      "title": "Bricklayers and related workers",
+      "frey_osborne_raw": 0.89,
+      "lmic_adjusted": 0.58,
+      "lmic_adjustment_factor": 0.65,
+      "exposure_label": "MODERATE-HIGH",
+      "primary_risk_source": "Routine bricklaying is highly automatable in formal construction (robotic bricklayers exist). In LMIC informal construction, physical access constraints and material variability reduce near-term risk significantly.",
+      "primary_resilience_source": "Informal construction sites with irregular materials, slopes, and complex client relationships. Physical complexity of informal urban building.",
+      "at_risk_dimensions": ["process_quality"],
+      "durable_dimensions": ["fault_diagnosis", "communication", "resource_judgment", "operational_organization"]
+    },
+    "5141": {
+      "title": "Hairdressers, barbers and related workers",
+      "frey_osborne_raw": 0.33,
+      "lmic_adjusted": 0.24,
+      "lmic_adjustment_factor": 0.72,
+      "exposure_label": "LOW",
+      "primary_risk_source": "Minimal. Personal care requires physical presence, touch, and community trust. Among the most automation-resistant occupations identified by Frey & Osborne.",
+      "primary_resilience_source": "Physical skill, aesthetic judgment, repeat customer relationships, and community embeddedness.",
+      "at_risk_dimensions": [],
+      "durable_dimensions": ["communication", "fault_diagnosis", "process_quality", "resource_judgment", "operational_organization"]
+    },
+    "7411": {
+      "title": "Building electricians",
+      "frey_osborne_raw": 0.15,
+      "lmic_adjusted": 0.12,
+      "lmic_adjustment_factor": 0.80,
+      "exposure_label": "LOW",
+      "primary_risk_source": "Very low. Electrical work requires physical presence, safety judgment in uncontrolled environments, and adaptation to non-standard installations.",
+      "primary_resilience_source": "Safety-critical judgment in unpredictable environments. Cannot be automated without reliable infrastructure for automated systems.",
+      "at_risk_dimensions": [],
+      "durable_dimensions": ["fault_diagnosis", "communication", "resource_judgment", "process_quality", "operational_organization"]
+    },
+    "8322": {
+      "title": "Motorcycle drivers",
+      "frey_osborne_raw": 0.89,
+      "lmic_adjusted": 0.62,
+      "lmic_adjustment_factor": 0.70,
+      "exposure_label": "HIGH",
+      "primary_risk_source": "Autonomous vehicles and drone delivery pose long-term risk. However, LMIC road infrastructure, regulatory environment, and capital costs make this risk >2035 for most markets.",
+      "primary_resilience_source": "Physical road navigation in informal urban environments. Platform consolidation risk is more immediate than automation risk.",
+      "at_risk_dimensions": ["process_quality", "operational_organization"],
+      "durable_dimensions": ["communication", "fault_diagnosis", "resource_judgment"]
+    },
+    "6111": {
+      "title": "Field crop and vegetable growers",
+      "frey_osborne_raw": 0.54,
+      "lmic_adjusted": 0.38,
+      "lmic_adjustment_factor": 0.70,
+      "exposure_label": "MODERATE",
+      "primary_risk_source": "Precision agriculture and AI-powered crop monitoring are growing. However, smallholder farming in LMIC contexts involves non-standard plots, mixed crops, and subsistence decisions that are poorly served by current tools.",
+      "primary_resilience_source": "Local environmental knowledge, smallholder adaptability, and diversity of crop/pest situations in LMIC contexts.",
+      "at_risk_dimensions": ["process_quality"],
+      "durable_dimensions": ["fault_diagnosis", "communication", "resource_judgment", "operational_organization"]
+    },
+    "7422": {
+      "title": "Cabinetmakers and related workers",
+      "frey_osborne_raw": 0.65,
+      "lmic_adjusted": 0.45,
+      "lmic_adjustment_factor": 0.69,
+      "exposure_label": "MODERATE",
+      "primary_risk_source": "CNC machines and automated woodworking exist but require capital investment far beyond informal LMIC workshops. Custom furniture work is durable.",
+      "primary_resilience_source": "Custom orders, client-specific dimensions, repair work, and unique materials are non-routine tasks.",
+      "at_risk_dimensions": ["process_quality"],
+      "durable_dimensions": ["fault_diagnosis", "communication", "resource_judgment", "operational_organization"]
+    },
+    "5131": {
+      "title": "Waiters and related workers",
+      "frey_osborne_raw": 0.94,
+      "lmic_adjusted": 0.63,
+      "lmic_adjustment_factor": 0.67,
+      "exposure_label": "HIGH",
+      "primary_risk_source": "Food service automation is real but capital-intensive. Informal chop bars and street food vendors face limited near-term automation risk. The primary risk is platform aggregation (delivery apps reducing foot-traffic value).",
+      "primary_resilience_source": "Community embeddedness, repeat customers, informal credit relationships with suppliers. Physical preparation of local foods requires local knowledge.",
+      "at_risk_dimensions": ["process_quality", "operational_organization"],
+      "durable_dimensions": ["communication", "fault_diagnosis", "resource_judgment"]
+    }
+  },
+
+  "wittgenstein_projections": {
+    "GHA": {
+      "country": "Ghana",
+      "tertiary_2025_pct": 8.2,
+      "tertiary_2030_pct": 11.4,
+      "tertiary_2035_pct": 14.9,
+      "post_secondary_2025_pct": 31.4,
+      "post_secondary_2035_pct": 41.2,
+      "interpretation": "Ghana's share of tertiary-educated workers in the 25-34 age cohort will nearly double from 8% to 15% by 2035 — increasing competition for formal roles. Workers without verifiable skills will face greater labour market exclusion as employer credential expectations rise.",
+      "implication_for_informal_workers": "The gap between credentialed and uncredentialed workers will widen. Verifiable skills profiles become increasingly valuable as employers gain more choices. Upskilling and credential-building have a higher return in 2030-2035 than they do today.",
+      "source": "Wittgenstein Centre WC-IIASA 2024, SSP2 scenario, Ghana 25-34 age cohort"
+    },
+    "KEN": {
+      "country": "Kenya",
+      "tertiary_2025_pct": 9.1,
+      "tertiary_2030_pct": 13.2,
+      "tertiary_2035_pct": 17.8,
+      "post_secondary_2025_pct": 34.7,
+      "post_secondary_2035_pct": 47.1,
+      "interpretation": "Kenya has one of SSA's fastest-expanding tertiary education sectors. By 2035, nearly 1 in 5 young adults (25-34) will hold a tertiary qualification — up from 1 in 11 today. This rapid shift increases labour market competition for informal workers without verifiable credentials.",
+      "implication_for_informal_workers": "Kenya's formal economy is absorbing more educated workers faster than most regional peers. Informal workers with verified, demonstrable skills are better positioned than those with informal experience alone — because employers now have more credentialed alternatives to compare against.",
+      "source": "Wittgenstein Centre WC-IIASA 2024, SSP2 scenario, Kenya 25-34 age cohort"
+    },
+    "IND": {
+      "country": "India",
+      "tertiary_2025_pct": 13.4,
+      "tertiary_2030_pct": 18.9,
+      "tertiary_2035_pct": 24.6,
+      "post_secondary_2025_pct": 39.5,
+      "post_secondary_2035_pct": 53.2,
+      "interpretation": "India's large youth cohort is moving rapidly toward post-secondary education, but the informal economy remains the main entry point for many workers. By 2035, credential competition will be much stronger in cities, especially for routine jobs with low verification signals.",
+      "implication_for_informal_workers": "Workers with portable, demonstrable skills will be better positioned than workers who rely only on informal experience. Skill legibility becomes more valuable as employers raise screening thresholds.",
+      "source": "Wittgenstein Centre WC-IIASA 2024, SSP2 scenario, India 25-34 age cohort"
+    },
+    "PAK": {
+      "country": "Pakistan",
+      "tertiary_2025_pct": 8.6,
+      "tertiary_2030_pct": 12.1,
+      "tertiary_2035_pct": 16.0,
+      "post_secondary_2025_pct": 32.7,
+      "post_secondary_2035_pct": 44.9,
+      "interpretation": "Pakistan's tertiary attainment is rising, but the pace of formal job creation is slower than the growth in labor supply. Informal workers will need legible skills and strong local demand signals to avoid being crowded out by credentialed entrants.",
+      "implication_for_informal_workers": "Portable proof of skill matters more over time, especially in urban markets where employers can compare more applicants. Skills that combine judgment, communication, and hands-on repair remain comparatively durable.",
+      "source": "Wittgenstein Centre WC-IIASA 2024, SSP2 scenario, Pakistan 25-34 age cohort"
+    },
+    "MEX": {
+      "country": "Mexico",
+      "tertiary_2025_pct": 21.3,
+      "tertiary_2030_pct": 25.4,
+      "tertiary_2035_pct": 29.1,
+      "post_secondary_2025_pct": 52.8,
+      "post_secondary_2035_pct": 61.7,
+      "interpretation": "Mexico already has a relatively credentialed urban labor market compared with many LMIC contexts. That means informal workers need clearer evidence of competence to compete, especially in cities with stronger formal hiring systems.",
+      "implication_for_informal_workers": "Verification and portable skills signals become especially important where employers have many applicants to compare. Hands-on repair, coordination, and customer-facing work remain durable but need proof.",
+      "source": "Wittgenstein Centre WC-IIASA 2024, SSP2 scenario, Mexico 25-34 age cohort"
+    }
+  }
+}
