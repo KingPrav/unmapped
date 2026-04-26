@@ -6,12 +6,15 @@ Generates a structured, portable Skills Card — something Amara can own, show, 
 
 import json
 import os
+import sys
 import uuid
 from datetime import datetime
 from openai import OpenAI
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.parent
+sys.path.append(str(BASE_DIR))
+from pipelines.scoring import compute_weighted_score
 
 EDUCATION_LABELS = {
     "none": "No formal education",
@@ -152,7 +155,10 @@ def generate_profile(
         else:
             growth_areas.append(result["dimension_label"])
 
-    avg_score = int(total_score / len(dimension_results)) if dimension_results else 0
+    # ISCO-aware weighted score — dimensions are weighted by occupational relevance,
+    # not averaged equally. A phone repair tech's fault_diagnosis counts 40%;
+    # a market seller's communication counts 40%.
+    avg_score = compute_weighted_score(dimension_results, isco_code)
     profile_id = _generate_profile_id(isco_code, country_config.get("country_code", "XX"))
 
     # The structured Skills Card — portable across borders

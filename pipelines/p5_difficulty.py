@@ -63,10 +63,17 @@ class AssessmentSession:
     def progress(self) -> dict:
         total = len(self.dimensions_to_assess)
         done  = len(self.dimension_results)
+        # 2 questions per dimension — track within-dimension question number
+        q_num       = getattr(self, "_current_q_num", 1)   # 1 or 2
+        total_q     = total * 2
+        answered_q  = done * 2 + (q_num - 1)
         return {
             "completed_dimensions": done,
             "total_dimensions":     total,
-            "percent":              int((done / total) * 100) if total > 0 else 0,
+            "current_question_num": q_num,           # 1 or 2 within current dimension
+            "total_questions":      total_q,          # 2 × number of dimensions
+            "answered_questions":   answered_q,
+            "percent":              int((answered_q / total_q) * 100) if total_q > 0 else 0,
             "current_tier":         self.current_tier,
             "is_complete":          self.completed
         }
@@ -89,13 +96,16 @@ def _serialize(session: AssessmentSession) -> dict:
         "current_tier":            session.current_tier,
         "completed":               session.completed,
         # Dynamic attributes set by api/main.py after creation
-        "_dimension_plan":  getattr(session, "_dimension_plan",  {}),
-        "_config":          getattr(session, "_config",          {}),
-        "_education_level": getattr(session, "_education_level", "upper_secondary"),
-        "_experience_years":getattr(session, "_experience_years", 0),
-        "_other_skills":    getattr(session, "_other_skills",    ""),
-        "_profile_id":      getattr(session, "_profile_id",      None),
-        "_current_challenge":getattr(session,"_current_challenge",None),
+        "_dimension_plan":   getattr(session, "_dimension_plan",   {}),
+        "_config":           getattr(session, "_config",           {}),
+        "_education_level":  getattr(session, "_education_level",  "upper_secondary"),
+        "_experience_years": getattr(session, "_experience_years", 0),
+        "_other_skills":     getattr(session, "_other_skills",     ""),
+        "_profile_id":       getattr(session, "_profile_id",       None),
+        "_current_challenge":getattr(session, "_current_challenge",None),
+        # 2-question-per-dimension state
+        "_current_q_num":   getattr(session, "_current_q_num",    1),
+        "_first_scores":    getattr(session, "_first_scores",     {}),
     }
 
 
@@ -112,13 +122,16 @@ def _deserialize(data: dict) -> AssessmentSession:
         current_tier            = data.get("current_tier", 1),
         completed               = data.get("completed", False),
     )
-    session._dimension_plan   = data.get("_dimension_plan", {})
-    session._config           = data.get("_config", {})
-    session._education_level  = data.get("_education_level", "upper_secondary")
-    session._experience_years = data.get("_experience_years", 0)
-    session._other_skills     = data.get("_other_skills", "")
-    session._profile_id       = data.get("_profile_id", None)
-    session._current_challenge= data.get("_current_challenge", None)
+    session._dimension_plan    = data.get("_dimension_plan", {})
+    session._config            = data.get("_config", {})
+    session._education_level   = data.get("_education_level", "upper_secondary")
+    session._experience_years  = data.get("_experience_years", 0)
+    session._other_skills      = data.get("_other_skills", "")
+    session._profile_id        = data.get("_profile_id", None)
+    session._current_challenge = data.get("_current_challenge", None)
+    # 2-question-per-dimension state
+    session._current_q_num     = data.get("_current_q_num", 1)
+    session._first_scores      = data.get("_first_scores", {})
     return session
 
 

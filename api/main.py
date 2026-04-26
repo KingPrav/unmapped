@@ -157,9 +157,12 @@ def start_assessment(req: StartRequest):
     session._education_level  = req.education_level
     session._experience_years = req.experience_years
     session._other_skills     = req.other_skills
+    # 2-question-per-dimension state — initialise fresh
+    session._current_q_num    = 1
+    session._first_scores     = {}
     persist_session(session_id)   # flush dynamic attrs to SQLite
 
-    # P4: Generate first challenge
+    # P4: Generate first challenge (Q1 of 2 for the first dimension)
     first_dim_id = session.current_dimension()
     first_dimension = dimension_result["dimension_plan"][first_dim_id]
 
@@ -172,6 +175,7 @@ def start_assessment(req: StartRequest):
 
     # Store full challenge (with answer keys) server-side; send sanitised version to client
     session._current_challenge = challenge_bundle["full"]
+    persist_session(session_id)
 
     return {
         "session_id": session_id,
@@ -182,7 +186,9 @@ def start_assessment(req: StartRequest):
             "matched_on": classification["matched_on"]
         },
         "assessment": {
-            "total_dimensions": len(dimensions_to_assess),
+            # total_questions = 2 questions × number of dimensions
+            "total_dimensions":  len(dimensions_to_assess),
+            "total_questions":   len(dimensions_to_assess) * 2,
             "region": config["region_name"],
             "location": config["location_context"]
         },
@@ -195,7 +201,12 @@ def start_assessment(req: StartRequest):
 def submit_answer(req: AnswerRequest):
     """
     Step 2+: Submit answer, get evaluation and next challenge (or completion).
-    Runs Pipeline 4b (eval) → P5 (advance) → P4 (next challenge) or P6 (profile)
+
+    2-question-per-dimension flow:
+      Q1 → store score → generate Q2 for the same dimension
+      Q2 → average Q1+Q2 scores → advance dimension → generate Q1 for next dimension
+
+    Runs Pipeline 4b (eval) → P5 (advance on Q2) → P4 (next challenge) or P6 (profile)
     """
     session = get_session(req.session_id)
     if not session:
@@ -204,7 +215,7 @@ def submit_answer(req: AnswerRequest):
         raise HTTPException(status_code=400, detail="Assessment already completed")
 
     challenge = session._current_challenge
-    config = session._config
+    config    = session._config
 
     # P4b: Score MCQ answer — deterministic, no API call
     evaluation = score_mcq_answer(
@@ -212,40 +223,106 @@ def submit_answer(req: AnswerRequest):
         selected_id=req.selected_option.upper()
     )
 
-    # P5: Record result and advance
-    record_answer(req.session_id, evaluation)
-    progress = session.progress()
+    current_dim_id = session.current_dimension()
+    q_num = getattr(session, "_current_q_num", 1)
 
-    # Check if assessment complete
-    if session.completed:
+    if q_num == 1:
+        # ── First question for this dimension ────────────────────────────────
+        # Store the raw score; do NOT advance the dimension yet.
+        if not hasattr(session, "_first_scores") or session._first_scores is None:
+            session._first_scores = {}
+        session._first_scores[current_dim_id] = evaluation["score"]
+        session._current_q_num = 2
+        persist_session(session.session_id)
+
+        # Generate a second, distinct question for the same dimension
+        current_dimension = session._dimension_plan[current_dim_id]
+        q2_bundle = generate_challenge(
+            occupation_title=session.occupation_title,
+            dimension=current_dimension,
+            country_config=config,
+            tier=session.current_tier
+        )
+        session._current_challenge = q2_bundle["full"]
+        persist_session(session.session_id)
+
+        progress = session.progress()
         return {
-            "evaluation": evaluation,
-            "progress": progress,
-            "assessment_complete": True,
-            "next_challenge": None,
-            "message": "Assessment complete. Generating your skill profile..."
+            "evaluation":         evaluation,
+            "progress":           progress,
+            "assessment_complete": False,
+            "next_challenge":     q2_bundle["client"],
+            "question_number":    2,          # tells the UI this is Q2 of 2 for same dimension
+            "questions_per_dim":  2
         }
 
-    # P4: Generate next challenge
-    next_dim_id = session.current_dimension()
-    next_dimension = session._dimension_plan[next_dim_id]
+    else:
+        # ── Second question for this dimension ───────────────────────────────
+        # Average Q1 and Q2 scores to get the dimension score.
+        first_scores = getattr(session, "_first_scores", {})
+        q1_score = first_scores.get(current_dim_id, evaluation["score"])
+        avg_score = (q1_score + evaluation["score"]) // 2
 
-    next_bundle = generate_challenge(
-        occupation_title=session.occupation_title,
-        dimension=next_dimension,
-        country_config=config,
-        tier=session.current_tier
-    )
+        # Rebuild evaluation with averaged score and recalculated tier/pass
+        current_tier = session.current_tier
+        if avg_score >= 70:
+            tier_achieved = current_tier
+            passed        = True
+        elif avg_score >= 35:
+            tier_achieved = max(1, current_tier - 1)
+            passed        = False
+        else:
+            tier_achieved = 1
+            passed        = False
 
-    session._current_challenge = next_bundle["full"]
-    persist_session(session.session_id)
+        averaged_eval = {
+            **evaluation,                    # keeps feedback, signals from Q2
+            "score":          avg_score,
+            "tier_achieved":  tier_achieved,
+            "passed":         passed,
+        }
 
-    return {
-        "evaluation": evaluation,
-        "progress": progress,
-        "assessment_complete": False,
-        "next_challenge": next_bundle["client"]
-    }
+        # Reset to Q1 for the next dimension
+        session._current_q_num = 1
+        if current_dim_id in session._first_scores:
+            del session._first_scores[current_dim_id]
+
+        # P5: Advance dimension with averaged result
+        record_answer(req.session_id, averaged_eval)
+        progress = session.progress()
+
+        if session.completed:
+            return {
+                "evaluation":         averaged_eval,
+                "progress":           progress,
+                "assessment_complete": True,
+                "next_challenge":     None,
+                "question_number":    2,
+                "questions_per_dim":  2,
+                "message":            "Assessment complete. Generating your skill profile..."
+            }
+
+        # P4: Generate Q1 for the next dimension
+        next_dim_id   = session.current_dimension()
+        next_dimension = session._dimension_plan[next_dim_id]
+
+        next_bundle = generate_challenge(
+            occupation_title=session.occupation_title,
+            dimension=next_dimension,
+            country_config=config,
+            tier=session.current_tier
+        )
+        session._current_challenge = next_bundle["full"]
+        persist_session(session.session_id)
+
+        return {
+            "evaluation":         averaged_eval,
+            "progress":           progress,
+            "assessment_complete": False,
+            "next_challenge":     next_bundle["client"],
+            "question_number":    1,          # Q1 of 2 for the next dimension
+            "questions_per_dim":  2
+        }
 
 
 @app.get("/assess/profile/{session_id}")
@@ -279,8 +356,8 @@ def get_profile(session_id: str):
         persist_session(session_id)   # flush profile_id to SQLite
 
     # Persist profile permanently for employer verification lookup
-    from pipelines.p7_opportunity_matcher import _compute_overall_score
-    overall_score = _compute_overall_score(session.dimension_results)
+    from pipelines.scoring import compute_weighted_score
+    overall_score = compute_weighted_score(session.dimension_results, session.isco_code)
     if profile.get("profile_id"):
         save_profile(
             profile_id      = profile["profile_id"],
@@ -436,7 +513,7 @@ def get_worker_registry(
     config = load_config(region)
 
     from pipelines.p5_difficulty import _sessions
-    from pipelines.p7_opportunity_matcher import _compute_overall_score
+    from pipelines.scoring import compute_weighted_score
 
     # All completed sessions for this region
     region_sessions = [
@@ -449,7 +526,7 @@ def get_worker_registry(
 
     workers = []
     for session in region_sessions:
-        overall_score = _compute_overall_score(session.dimension_results)
+        overall_score = compute_weighted_score(session.dimension_results, session.isco_code)
 
         # Build dimension snapshot
         dims = {}

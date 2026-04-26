@@ -9,11 +9,14 @@ Matches a worker's skill profile to real local opportunities in 3 honest layers:
 
 import json
 import os
+import sys
 from openai import OpenAI
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.parent
 SEED_DIR = BASE_DIR / "data" / "seed"
+sys.path.append(str(BASE_DIR))
+from pipelines.scoring import compute_weighted_score
 
 TIER_LABELS = {1: "Entry", 2: "Functional", 3: "Mastery"}
 
@@ -69,13 +72,17 @@ def _load_meta(region_id: str) -> dict:
     return data.get("meta", {})
 
 
-def _compute_overall_score(dimension_results: dict) -> int:
-    """Compute overall score as average across all assessed dimensions."""
-    scores = [r.get("score", 0) for r in dimension_results.values()]
-    return int(sum(scores) / len(scores)) if scores else 0
+def _compute_overall_score(dimension_results: dict, isco_code: str = "") -> int:
+    """
+    ISCO-aware weighted overall score.
+    Kept as a module-level function so main.py can import it for profile persistence.
+    Delegates to the shared scoring utility.
+    """
+    return compute_weighted_score(dimension_results, isco_code)
 
 
-def _score_match(opportunity: dict, dimension_results: dict, isco_group: int, overall_score: int) -> dict:
+def _score_match(opportunity: dict, dimension_results: dict, isco_group: int, overall_score: int,
+                 education: str = "", experience_years: int = 0) -> dict:
     """
     Score how well a worker's profile matches an opportunity.
 
@@ -173,6 +180,21 @@ def _score_match(opportunity: dict, dimension_results: dict, isco_group: int, ov
             match_layer = "close_gap"
         else:
             match_layer = "training_pathway"
+
+    # ── Experience / education credit ─────────────────────────────────────────
+    # Significant field experience or tertiary education can lift a marginal
+    # training_pathway to close_gap — but ONLY when the ISCO is compatible and
+    # the skill match already shows some alignment (≥ 40%).
+    # This is conservative: we never lift to ready_now this way.
+    STRONG_EDUCATION = {"vocational", "tertiary"}
+    has_strong_education = education in STRONG_EDUCATION
+    has_experience       = experience_years >= 5
+
+    if (match_layer == "training_pathway"
+            and (has_experience or has_strong_education)
+            and isco_compatible
+            and match_score >= 40):
+        match_layer = "close_gap"
 
     return {
         "match_score": match_score,
@@ -277,12 +299,13 @@ def match_opportunities(
 
     isco_group = int(isco_code[0]) if isco_code else 5
 
-    # Compute overall score once — used for honest layer floors
-    overall_score = _compute_overall_score(dimension_results)
+    # Compute ISCO-weighted overall score once — used for honest layer floors
+    overall_score = _compute_overall_score(dimension_results, isco_code)
 
     scored = []
     for opp in opportunities:
-        match_result = _score_match(opp, dimension_results, isco_group, overall_score)
+        match_result = _score_match(opp, dimension_results, isco_group, overall_score,
+                                    education=education, experience_years=experience_years)
         scored.append((opp, match_result))
 
     # Sort by match score descending

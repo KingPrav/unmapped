@@ -512,7 +512,7 @@
   <div id="screen-assess" class="screen">
     <div class="progress-bar-wrap">
       <div class="progress-label">
-        <span id="progressText">Question 1 of 5</span>
+        <span id="progressText">Question 1 of 10</span>
         <span id="tierText">Tier 1 — Entry</span>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
@@ -520,7 +520,10 @@
 
     <div id="evalFeedback" style="display:none"></div>
 
-    <div class="dimension-tag" id="dimensionTag"></div>
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+      <div class="dimension-tag" id="dimensionTag"></div>
+      <div id="qNumTag" style="font-size:10px; font-weight:700; letter-spacing:1px; color:#64748b; padding:3px 8px; background:#0f172a; border:1px solid #334155; border-radius:4px;">Q1 OF 2</div>
+    </div>
     <div class="challenge-box" id="challengeText"></div>
 
     <div class="options-grid" id="optionsGrid"></div>
@@ -741,7 +744,9 @@
       state.occupation = data.occupation;
       state.challengeData = data.challenge;
       state.currentQuestion = 1;
-      state.totalQuestions = data.assessment.total_dimensions;
+      // total_questions = 2 per dimension (Q1 + Q2 per skill)
+      state.totalQuestions = data.assessment.total_questions || (data.assessment.total_dimensions * 2);
+      state.currentQNum = 1;   // 1 or 2 within current dimension
 
       // Show confirmation screen
       document.getElementById('confirmTitle').textContent = data.occupation.title;
@@ -760,6 +765,7 @@
   }
 
   function beginChallenges() {
+    state.currentQNum = 1;   // always Q1 of 2 on the very first question
     renderChallenge(state.challengeData);
     showScreen('assess');
   }
@@ -777,6 +783,13 @@
     document.getElementById('progressFill').style.width = pct + '%';
     document.getElementById('progressText').textContent =
       `Question ${state.currentQuestion} of ${state.totalQuestions}`;
+
+    // Q1/Q2 sub-indicator
+    const qn = state.currentQNum || 1;
+    const qTag = document.getElementById('qNumTag');
+    qTag.textContent = `Q${qn} OF 2`;
+    qTag.style.color  = qn === 2 ? '#a5b4fc' : '#64748b';
+    qTag.style.borderColor = qn === 2 ? '#6366f1' : '#334155';
 
     // Render option cards
     const grid = document.getElementById('optionsGrid');
@@ -879,10 +892,18 @@
           await loadProfile();
         };
       } else {
+        // question_number tells us whether next question is Q1 (new dimension) or Q2 (same dimension)
+        const nextQNum = data.question_number || 1;
+        state.currentQNum = nextQNum;
         state.currentQuestion++;
         state.challengeData = data.next_challenge;
+
         const nextBtn = document.getElementById('nextBtn');
-        nextBtn.textContent = 'Next Question →';
+        if (nextQNum === 2) {
+          nextBtn.textContent = 'Second Question →';
+        } else {
+          nextBtn.textContent = 'Next Skill →';
+        }
         nextBtn.style.background = '#1e293b';
         nextBtn.style.color = '#a5b4fc';
         nextBtn.style.border = '1px solid #6366f1';
