@@ -209,9 +209,199 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-overlay p { color: #64748b; font-size: 14px; }
 
+    /* ── Tab switcher ── */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid #334155;
+      margin-bottom: 28px;
+    }
+    .tab-btn {
+      padding: 10px 22px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.15s;
+    }
+    .tab-btn.active { color: #a5b4fc; border-bottom-color: #6366f1; }
+    .tab-btn:hover:not(.active) { color: #94a3b8; }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── Registry filter bar ── */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 5px; }
+    .filter-label { font-size: 10px; color: #475569; font-weight: 700; letter-spacing: 1px; }
+    .filter-select, .filter-input {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #e2e8f0;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+      min-width: 160px;
+    }
+    .filter-select:focus, .filter-input:focus { border-color: #6366f1; }
+    .filter-input { min-width: 80px; width: 80px; }
+    .filter-apply {
+      padding: 8px 18px;
+      background: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .filter-apply:hover { background: #4f46e5; }
+    .filter-reset {
+      padding: 8px 14px;
+      background: transparent;
+      color: #64748b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .filter-count { font-size: 12px; color: #475569; margin-left: auto; align-self: center; margin-top: 15px; }
+
+    /* ── Registry table ── */
+    .registry-wrap { overflow-x: auto; }
+    .registry-table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    .registry-table th {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+      color: #475569; text-align: left;
+      padding: 8px 12px 10px;
+      border-bottom: 1px solid #334155;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    .registry-table th:hover { color: #94a3b8; }
+    .registry-table th.sorted { color: #a5b4fc; }
+    .registry-table td {
+      padding: 11px 12px;
+      border-bottom: 1px solid #1e293b;
+      font-size: 13px;
+      color: #cbd5e1;
+      vertical-align: middle;
+    }
+    .registry-table tr:last-child td { border-bottom: none; }
+    .registry-table tr:hover td { background: #1e293b; cursor: pointer; }
+
+    .rank-num { font-size: 12px; font-weight: 800; color: #475569; }
+    .rank-num.top3 { color: #6366f1; }
+
+    .score-cell { display: flex; align-items: center; gap: 8px; }
+    .score-num { font-size: 14px; font-weight: 800; min-width: 28px; }
+    .score-bar-track { width: 52px; height: 5px; background: #0f172a; border-radius: 3px; }
+    .score-bar-fill { height: 5px; border-radius: 3px; }
+
+    .dim-chip {
+      display: inline-block;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 3px;
+      letter-spacing: 0.3px;
+    }
+    .dc-0 { background: #1e293b; color: #334155; border: 1px solid #1e293b; }
+    .dc-1 { background: #1e293b; color: #64748b; border: 1px solid #334155; }
+    .dc-2 { background: #172554; color: #93c5fd; border: 1px solid #1d4ed8; }
+    .dc-3 { background: #14532d; color: #86efac; border: 1px solid #15803d; }
+
+    .occ-cell { max-width: 180px; }
+    .occ-title { font-size: 13px; color: #e2e8f0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .occ-isco { font-size: 10px; color: #475569; }
+
+    .edu-cell { font-size: 11px; color: #64748b; }
+    .exp-cell { font-size: 11px; color: #64748b; white-space: nowrap; }
+
+    .view-btn {
+      font-size: 11px; color: #6366f1;
+      border: 1px solid #312e81; background: #1e1b4b;
+      padding: 4px 10px; border-radius: 4px;
+      cursor: pointer; white-space: nowrap;
+    }
+    .view-btn:hover { background: #312e81; }
+
+    .empty-registry {
+      text-align: center;
+      padding: 48px 24px;
+      color: #475569;
+    }
+    .empty-registry strong { display: block; color: #64748b; font-size: 15px; margin-bottom: 8px; }
+
+    /* ── Slide-out drawer ── */
+    .drawer-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      display: none;
+    }
+    .drawer-overlay.open { display: block; }
+
+    .drawer {
+      position: fixed; top: 0; right: -480px; bottom: 0;
+      width: 460px; max-width: 95vw;
+      background: #1e293b;
+      border-left: 1px solid #334155;
+      z-index: 201;
+      overflow-y: auto;
+      transition: right 0.25s ease;
+    }
+    .drawer.open { right: 0; }
+
+    .drawer-header {
+      background: #312e81;
+      padding: 20px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .drawer-close {
+      background: transparent; border: none;
+      color: #a5b4fc; font-size: 20px; cursor: pointer; line-height: 1;
+    }
+    .drawer-verified {
+      background: #052e16;
+      border-bottom: 1px solid #166534;
+      padding: 8px 22px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .drawer-body { padding: 20px 22px; }
+
+    .drawer-dim-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid #0f172a;
+    }
+    .drawer-dim-row:last-child { border-bottom: none; }
+    .drawer-dim-label { font-size: 13px; color: #cbd5e1; }
+    .drawer-dim-right { display: flex; align-items: center; gap: 10px; }
+    .drawer-score-bar { width: 80px; height: 5px; background: #0f172a; border-radius: 3px; }
+    .drawer-score-fill { height: 5px; border-radius: 3px; }
+
     @media (max-width: 700px) {
       .stats-row { grid-template-columns: 1fr 1fr; }
       .grid-2 { grid-template-columns: 1fr; }
+      .drawer { width: 100vw; }
     }
   </style>
 </head>
@@ -240,6 +430,15 @@
     <h1>Labour Market Signals — <span id="heroRegion">Ghana Urban Informal</span></h1>
     <p>Aggregate skill profiles, sector demand, and opportunity signals. Grounded in ILOSTAT + WBES econometric data.</p>
   </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tabAggregate" onclick="switchTab('aggregate')">Aggregate Signals</button>
+    <button class="tab-btn" id="tabRegistry" onclick="switchTab('registry')">Worker Registry</button>
+  </div>
+
+  <!-- ══ TAB: AGGREGATE SIGNALS ══ -->
+  <div class="tab-content active" id="tab-aggregate">
 
   <!-- Stats Row -->
   <div class="stats-row">
@@ -317,6 +516,134 @@
     <p id="sourcesText"></p>
   </div>
 
+  </div><!-- end tab-aggregate -->
+
+  <!-- ══ TAB: WORKER REGISTRY ══ -->
+  <div class="tab-content" id="tab-registry">
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <div class="filter-label">FILTER BY DIMENSION</div>
+        <select class="filter-select" id="filterDimension">
+          <option value="">All dimensions</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">MIN TIER</div>
+        <select class="filter-select" id="filterMinTier" style="min-width:120px;">
+          <option value="">Any</option>
+          <option value="1">Entry (1+)</option>
+          <option value="2">Functional (2+)</option>
+          <option value="3">Mastery only</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">MIN SCORE</div>
+        <input class="filter-input" type="number" id="filterMinScore" min="0" max="100" placeholder="0" value="" />
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">ISCO GROUP</div>
+        <select class="filter-select" id="filterIscoGroup" style="min-width:170px;">
+          <option value="">All groups</option>
+          <option value="5">Group 5 — Service & Sales</option>
+          <option value="6">Group 6 — Agricultural</option>
+          <option value="7">Group 7 — Craft & Trades</option>
+          <option value="8">Group 8 — Plant & Machine</option>
+          <option value="9">Group 9 — Elementary</option>
+        </select>
+      </div>
+      <button class="filter-apply" onclick="applyFilters()">Apply</button>
+      <button class="filter-reset" onclick="resetFilters()">Reset</button>
+      <div class="filter-count" id="filterCount"></div>
+    </div>
+
+    <!-- Registry table -->
+    <div class="panel" style="padding:0; overflow:hidden;">
+      <div class="registry-wrap">
+        <table class="registry-table">
+          <thead>
+            <tr>
+              <th style="width:40px;">#</th>
+              <th onclick="sortBy('occupation_title')">OCCUPATION <span id="sort-occ"></span></th>
+              <th onclick="sortBy('overall_score')" class="sorted">SCORE <span id="sort-score">↓</span></th>
+              <th>FD</th>
+              <th>COM</th>
+              <th>RJ</th>
+              <th>PQ</th>
+              <th>OO</th>
+              <th>EDUCATION</th>
+              <th>EXP</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="registryTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:10px; font-size:11px; color:#334155; text-align:right;">
+      FD = Fault Diagnosis · COM = Communication · RJ = Resource Judgment · PQ = Process &amp; Quality · OO = Operational Organization
+    </div>
+
+  </div><!-- end tab-registry -->
+
+</div>
+
+<!-- Slide-out drawer overlay -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+
+<!-- Slide-out drawer -->
+<div class="drawer" id="workerDrawer">
+  <div class="drawer-header">
+    <div>
+      <div style="font-size:10px; color:#a5b4fc; font-weight:700; letter-spacing:2px; margin-bottom:6px;">UNMAPPED SKILLS CARD</div>
+      <div style="font-size:18px; font-weight:800; color:#f1f5f9;" id="dOccupation"></div>
+      <div style="font-size:12px; color:#818cf8; margin-top:4px;" id="dIsco"></div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:32px; font-weight:900; color:#fff;" id="dScore"></div>
+      <div style="font-size:10px; color:#a5b4fc;">OVERALL</div>
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+  </div>
+
+  <!-- Verified strip -->
+  <div class="drawer-verified">
+    <div style="width:18px; height:18px; background:#16a34a; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1.5 5.5L4 8L9.5 2.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div>
+      <div style="font-size:11px; font-weight:700; color:#4ade80;">UNMAPPED VERIFIED</div>
+      <div style="font-size:10px; color:#166534;" id="dProfileId"></div>
+    </div>
+  </div>
+
+  <div class="drawer-body">
+
+    <!-- Worker meta -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid #334155;">
+      <div>
+        <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:3px;">EDUCATION</div>
+        <div style="font-size:12px; color:#cbd5e1;" id="dEducation"></div>
+      </div>
+      <div>
+        <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:3px;">EXPERIENCE</div>
+        <div style="font-size:12px; color:#cbd5e1;" id="dExperience"></div>
+      </div>
+      <div>
+        <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:3px;">REGION</div>
+        <div style="font-size:12px; color:#cbd5e1;" id="dRegion"></div>
+      </div>
+    </div>
+
+    <!-- Dimension breakdown -->
+    <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:12px;">SKILL DIMENSIONS</div>
+    <div id="dDimensions"></div>
+
+    <!-- Session ID ref -->
+    <div style="margin-top:20px; padding-top:14px; border-top:1px solid #1e293b; font-size:10px; color:#334155; font-family:monospace;" id="dSessionRef"></div>
+  </div>
 </div>
 
 <script>
@@ -343,13 +670,44 @@
     'Training Pathway': '#fb923c'
   };
 
+  // ── Tab state ────────────────────────────────────────────────────────────
+  let activeTab = 'aggregate';
+  let registryData = null;
+  let sortField = 'overall_score';
+  let sortDir = -1; // -1 = desc, 1 = asc
+
+  const DIM_COLS = [
+    { id: 'fault_diagnosis',       abbr: 'FD' },
+    { id: 'communication',         abbr: 'COM' },
+    { id: 'resource_judgment',     abbr: 'RJ' },
+    { id: 'process_quality',       abbr: 'PQ' },
+    { id: 'operational_organization', abbr: 'OO' }
+  ];
+
+  const EDU_LABELS = {
+    none: 'No formal', primary: 'Primary', lower_secondary: 'Lower Sec.',
+    upper_secondary: 'Upper Sec.', vocational: 'Vocational', tertiary: 'Tertiary'
+  };
+
+  function switchTab(tab) {
+    activeTab = tab;
+    document.getElementById('tabAggregate').classList.toggle('active', tab === 'aggregate');
+    document.getElementById('tabRegistry').classList.toggle('active', tab === 'registry');
+    document.getElementById('tab-aggregate').classList.toggle('active', tab === 'aggregate');
+    document.getElementById('tab-registry').classList.toggle('active', tab === 'registry');
+    if (tab === 'registry' && !registryData) loadRegistry();
+  }
+
   async function loadDashboard(region) {
     document.getElementById('loadingOverlay').style.display = 'flex';
+    registryData = null; // reset registry on region switch
     try {
       const res = await fetch(`${API}/dashboard/${region}`);
       if (!res.ok) throw new Error('Failed to load');
       dashData = await res.json();
       render(dashData);
+      // Reload registry if that tab is visible
+      if (activeTab === 'registry') loadRegistry();
     } catch(e) {
       console.error(e);
     } finally {
@@ -357,11 +715,183 @@
     }
   }
 
+  async function loadRegistry(params = {}) {
+    const qs = new URLSearchParams();
+    if (params.dimension)  qs.set('dimension', params.dimension);
+    if (params.min_tier)   qs.set('min_tier', params.min_tier);
+    if (params.min_score)  qs.set('min_score', params.min_score);
+    if (params.isco_group) qs.set('isco_group', params.isco_group);
+
+    try {
+      const res = await fetch(`${API}/workers/${currentRegion}?${qs}`);
+      if (!res.ok) throw new Error('Failed');
+      registryData = await res.json();
+      renderRegistry(registryData);
+      populateDimFilter(registryData.available_dimensions || {});
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
+  function applyFilters() {
+    const params = {};
+    const dim = document.getElementById('filterDimension').value;
+    const tier = document.getElementById('filterMinTier').value;
+    const score = document.getElementById('filterMinScore').value;
+    const isco = document.getElementById('filterIscoGroup').value;
+    if (dim)   params.dimension  = dim;
+    if (tier)  params.min_tier   = tier;
+    if (score) params.min_score  = score;
+    if (isco)  params.isco_group = isco;
+    loadRegistry(params);
+  }
+
+  function resetFilters() {
+    document.getElementById('filterDimension').value  = '';
+    document.getElementById('filterMinTier').value    = '';
+    document.getElementById('filterMinScore').value   = '';
+    document.getElementById('filterIscoGroup').value  = '';
+    loadRegistry();
+  }
+
   function switchRegion(region) {
     currentRegion = region;
     document.getElementById('btnGhana').classList.toggle('active', region === 'ghana_urban');
     document.getElementById('btnKenya').classList.toggle('active', region === 'kenya_mixed');
     loadDashboard(region);
+  }
+
+  function sortBy(field) {
+    if (sortField === field) { sortDir *= -1; }
+    else { sortField = field; sortDir = field === 'overall_score' ? -1 : 1; }
+    // Update sort indicators
+    document.getElementById('sort-score').textContent = '';
+    document.getElementById('sort-occ').textContent   = '';
+    const indicator = sortDir === -1 ? '↓' : '↑';
+    if (field === 'overall_score') document.getElementById('sort-score').textContent = indicator;
+    if (field === 'occupation_title') document.getElementById('sort-occ').textContent = indicator;
+    if (registryData) renderRegistry(registryData);
+  }
+
+  function populateDimFilter(dims) {
+    const sel = document.getElementById('filterDimension');
+    const current = sel.value;
+    sel.innerHTML = '<option value="">All dimensions</option>';
+    Object.entries(dims).forEach(([id, label]) => {
+      const opt = document.createElement('option');
+      opt.value = id; opt.textContent = label;
+      if (id === current) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+
+  function scoreColor(s) {
+    if (s >= 70) return '#4ade80';
+    if (s >= 45) return '#fbbf24';
+    return '#f87171';
+  }
+
+  function renderRegistry(data) {
+    const workers = [...(data.workers || [])];
+    document.getElementById('filterCount').textContent =
+      `${data.filtered_count} of ${data.total_assessed} workers`;
+
+    // Client-side sort
+    workers.sort((a, b) => {
+      let va = a[sortField], vb = b[sortField];
+      if (typeof va === 'string') va = va.toLowerCase();
+      if (typeof vb === 'string') vb = vb.toLowerCase();
+      return va < vb ? -sortDir : va > vb ? sortDir : 0;
+    });
+
+    const tbody = document.getElementById('registryTableBody');
+
+    if (!workers.length) {
+      tbody.innerHTML = `<tr><td colspan="11">
+        <div class="empty-registry">
+          <strong>No workers found</strong>
+          ${data.total_assessed === 0
+            ? 'Complete assessments via the worker portal to populate the registry.'
+            : 'No workers match the current filters — try broadening your criteria.'}
+        </div>
+      </td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = workers.map((w, i) => {
+      const rankClass = i < 3 ? 'top3' : '';
+      const sc = scoreColor(w.overall_score);
+
+      // Dimension chips — in fixed order
+      const dimChips = DIM_COLS.map(col => {
+        const d = w.dimensions[col.id];
+        const tier = d ? d.tier : 0;
+        return `<td><span class="dim-chip dc-${tier}">${d ? ['—','E','F','M'][tier] : '—'}</span></td>`;
+      }).join('');
+
+      const edu = EDU_LABELS[w.education] || w.education || '—';
+      const exp = w.experience_years ? `${w.experience_years}yr` : '—';
+
+      return `
+        <tr onclick="openDrawer(${JSON.stringify(w).replace(/"/g, '&quot;')})">
+          <td><span class="rank-num ${rankClass}">#${i + 1}</span></td>
+          <td class="occ-cell">
+            <div class="occ-title">${w.occupation_title}</div>
+            <div class="occ-isco">ISCO ${w.isco_code} · Grp ${w.isco_group}</div>
+          </td>
+          <td>
+            <div class="score-cell">
+              <span class="score-num" style="color:${sc}">${w.overall_score}</span>
+              <div class="score-bar-track">
+                <div class="score-bar-fill" style="width:${w.overall_score}%; background:${sc};"></div>
+              </div>
+            </div>
+          </td>
+          ${dimChips}
+          <td class="edu-cell">${edu}</td>
+          <td class="exp-cell">${exp}</td>
+          <td><button class="view-btn">View →</button></td>
+        </tr>`;
+    }).join('');
+  }
+
+  function openDrawer(worker) {
+    document.getElementById('dOccupation').textContent = worker.occupation_title;
+    document.getElementById('dIsco').textContent = `ISCO-08 · ${worker.isco_code}`;
+    document.getElementById('dScore').textContent = worker.overall_score;
+    document.getElementById('dProfileId').textContent = worker.profile_id || worker.session_id_short;
+    document.getElementById('dEducation').textContent = EDU_LABELS[worker.education] || worker.education || '—';
+    document.getElementById('dExperience').textContent = worker.experience_years ? `${worker.experience_years} years` : '—';
+    document.getElementById('dRegion').textContent = dashData?.region || currentRegion;
+    document.getElementById('dSessionRef').textContent = `Ref: ${worker.session_id_short}`;
+
+    // Dimensions
+    const el = document.getElementById('dDimensions');
+    el.innerHTML = DIM_COLS.map(col => {
+      const d = worker.dimensions[col.id];
+      if (!d) return '';
+      const sc = scoreColor(d.score);
+      const tierLabels = ['—', 'Entry', 'Functional', 'Mastery'];
+      return `
+        <div class="drawer-dim-row">
+          <div class="drawer-dim-label">${d.label || col.id}</div>
+          <div class="drawer-dim-right">
+            <div style="font-size:12px; color:#64748b;">${d.score}/100</div>
+            <div class="drawer-score-bar">
+              <div class="drawer-score-fill" style="width:${d.score}%; background:${sc};"></div>
+            </div>
+            <span class="dim-chip dc-${d.tier}">${tierLabels[d.tier] || '—'}</span>
+          </div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('drawerOverlay').classList.add('open');
+    document.getElementById('workerDrawer').classList.add('open');
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.getElementById('workerDrawer').classList.remove('open');
   }
 
   function render(data) {

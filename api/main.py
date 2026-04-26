@@ -9,6 +9,7 @@ Endpoints:
   GET  /assess/profile/{session_id}     — Get final skill profile
   GET  /opportunities/{session_id}      — Get matched opportunities (Module 3)
   GET  /dashboard/{region}             — Policymaker aggregate signals (Module 3)
+  GET  /workers/{region}               — Policymaker worker registry, ranked + filterable
   GET  /health                          — Health check
 """
 
@@ -16,7 +17,8 @@ import os
 import uuid
 import yaml
 from pathlib import Path
-from fastapi import FastAPI, HTTPException
+from typing import Optional
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
@@ -268,6 +270,10 @@ def get_profile(session_id: str):
         isco_code=session.isco_code
     )
 
+    # Store profile ID on session so worker registry can surface it
+    if profile.get("profile_id"):
+        session._profile_id = profile["profile_id"]
+
     return {
         "session_id": session_id,
         "profile": profile
@@ -390,6 +396,114 @@ def get_dashboard(region: str):
         "opportunity_type_distribution": type_distribution,
         "econometric_sources": meta.get("econometric_sources", {}),
         "isco_priority_groups": config.get("isco_priority_groups", [])
+    }
+
+
+@app.get("/workers/{region}")
+def get_worker_registry(
+    region: str,
+    dimension: Optional[str] = Query(None, description="Filter by dimension ID, e.g. fault_diagnosis"),
+    min_tier: Optional[int] = Query(None, ge=1, le=3, description="Minimum tier in the filtered dimension (1=Entry, 2=Functional, 3=Mastery)"),
+    min_score: Optional[int] = Query(0, ge=0, le=100, description="Minimum overall score"),
+    isco_group: Optional[int] = Query(None, ge=1, le=9, description="Filter by ISCO-08 major group (1-9)")
+):
+    """
+    Policymaker worker registry — all completed assessments in a region,
+    ranked by overall score, with dimension-level filtering.
+
+    Filter examples:
+      /workers/ghana_urban?dimension=fault_diagnosis&min_tier=2
+      /workers/ghana_urban?min_score=60&isco_group=7
+    """
+    config = load_config(region)
+
+    from pipelines.p5_difficulty import _sessions
+    from pipelines.p7_opportunity_matcher import _compute_overall_score
+
+    # All completed sessions for this region
+    region_sessions = [
+        s for s in _sessions.values()
+        if s.region_id == region and s.completed
+    ]
+
+    TIER_LABELS = {0: "—", 1: "Entry", 2: "Functional", 3: "Mastery"}
+    TIER_COLORS = {0: "#334155", 1: "#64748b", 2: "#3b82f6", 3: "#22c55e"}
+
+    workers = []
+    for session in region_sessions:
+        overall_score = _compute_overall_score(session.dimension_results)
+
+        # Build dimension snapshot
+        dims = {}
+        for dim_id, result in session.dimension_results.items():
+            dims[dim_id] = {
+                "score": result.get("score", 0),
+                "tier": result.get("tier_achieved", 0),
+                "tier_label": TIER_LABELS.get(result.get("tier_achieved", 0), "—"),
+                "tier_color": TIER_COLORS.get(result.get("tier_achieved", 0), "#334155"),
+                "label": result.get("dimension_label", dim_id)
+            }
+
+        # Pull profile ID if profile was generated
+        profile_id = getattr(session, "_profile_id", None)
+
+        workers.append({
+            "session_id": session.session_id,
+            "session_id_short": session.session_id[:8].upper(),
+            "occupation_title": session.occupation_title,
+            "isco_code": session.isco_code,
+            "isco_group": int(session.isco_code[0]) if session.isco_code else None,
+            "overall_score": overall_score,
+            "education": getattr(session, "_education_level", "—"),
+            "experience_years": getattr(session, "_experience_years", 0),
+            "dimensions": dims,
+            "profile_id": profile_id
+        })
+
+    # ── Filters ──────────────────────────────────────────────────────────────
+
+    # Minimum overall score
+    if min_score:
+        workers = [w for w in workers if w["overall_score"] >= min_score]
+
+    # ISCO group
+    if isco_group is not None:
+        workers = [w for w in workers if w["isco_group"] == isco_group]
+
+    # Dimension + tier filter
+    if dimension:
+        workers = [
+            w for w in workers
+            if dimension in w["dimensions"] and
+               w["dimensions"][dimension]["tier"] >= (min_tier or 1)
+        ]
+
+    # ── Sort by overall score descending, assign rank ─────────────────────────
+    workers.sort(key=lambda w: w["overall_score"], reverse=True)
+    for i, w in enumerate(workers):
+        w["rank"] = i + 1
+
+    # Dimension index (all dimensions seen across all workers — for filter UI)
+    all_dims = {}
+    for s in _sessions.values():
+        if s.region_id == region and s.completed:
+            for dim_id, result in s.dimension_results.items():
+                if dim_id not in all_dims:
+                    all_dims[dim_id] = result.get("dimension_label", dim_id)
+
+    return {
+        "region": config["region_name"],
+        "country": config["country"],
+        "total_assessed": len([s for s in _sessions.values() if s.region_id == region and s.completed]),
+        "filtered_count": len(workers),
+        "active_filters": {
+            "dimension": dimension,
+            "min_tier": min_tier,
+            "min_score": min_score,
+            "isco_group": isco_group
+        },
+        "available_dimensions": all_dims,
+        "workers": workers
     }
 
 
