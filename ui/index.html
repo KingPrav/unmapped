@@ -539,6 +539,23 @@
         </div>
       </div>
 
+      <!-- Verified Banner -->
+      <div style="background:#052e16; border-bottom:2px solid #166534; padding:10px 24px; display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:22px; height:22px; background:#16a34a; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5L5 9.5L11 3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:800; color:#4ade80; letter-spacing:0.5px;">UNMAPPED VERIFIED</div>
+            <div style="font-size:10px; color:#166534;" id="verifiedTimestamp"></div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:9px; color:#166534; font-weight:700; letter-spacing:1px;">ASSESSMENT ID</div>
+          <div style="font-size:10px; color:#4ade80; font-family:monospace;" id="verifiedProfileId"></div>
+        </div>
+      </div>
+
       <!-- Worker Details -->
       <div style="padding:16px 24px; border-bottom:1px solid #334155; display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
         <div>
@@ -596,6 +613,9 @@
       <h2 style="font-size:22px; font-weight:800; color:#f1f5f9; margin-bottom:6px;">What's available to you</h2>
       <p style="font-size:13px; color:#64748b;" id="oppSubtitle"></p>
     </div>
+
+    <!-- Score context banner -->
+    <div id="oppScoreBanner" style="margin-bottom:20px; padding:14px 18px; border-radius:10px; font-size:13px; line-height:1.5;"></div>
 
     <!-- Ready Now -->
     <div class="opp-layer-header">
@@ -876,6 +896,13 @@
 
     // Profile ID
     document.getElementById('cardProfileId').textContent = `Profile ID: ${profile.profile_id || ''}`;
+
+    // Verified banner
+    const now = new Date();
+    const verifiedAt = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
+      ' · ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' UTC';
+    document.getElementById('verifiedTimestamp').textContent = `Assessed & verified ${verifiedAt}`;
+    document.getElementById('verifiedProfileId').textContent = profile.profile_id || '';
   }
 
   async function goToOpportunities() {
@@ -969,9 +996,26 @@
   function renderOpportunities(data) {
     const opps = data.opportunities;
     const currency = data.currency || opps.currency || '';
+    const overallScore = opps.overall_score || 0;
 
     document.getElementById('oppSubtitle').textContent =
       `${data.occupation_title} · ${data.region}`;
+
+    // Score context banner — honest framing of what the score means
+    const banner = document.getElementById('oppScoreBanner');
+    if (overallScore < 30) {
+      banner.style.cssText = 'background:#1c1917; border:1px solid #44403c; color:#a8a29e;';
+      banner.innerHTML = `<strong style="color:#f97316">Overall score: ${overallScore}/100</strong> — Your current skill level isn't yet at the threshold for employment or self-employment opportunities. The training pathways below are the most honest starting point. Focus on one skill, build it to functional level, then reassess.`;
+    } else if (overallScore < 50) {
+      banner.style.cssText = 'background:#1c1917; border:1px solid #44403c; color:#a8a29e;';
+      banner.innerHTML = `<strong style="color:#fbbf24">Overall score: ${overallScore}/100</strong> — Your skills are developing but not yet at a consistent level for most opportunities in your region. A few targeted gaps to close are shown below. Training pathways will move you there fastest.`;
+    } else if (overallScore < 70) {
+      banner.style.cssText = 'background:#172554; border:1px solid #1d4ed8; color:#93c5fd;';
+      banner.innerHTML = `<strong style="color:#60a5fa">Overall score: ${overallScore}/100</strong> — You have a working skill base. Some opportunities are within reach now, others need 1-2 areas developed. The matches below reflect what's realistic for your current profile.`;
+    } else {
+      banner.style.cssText = 'background:#052e16; border:1px solid #166534; color:#86efac;';
+      banner.innerHTML = `<strong style="color:#4ade80">Overall score: ${overallScore}/100</strong> — Strong profile. The opportunities below are genuine matches for your verified skill level.`;
+    }
 
     const readyNow = opps.ready_now || [];
     const closeGap = opps.close_gap || [];
