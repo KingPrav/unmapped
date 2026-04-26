@@ -189,8 +189,10 @@ def start_assessment(req: StartRequest):
             # total_questions = 2 questions × number of dimensions
             "total_dimensions":  len(dimensions_to_assess),
             "total_questions":   len(dimensions_to_assess) * 2,
-            "region": config["region_name"],
-            "location": config["location_context"]
+            "region":            config["region_name"],
+            "location":          config["location_context"],
+            "language":          config.get("language", "en"),
+            "language_name":     config.get("language_name", "English"),
         },
         "challenge": challenge_bundle["client"],
         "progress": session.progress()

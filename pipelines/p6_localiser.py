@@ -41,6 +41,12 @@ Worker:
 Assessment results:
 {dimension_results}
 
+LANGUAGE REQUIREMENT:
+- Write BOTH the summary and employer_signal in {language_name}.
+- Use {language_register}.
+- If {language_name} is English, write naturally in English.
+- Do not mix languages.
+
 Write TWO things:
 
 1. SUMMARY (2 sentences max): A plain, human description of who this person is and what they can demonstrably do. Write it as if you're introducing them to an employer. Use "This person" not "Amara". Do not mention scores or tiers.
@@ -104,14 +110,25 @@ def generate_profile(
     education_label = EDUCATION_LABELS.get(education_level, education_level)
     formatted_results = _format_dimension_results(dimension_results)
 
-    # Generate human-readable summary + employer signal
+    # Language settings from config — fall back to English
+    language_name     = country_config.get("language_name", "English")
+    language_register = country_config.get("language_register", "Standard English")
+
+    # Generate human-readable summary + employer signal (in worker's language)
     prompt = SUMMARY_PROMPT.format(
         occupation_title=occupation_title,
         education_label=education_label,
         experience_years=experience_years,
         other_skills=other_skills if other_skills else "Not specified",
         location_context=country_config["location_context"],
-        dimension_results=formatted_results
+        dimension_results=formatted_results,
+        language_name=language_name,
+        language_register=language_register,
+    )
+
+    system_prompt = (
+        "You write concise, honest, human-readable skill summaries. Always return valid JSON. "
+        f"The summary and employer_signal MUST be written entirely in {language_name}."
     )
 
     message = client.chat.completions.create(
@@ -119,7 +136,7 @@ def generate_profile(
         max_tokens=300,
         response_format={"type": "json_object"},
         messages=[
-            {"role": "system", "content": "You write concise, honest, human-readable skill summaries. Always return valid JSON."},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt}
         ]
     )
@@ -207,6 +224,8 @@ def generate_profile(
         "experience_years": experience_years,
         "other_skills": other_skills,
         "skills_card": skills_card,
+        "language": country_config.get("language", "en"),
+        "language_name": language_name,
         "data_sources": country_config.get("data_sources", {}),
         "opportunity_types": country_config.get("opportunity_types", [])
     }

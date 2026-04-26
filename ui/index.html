@@ -520,9 +520,10 @@
 
     <div id="evalFeedback" style="display:none"></div>
 
-    <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
       <div class="dimension-tag" id="dimensionTag"></div>
       <div id="qNumTag" style="font-size:10px; font-weight:700; letter-spacing:1px; color:#64748b; padding:3px 8px; background:#0f172a; border:1px solid #334155; border-radius:4px;">Q1 OF 2</div>
+      <div id="langBadge" style="display:none; font-size:10px; font-weight:700; letter-spacing:1px; color:#f59e0b; padding:3px 8px; background:#0f172a; border:1px solid #92400e; border-radius:4px;"></div>
     </div>
     <div class="challenge-box" id="challengeText"></div>
 
@@ -790,6 +791,17 @@
     qTag.textContent = `Q${qn} OF 2`;
     qTag.style.color  = qn === 2 ? '#a5b4fc' : '#64748b';
     qTag.style.borderColor = qn === 2 ? '#6366f1' : '#334155';
+
+    // Language badge — only shown when assessment is NOT in English
+    const langBadge = document.getElementById('langBadge');
+    const lang = challenge.language || 'en';
+    const langName = challenge.language_name || 'English';
+    if (lang !== 'en') {
+      langBadge.textContent = langName.toUpperCase();
+      langBadge.style.display = 'block';
+    } else {
+      langBadge.style.display = 'none';
+    }
 
     // Render option cards
     const grid = document.getElementById('optionsGrid');

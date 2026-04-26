@@ -1,0 +1,61 @@
+# UNMAPPED — Country Configuration
+# Region: Kenya, Mixed Urban-Rural Economy — Swahili language variant
+# Identical to kenya_mixed except all worker-facing content is generated in Swahili.
+
+region_id: kenya_swahili
+region_name: "Kenya — Mixed Urban-Rural Economy (Kiswahili)"
+country: Kenya
+country_code: KEN
+
+# Language settings
+language: sw
+language_name: Swahili
+language_register: "Standard Kiswahili with natural Nairobi/peri-urban register, avoiding overly formal terms"
+
+# Location context injected into challenge generator prompts
+location_context: "mixed urban-rural economy, Nairobi and peri-urban Kenya"
+city: Nairobi
+currency: "Kenyan shilling (KES)"
+local_tools: "basic hand tools, roadside repair stand, shared equipment"
+local_examples:
+  - "Gikomba market"
+  - "Jua Kali sector (open-air artisan workshops)"
+  - "Mombasa road industrial corridor"
+
+# ISCO-08 groups dominant in Kenyan mixed economy
+# Source: ILOSTAT — Employment by occupation, Kenya
+isco_priority_groups:
+  - code: 6
+    label: "Skilled Agricultural Workers"
+    informal_share: 0.38
+  - code: 5
+    label: "Service and Sales Workers"
+    informal_share: 0.27
+  - code: 9
+    label: "Elementary Occupations"
+    informal_share: 0.18
+  - code: 7
+    label: "Craft and Related Trades Workers"
+    informal_share: 0.12
+  - code: 8
+    label: "Plant and Machine Operators"
+    informal_share: 0.05
+
+# ESCO localisation
+esco_language: en
+esco_version: "1.2.1"
+
+# Opportunity types surfaced to workers
+opportunity_types:
+  - self_employment
+  - informal_employment
+  - agricultural_value_chain
+  - gig
+  - training_pathway
+  - cooperative
+
+# Econometric data sources used for this config
+data_sources:
+  labor_market: "ILOSTAT — Kenya Employment by Occupation (ISCO-08), 2022"
+  skills_taxonomy: "O*NET 28.0 via ISCO-08 crosswalk"
+  localisation: "ESCO v1.2.1 — English"

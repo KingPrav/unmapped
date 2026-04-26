@@ -39,11 +39,18 @@ Local context:
 - Currency: {currency}
 - Difficulty: Tier {tier} — {tier_description}
 
+LANGUAGE REQUIREMENT:
+- Write the "question" field and ALL four "text" fields entirely in {language_name}.
+- Use {language_register}.
+- The "explanation" fields must also be in {language_name}.
+- Do NOT mix languages — the worker only reads {language_name}.
+- If {language_name} is English, write naturally in English.
+
 Create ONE realistic scenario question with exactly 4 options.
 
 Rules:
 - The scenario must describe a real situation this worker encounters regularly
-- Use local language, tools, prices in {currency}, and customer types from {location_context}
+- Use local tools, prices in {currency}, and customer types from {location_context}
 - All 4 options must sound plausible — no obviously silly answers
 - Exactly ONE option scores 10 (clearly the best action)
 - Exactly ONE option scores 5 (reasonable but not optimal — a common near-miss)
@@ -52,12 +59,12 @@ Rules:
 
 Return ONLY valid JSON in this exact structure:
 {{
-  "question": "Scenario + question in 2-3 sentences. End with a clear question.",
+  "question": "Scenario + question in 2-3 sentences in {language_name}. End with a clear question.",
   "options": [
-    {{"id": "A", "text": "Option text (max 20 words)", "score": 10, "explanation": "Why this is the best action."}},
-    {{"id": "B", "text": "Option text (max 20 words)", "score": 5,  "explanation": "Why this is close but not optimal."}},
-    {{"id": "C", "text": "Option text (max 20 words)", "score": 0,  "explanation": "Why this leads to a problem."}},
-    {{"id": "D", "text": "Option text (max 20 words)", "score": 0,  "explanation": "Why this leads to a problem."}}
+    {{"id": "A", "text": "Option text in {language_name} (max 20 words)", "score": 10, "explanation": "Why this is the best action (in {language_name})."}},
+    {{"id": "B", "text": "Option text in {language_name} (max 20 words)", "score": 5,  "explanation": "Why this is close but not optimal (in {language_name})."}},
+    {{"id": "C", "text": "Option text in {language_name} (max 20 words)", "score": 0,  "explanation": "Why this leads to a problem (in {language_name})."}},
+    {{"id": "D", "text": "Option text in {language_name} (max 20 words)", "score": 0,  "explanation": "Why this leads to a problem (in {language_name})."}}
   ]
 }}"""
 
@@ -81,6 +88,8 @@ def _sanitise_for_client(challenge: dict) -> dict:
         "dimension_id":    challenge["dimension_id"],
         "dimension_label": challenge["dimension_label"],
         "tier":            challenge["tier"],
+        "language":        challenge.get("language", "en"),
+        "language_name":   challenge.get("language_name", "English"),
         "options": [
             {"id": opt["id"], "text": opt["text"]}
             for opt in challenge["options"]
@@ -103,6 +112,11 @@ def generate_challenge(
     """
     client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
+    # Pull language settings — fall back to English if not set
+    language_name     = country_config.get("language_name", "English")
+    language_register = country_config.get("language_register", "Standard English")
+    language_code     = country_config.get("language", "en")
+
     prompt = MCQ_PROMPT.format(
         occupation_title     = occupation_title,
         dimension_label      = dimension["label"],
@@ -112,15 +126,23 @@ def generate_challenge(
         local_tools          = country_config["local_tools"],
         currency             = country_config["currency"],
         tier                 = tier,
-        tier_description     = TIER_DESCRIPTIONS[tier]
+        tier_description     = TIER_DESCRIPTIONS[tier],
+        language_name        = language_name,
+        language_register    = language_register,
+    )
+
+    system_prompt = (
+        "You generate MCQ assessment questions. Always respond with valid JSON only. "
+        f"All worker-facing text (question, option texts, explanations) MUST be written "
+        f"entirely in {language_name}. Do not use any other language."
     )
 
     message = client.chat.completions.create(
         model    = "gpt-4o",
-        max_tokens = 700,
+        max_tokens = 800,
         response_format = {"type": "json_object"},
         messages = [
-            {"role": "system", "content": "You generate MCQ assessment questions. Always respond with valid JSON only."},
+            {"role": "system", "content": system_prompt},
             {"role": "user",   "content": prompt}
         ]
     )
@@ -142,7 +164,9 @@ def generate_challenge(
         "employer_signal": dimension["employer_signal"],
         "tier":            tier,
         "occupation_title":occupation_title,
-        "region":          country_config["region_id"]
+        "region":          country_config["region_id"],
+        "language":        language_code,
+        "language_name":   language_name,
     }
 
     return {
