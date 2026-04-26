@@ -39,7 +39,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 from pipelines.p1_classifier import classify_occupation
 from pipelines.p2_dwa_retriever import retrieve_dwas
 from pipelines.p3_dimension_mapper import map_dimensions
-from pipelines.p4_challenge_generator import generate_challenge, evaluate_answer
+from pipelines.p4_challenge_generator import generate_challenge, score_mcq_answer
 from pipelines.p5_difficulty import create_session, get_session, record_answer, persist_session
 from database.db import save_profile, get_profile as db_get_profile, profile_exists
 from pipelines.p6_localiser import generate_profile
@@ -80,7 +80,7 @@ class StartRequest(BaseModel):
 
 class AnswerRequest(BaseModel):
     session_id: str
-    answer: str
+    selected_option: str   # "A", "B", "C", or "D"
 
 
 # ─────────────────────────────────────────────
@@ -163,14 +163,15 @@ def start_assessment(req: StartRequest):
     first_dim_id = session.current_dimension()
     first_dimension = dimension_result["dimension_plan"][first_dim_id]
 
-    challenge = generate_challenge(
+    challenge_bundle = generate_challenge(
         occupation_title=occupation_title,
         dimension=first_dimension,
         country_config=config,
         tier=session.current_tier
     )
 
-    session._current_challenge = challenge
+    # Store full challenge (with answer keys) server-side; send sanitised version to client
+    session._current_challenge = challenge_bundle["full"]
 
     return {
         "session_id": session_id,
@@ -185,7 +186,7 @@ def start_assessment(req: StartRequest):
             "region": config["region_name"],
             "location": config["location_context"]
         },
-        "challenge": challenge,
+        "challenge": challenge_bundle["client"],
         "progress": session.progress()
     }
 
@@ -205,11 +206,10 @@ def submit_answer(req: AnswerRequest):
     challenge = session._current_challenge
     config = session._config
 
-    # P4b: Evaluate answer
-    evaluation = evaluate_answer(
+    # P4b: Score MCQ answer — deterministic, no API call
+    evaluation = score_mcq_answer(
         challenge=challenge,
-        user_answer=req.answer,
-        occupation_title=session.occupation_title
+        selected_id=req.selected_option.upper()
     )
 
     # P5: Record result and advance
@@ -230,20 +230,21 @@ def submit_answer(req: AnswerRequest):
     next_dim_id = session.current_dimension()
     next_dimension = session._dimension_plan[next_dim_id]
 
-    next_challenge = generate_challenge(
+    next_bundle = generate_challenge(
         occupation_title=session.occupation_title,
         dimension=next_dimension,
         country_config=config,
         tier=session.current_tier
     )
 
-    session._current_challenge = next_challenge
+    session._current_challenge = next_bundle["full"]
+    persist_session(session.session_id)
 
     return {
         "evaluation": evaluation,
         "progress": progress,
         "assessment_complete": False,
-        "next_challenge": next_challenge
+        "next_challenge": next_bundle["client"]
     }
 
 

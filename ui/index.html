@@ -174,23 +174,49 @@
       color: #e2e8f0;
     }
 
-    textarea {
-      width: 100%;
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #f1f5f9;
-      padding: 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      line-height: 1.6;
-      resize: vertical;
-      min-height: 120px;
-      outline: none;
-      font-family: inherit;
+    /* ── MCQ Option Cards ── */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       margin-bottom: 16px;
-      transition: border-color 0.2s;
     }
-    textarea:focus { border-color: #6366f1; }
+    .option-card {
+      background: #1e293b;
+      border: 2px solid #334155;
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .option-card:hover:not(.disabled) { border-color: #6366f1; background: #1e1b4b; }
+    .option-card.selected  { border-color: #6366f1; background: #1e1b4b; }
+    .option-card.correct   { border-color: #16a34a; background: #052e16; }
+    .option-card.wrong     { border-color: #64748b; background: #1e293b; opacity: 0.5; }
+    .option-card.partial   { border-color: #d97706; background: #1c1400; }
+    .option-card.disabled  { cursor: default; }
+
+    .option-letter {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      background: #334155;
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .option-card.selected  .option-letter { background: #6366f1; color: white; }
+    .option-card.correct   .option-letter { background: #16a34a; color: white; }
+    .option-card.partial   .option-letter { background: #d97706; color: white; }
+    .option-card.wrong     .option-letter { background: #334155; color: #64748b; }
+
+    .option-text { font-size: 14px; color: #e2e8f0; line-height: 1.5; flex: 1; }
 
     /* ── Evaluation feedback ── */
     .eval-card {
@@ -497,12 +523,10 @@
     <div class="dimension-tag" id="dimensionTag"></div>
     <div class="challenge-box" id="challengeText"></div>
 
-    <div class="input-group" id="answerGroup">
-      <label>Your answer</label>
-      <textarea id="answerInput" placeholder="Describe what you would do in this situation..."></textarea>
-    </div>
+    <div class="options-grid" id="optionsGrid"></div>
+
     <div id="assessError" class="error-msg" style="display:none"></div>
-    <button class="btn" id="submitBtn" onclick="submitAnswer()">Submit Answer →</button>
+    <button class="btn" id="submitBtn" onclick="submitAnswer()" style="display:none;">Confirm Answer →</button>
     <button class="btn" id="nextBtn" onclick="goToNextQuestion()" style="display:none; margin-top:12px; background:#1e293b; border:1px solid #6366f1; color:#a5b4fc;">Next Question →</button>
   </div>
 
@@ -593,7 +617,8 @@
       <!-- Portability & Data Sources -->
       <div style="padding:16px 24px;">
         <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:8px;">PORTABILITY</div>
-        <div style="font-size:11px; color:#475569; margin-bottom:6px;">Taxonomy: ISCO-08 · O*NET 28.0 · ESCO v1.2.1</div>
+        <div style="font-size:11px; color:#475569; margin-bottom:4px;">Taxonomy: ISCO-08 · O*NET 28.0 · ESCO v1.2.1</div>
+        <div style="font-size:10px; color:#334155; margin-bottom:6px;">Assessment method: Scenario-based multiple choice · Score: 0–100</div>
         <div style="font-size:11px; color:#475569; margin-bottom:10px;" id="cardDataSources"></div>
         <div style="display:flex; gap:6px; flex-wrap:wrap;" id="cardTransferTags"></div>
         <div style="margin-top:12px; font-size:10px; color:#334155; font-family:monospace;" id="cardProfileId"></div>
@@ -664,7 +689,9 @@
     totalQuestions: 0,
     educationLevel: null,
     experienceYears: null,
-    otherSkills: null
+    otherSkills: null,
+    selectedOption: null,
+    profileId: null
   };
 
   const TIER_LABELS = { 1: 'Entry', 2: 'Functional', 3: 'Mastery' };
@@ -738,10 +765,9 @@
   }
 
   function renderChallenge(challenge) {
+    state.selectedOption = null;
     document.getElementById('dimensionTag').textContent = challenge.dimension_label.toUpperCase();
     document.getElementById('challengeText').textContent = challenge.question;
-    document.getElementById('answerInput').value = '';
-    document.getElementById('answerInput').disabled = false;
     document.getElementById('evalFeedback').style.display = 'none';
 
     const tier = TIER_LABELS[challenge.tier] || 'Entry';
@@ -752,47 +778,95 @@
     document.getElementById('progressText').textContent =
       `Question ${state.currentQuestion} of ${state.totalQuestions}`;
 
-    document.getElementById('submitBtn').style.display = 'block';
+    // Render option cards
+    const grid = document.getElementById('optionsGrid');
+    grid.innerHTML = (challenge.options || []).map(opt => `
+      <div class="option-card" id="opt-${opt.id}" onclick="selectOption('${opt.id}')">
+        <div class="option-letter">${opt.id}</div>
+        <div class="option-text">${opt.text}</div>
+      </div>`).join('');
+
+    document.getElementById('submitBtn').style.display = 'none';
     document.getElementById('submitBtn').disabled = false;
     document.getElementById('nextBtn').style.display = 'none';
     document.getElementById('assessError').style.display = 'none';
   }
 
+  function selectOption(optionId) {
+    if (state.selectedOption) return; // already locked after confirm
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Clear previous selection highlight
+    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+
+    state.selectedOption = optionId;
+    document.getElementById('opt-' + optionId).classList.add('selected');
+
+    // Show confirm button
+    submitBtn.style.display = 'block';
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Confirm Answer →';
+  }
+
   function renderEvalFeedback(evaluation) {
     const passed = evaluation.passed;
+    const score = evaluation.score;
+    const scoreColor = score === 100 ? '#4ade80' : score === 50 ? '#fbbf24' : '#f87171';
+    const scoreLabel = score === 100 ? 'Correct' : score === 50 ? 'Partial' : 'Incorrect';
+    const cardClass = score === 100 ? 'passed' : 'failed';
+
+    // Highlight option cards post-answer
+    document.querySelectorAll('.option-card').forEach(card => {
+      const id = card.id.replace('opt-', '');
+      card.classList.add('disabled');
+      if (id === evaluation.correct_option) {
+        card.classList.remove('selected', 'wrong', 'partial');
+        card.classList.add('correct');
+      } else if (id === evaluation.selected_option && id !== evaluation.correct_option) {
+        card.classList.remove('selected');
+        card.classList.add(score === 50 ? 'partial' : 'wrong');
+      } else {
+        card.classList.add('wrong');
+      }
+    });
+
     const el = document.getElementById('evalFeedback');
     el.innerHTML = `
-      <div class="eval-card ${passed ? 'passed' : 'failed'}">
-        <div class="eval-score ${passed ? 'passed' : 'failed'}">${evaluation.score}/100</div>
+      <div class="eval-card ${cardClass}">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+          <div class="eval-score ${cardClass}" style="color:${scoreColor};">${score}/100</div>
+          <div style="font-size:12px; font-weight:700; color:${scoreColor}; letter-spacing:1px;">${scoreLabel.toUpperCase()}</div>
+        </div>
         <div class="eval-feedback">${evaluation.feedback}</div>
       </div>`;
     el.style.display = 'block';
   }
 
   async function submitAnswer() {
-    const answer = document.getElementById('answerInput').value.trim();
-    if (!answer) return;
+    if (!state.selectedOption) return;
 
     document.getElementById('submitBtn').disabled = true;
     document.getElementById('assessError').style.display = 'none';
-    showLoading('Evaluating your answer...');
+    showLoading('Checking your answer...');
 
     try {
       const res = await fetch(`${API}/assess/answer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session_id: state.sessionId, answer })
+        body: JSON.stringify({
+          session_id: state.sessionId,
+          selected_option: state.selectedOption
+        })
       });
 
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
 
+      showScreen('assess');
+      renderEvalFeedback(data.evaluation);
+      document.getElementById('submitBtn').style.display = 'none';
+
       if (data.assessment_complete) {
-        showScreen('assess');
-        renderEvalFeedback(data.evaluation);
-        // Lock answer area, show "View Profile" instead of Next
-        document.getElementById('answerInput').disabled = true;
-        document.getElementById('submitBtn').style.display = 'none';
         const nextBtn = document.getElementById('nextBtn');
         nextBtn.textContent = 'View My Skill Profile →';
         nextBtn.style.background = '#6366f1';
@@ -806,12 +880,6 @@
       } else {
         state.currentQuestion++;
         state.challengeData = data.next_challenge;
-        showScreen('assess');
-        // Lock answer area and show feedback
-        document.getElementById('answerInput').disabled = true;
-        document.getElementById('submitBtn').style.display = 'none';
-        renderEvalFeedback(data.evaluation);
-        // Show Next Question button — user controls when to advance
         const nextBtn = document.getElementById('nextBtn');
         nextBtn.textContent = 'Next Question →';
         nextBtn.style.background = '#1e293b';
@@ -1076,9 +1144,15 @@
   }
 
   function resetApp() {
-    state = { sessionId: null, occupation: null, challengeData: null, currentQuestion: 0, totalQuestions: 0 };
+    state = {
+      sessionId: null, occupation: null, challengeData: null,
+      currentQuestion: 0, totalQuestions: 0,
+      educationLevel: null, experienceYears: null, otherSkills: null,
+      selectedOption: null, profileId: null
+    };
     document.getElementById('descInput').value = '';
     document.getElementById('startBtn').disabled = false;
+    document.getElementById('shareCardBtn').style.display = 'none';
     showScreen('start');
   }
 
