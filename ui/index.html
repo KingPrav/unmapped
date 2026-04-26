@@ -4,471 +4,581 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UNMAPPED — Skills Visibility</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:          #07080f;
+      --s1:          #0c0e1a;
+      --s2:          #101221;
+      --s3:          #161829;
+      --border:      #1a1d2e;
+      --border-hi:   #252840;
+      --primary:     #6f63ff;
+      --primary-dim: #3d3799;
+      --primary-glow:rgba(111,99,255,.12);
+      --green:       #10d9a0;
+      --green-bg:    rgba(16,217,160,.08);
+      --amber:       #f5a623;
+      --amber-bg:    rgba(245,166,35,.08);
+      --red:         #ff5f6e;
+      --red-bg:      rgba(255,95,110,.08);
+      --blue:        #4d9eff;
+      --t1:          #eef0f8;
+      --t2:          #7b85a8;
+      --t3:          #3a3f58;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #0f172a;
-      color: #e2e8f0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--t1);
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
+    /* ─── HEADER ─────────────────────────────── */
     header {
-      background: #1e293b;
-      border-bottom: 1px solid #334155;
-      padding: 16px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(7,8,15,.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-
-    .logo { font-size: 20px; font-weight: 800; letter-spacing: 3px; color: #6366f1; }
-    .logo span { color: #94a3b8; font-weight: 400; font-size: 13px; letter-spacing: 1px; margin-left: 12px; }
-
-    .region-selector select {
-      background: #0f172a;
-      border: 1px solid #334155;
-      color: #94a3b8;
+    .logo {
+      font-size: 17px; font-weight: 900; letter-spacing: 4px;
+      background: linear-gradient(135deg, #a78bfa 0%, var(--primary) 60%, #4d9eff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .logo-sub {
+      font-size: 11px; font-weight: 400; letter-spacing: 1.5px;
+      color: var(--t3); margin-left: 14px;
+      -webkit-text-fill-color: var(--t3);
+      vertical-align: middle;
+    }
+    .region-pill select {
+      background: var(--s2);
+      border: 1px solid var(--border-hi);
+      color: var(--t2);
       padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 13px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
       cursor: pointer;
+      outline: none;
+      appearance: none;
+      padding-right: 28px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237b85a8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
     }
 
+    /* ─── LAYOUT ─────────────────────────────── */
     .container {
-      max-width: 720px;
+      max-width: 660px;
       margin: 0 auto;
-      padding: 40px 24px;
+      padding: 48px 24px 80px;
     }
 
-    /* ── Screens ── */
     .screen { display: none; }
     .screen.active { display: block; }
 
-    /* ── Start screen ── */
-    .hero {
-      text-align: center;
-      margin-bottom: 40px;
+    /* ─── TYPOGRAPHY UTILS ───────────────────── */
+    .eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+      color: var(--primary); text-transform: uppercase; margin-bottom: 10px;
     }
-    .hero h1 {
-      font-size: 32px;
-      font-weight: 800;
-      color: #f1f5f9;
-      margin-bottom: 12px;
+    .section-title {
+      font-size: 24px; font-weight: 800; color: var(--t1); line-height: 1.2;
     }
-    .hero p {
-      color: #64748b;
-      font-size: 15px;
-      line-height: 1.6;
-      max-width: 500px;
-      margin: 0 auto;
+    .section-sub {
+      font-size: 14px; color: var(--t2); line-height: 1.6; margin-top: 6px;
     }
 
-    .amara-card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 12px;
+    /* ─── CARD BASE ──────────────────────────── */
+    .card {
+      background: var(--s2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
       padding: 24px;
-      margin-bottom: 32px;
     }
-    .amara-card .name { color: #6366f1; font-weight: 700; font-size: 14px; margin-bottom: 8px; }
-    .amara-card p { color: #94a3b8; font-size: 14px; line-height: 1.6; }
+    .card-sm { padding: 16px 20px; border-radius: 10px; }
 
-    .input-group { margin-bottom: 16px; }
-    .input-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 8px; }
-    .input-group input {
+    /* ─── INPUTS ─────────────────────────────── */
+    .field { margin-bottom: 14px; }
+    .field label {
+      display: block; font-size: 12px; font-weight: 600;
+      color: var(--t2); letter-spacing: 0.3px; margin-bottom: 7px;
+    }
+    .field input, .field select {
       width: 100%;
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #f1f5f9;
-      padding: 14px 16px;
-      border-radius: 8px;
-      font-size: 15px;
+      background: var(--s2);
+      border: 1px solid var(--border-hi);
+      color: var(--t1);
+      padding: 13px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color .18s, box-shadow .18s;
     }
-    .input-group input:focus { border-color: #6366f1; }
-    .input-group input::placeholder { color: #475569; }
+    .field input:focus, .field select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+    .field input::placeholder { color: var(--t3); }
+    .field select { appearance: none; cursor: pointer; }
 
+    /* ─── BUTTONS ────────────────────────────── */
     .btn {
-      width: 100%;
-      background: #6366f1;
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
+      width: 100%; padding: 14px 20px;
+      border-radius: 10px; border: none;
+      font-size: 14px; font-weight: 700; font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: all .18s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
-    .btn:hover { background: #4f46e5; }
-    .btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
-
-    /* ── Occupation confirm ── */
-    .confirm-card {
-      background: #1e293b;
-      border: 1px solid #6366f1;
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(111,99,255,.3);
     }
-    .confirm-card .isco { font-size: 11px; color: #6366f1; font-weight: 700; letter-spacing: 1px; margin-bottom: 6px; }
-    .confirm-card h2 { font-size: 20px; color: #f1f5f9; margin-bottom: 8px; }
-    .confirm-card .meta { font-size: 13px; color: #64748b; }
-    .confidence-bar { height: 4px; background: #334155; border-radius: 2px; margin-top: 12px; }
-    .confidence-fill { height: 4px; background: #6366f1; border-radius: 2px; }
-
-    .btn-row { display: flex; gap: 12px; }
-    .btn-secondary {
-      flex: 1;
-      background: transparent;
-      border: 1px solid #334155;
-      color: #94a3b8;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
+    .btn-primary:hover { background: #5f52f0; box-shadow: 0 6px 24px rgba(111,99,255,.4); }
+    .btn-primary:disabled { background: var(--s3); color: var(--t3); box-shadow: none; cursor: not-allowed; }
+    .btn-ghost {
+      background: transparent; color: var(--t2);
+      border: 1px solid var(--border-hi);
     }
-    .btn-primary { flex: 2; }
-
-    /* ── Assessment screen ── */
-    .progress-bar-wrap { margin-bottom: 32px; }
-    .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: #64748b; margin-bottom: 8px; }
-    .progress-bar { height: 4px; background: #1e293b; border-radius: 2px; }
-    .progress-fill { height: 4px; background: #6366f1; border-radius: 2px; transition: width 0.4s ease; }
-
-    .dimension-tag {
-      display: inline-block;
-      background: #1e293b;
-      border: 1px solid #6366f1;
-      color: #a5b4fc;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      padding: 4px 10px;
-      border-radius: 4px;
-      margin-bottom: 16px;
+    .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-outline-primary {
+      background: transparent; color: #a78bfa;
+      border: 1px solid var(--primary-dim);
     }
+    .btn-outline-primary:hover { background: var(--primary-glow); border-color: var(--primary); }
+    .btn-row { display: flex; gap: 10px; }
+    .btn-row .btn { flex: 1; }
+    .btn-row .btn-primary { flex: 2; }
 
-    .tier-badge {
-      display: inline-block;
-      background: #312e81;
-      color: #c7d2fe;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 4px;
-      margin-left: 8px;
+    /* ─── START SCREEN ───────────────────────── */
+    .hero { margin-bottom: 36px; }
+    .hero h1 {
+      font-size: 36px; font-weight: 900; line-height: 1.15;
+      background: linear-gradient(135deg, #fff 40%, #a78bfa 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 12px;
     }
+    .hero p { font-size: 15px; color: var(--t2); line-height: 1.65; max-width: 480px; }
 
-    .challenge-box {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
-      font-size: 15px;
-      line-height: 1.7;
-      color: #e2e8f0;
-    }
-
-    /* ── MCQ Option Cards ── */
-    .options-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    .option-card {
-      background: #1e293b;
-      border: 2px solid #334155;
+    .amara-quote {
+      margin-bottom: 28px;
+      padding: 20px 22px;
+      background: var(--s1);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--primary);
       border-radius: 10px;
-      padding: 14px 16px;
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-      user-select: none;
     }
-    .option-card:hover:not(.disabled) { border-color: #6366f1; background: #1e1b4b; }
-    .option-card.selected  { border-color: #6366f1; background: #1e1b4b; }
-    .option-card.correct   { border-color: #16a34a; background: #052e16; }
-    .option-card.wrong     { border-color: #64748b; background: #1e293b; opacity: 0.5; }
-    .option-card.partial   { border-color: #d97706; background: #1c1400; }
-    .option-card.disabled  { cursor: default; }
-
-    .option-letter {
-      width: 28px; height: 28px;
-      border-radius: 6px;
-      background: #334155;
-      color: #94a3b8;
-      font-size: 13px;
-      font-weight: 800;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      transition: background 0.15s, color 0.15s;
+    .amara-quote .quote-name {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      color: var(--primary); margin-bottom: 8px;
     }
-    .option-card.selected  .option-letter { background: #6366f1; color: white; }
-    .option-card.correct   .option-letter { background: #16a34a; color: white; }
-    .option-card.partial   .option-letter { background: #d97706; color: white; }
-    .option-card.wrong     .option-letter { background: #334155; color: #64748b; }
+    .amara-quote p { font-size: 13px; color: var(--t2); line-height: 1.65; }
 
-    .option-text { font-size: 14px; color: #e2e8f0; line-height: 1.5; flex: 1; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .error-msg { font-size: 12px; color: var(--red); margin-top: 8px; text-align: center; }
 
-    /* ── Evaluation feedback ── */
-    .eval-card {
-      border-radius: 10px;
-      padding: 16px 20px;
+    /* ─── CONFIRM SCREEN ─────────────────────── */
+    .classify-card {
+      background: var(--s2);
+      border: 1px solid var(--border-hi);
+      border-radius: 14px;
+      overflow: hidden;
       margin-bottom: 20px;
-      font-size: 14px;
     }
-    .eval-card.passed { background: #052e16; border: 1px solid #166534; }
-    .eval-card.failed { background: #1c1917; border: 1px solid #44403c; }
-    .eval-score { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
-    .eval-score.passed { color: #4ade80; }
-    .eval-score.failed { color: #f97316; }
-    .eval-feedback { color: #94a3b8; line-height: 1.5; }
-
-    /* ── Profile screen ── */
-    .profile-header {
-      text-align: center;
-      margin-bottom: 32px;
+    .classify-card-top {
+      background: linear-gradient(135deg, #0f1230 0%, var(--s3) 100%);
+      padding: 22px 24px;
+      border-bottom: 1px solid var(--border);
     }
-    .profile-header h2 { font-size: 24px; font-weight: 800; color: #f1f5f9; margin-bottom: 8px; }
-    .profile-header p { color: #64748b; font-size: 14px; }
+    .classify-isco {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      color: var(--primary); margin-bottom: 8px;
+    }
+    .classify-title { font-size: 20px; font-weight: 800; color: var(--t1); margin-bottom: 4px; }
+    .classify-meta { font-size: 13px; color: var(--t2); }
+    .confidence-wrap { padding: 16px 24px; }
+    .confidence-label {
+      display: flex; justify-content: space-between;
+      font-size: 11px; color: var(--t3); margin-bottom: 8px; font-weight: 600; letter-spacing: 0.5px;
+    }
+    .confidence-track { height: 3px; background: var(--border); border-radius: 2px; }
+    .confidence-fill { height: 3px; background: var(--primary); border-radius: 2px; transition: width .6s ease; }
 
-    .overall-score {
-      background: #1e293b;
-      border: 1px solid #6366f1;
+    /* ─── ASSESSMENT SCREEN ──────────────────── */
+    .assess-progress {
+      margin-bottom: 28px;
+      padding: 16px 20px;
+      background: var(--s1);
+      border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 24px;
-      text-align: center;
-      margin-bottom: 24px;
     }
-    .overall-score .score-num { font-size: 48px; font-weight: 900; color: #6366f1; }
-    .overall-score .score-label { font-size: 13px; color: #64748b; }
-
-    .profile-text {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 24px;
-      font-size: 14px;
-      line-height: 1.8;
-      color: #cbd5e1;
-      margin-bottom: 24px;
-      white-space: pre-wrap;
-    }
-
-    .dimension-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-    .dimension-card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      padding: 16px;
-    }
-    .dimension-card .dim-label { font-size: 11px; color: #6366f1; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; }
-    .dimension-card .dim-tier { font-size: 16px; font-weight: 800; color: #f1f5f9; margin-bottom: 4px; }
-    .dimension-card .dim-signal { font-size: 11px; color: #64748b; line-height: 1.4; }
-
-    .data-sources {
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 8px;
-      padding: 16px;
-      font-size: 12px;
-      color: #475569;
-      margin-bottom: 24px;
-    }
-    .data-sources strong { color: #64748b; }
-
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: #6366f1;
-    }
-    .spinner {
-      width: 32px;
-      height: 32px;
-      border: 3px solid #1e293b;
-      border-top-color: #6366f1;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading p { color: #64748b; font-size: 14px; }
-
-    .error-msg { color: #f87171; font-size: 13px; margin-top: 8px; text-align: center; }
-
-    /* ── Opportunities screen ── */
-    .opp-layer-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 28px 0 14px;
-    }
-    .opp-layer-header .layer-dot {
-      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
-    }
-    .opp-layer-header h3 { font-size: 13px; font-weight: 700; letter-spacing: 1px; }
-    .opp-layer-header .layer-count {
-      font-size: 11px; color: #475569; margin-left: auto;
-    }
-
-    .opp-card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 14px;
-      position: relative;
-    }
-    .opp-card:hover { border-color: #475569; }
-
-    .opp-card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+    .assess-progress-top {
+      display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 10px;
     }
-    .opp-title { font-size: 15px; font-weight: 700; color: #f1f5f9; line-height: 1.3; flex: 1; margin-right: 12px; }
-    .opp-type-badge {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      padding: 3px 9px;
-      border-radius: 4px;
-      flex-shrink: 0;
-      white-space: nowrap;
+    #progressText { font-size: 12px; font-weight: 600; color: var(--t2); }
+    #tierText {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+      color: #a78bfa; background: rgba(167,139,250,.1);
+      padding: 3px 9px; border-radius: 20px; border: 1px solid rgba(167,139,250,.2);
     }
-    .badge-self { background: #1e3a1e; color: #4ade80; border: 1px solid #166534; }
-    .badge-gig  { background: #1e2a3a; color: #60a5fa; border: 1px solid #1d4ed8; }
-    .badge-informal { background: #2a1e3a; color: #c084fc; border: 1px solid #7c3aed; }
-    .badge-training { background: #3a2a1e; color: #fb923c; border: 1px solid #c2410c; }
+    .progress-track { height: 3px; background: var(--border); border-radius: 2px; }
+    .progress-fill { height: 3px; background: linear-gradient(90deg, var(--primary), #a78bfa); border-radius: 2px; transition: width .4s ease; }
 
-    .opp-signals {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin: 14px 0;
-      padding: 12px;
-      background: #0f172a;
+    .assess-tags {
+      display: flex; align-items: center; gap: 8px;
+      flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .dim-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      color: #a78bfa; background: rgba(111,99,255,.1);
+      border: 1px solid rgba(111,99,255,.25);
+      padding: 4px 10px; border-radius: 20px;
+    }
+    .q-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      color: var(--t3); background: var(--s1);
+      border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px;
+    }
+    .q-tag.active { color: #a78bfa; border-color: rgba(111,99,255,.3); background: rgba(111,99,255,.08); }
+    .lang-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      color: var(--amber); background: var(--amber-bg);
+      border: 1px solid rgba(245,166,35,.25); padding: 4px 10px; border-radius: 20px;
+      display: none;
+    }
+
+    .question-card {
+      background: var(--s2);
+      border: 1px solid var(--border-hi);
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 16px;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.75;
+      color: var(--t1);
+      letter-spacing: 0.1px;
+    }
+
+    /* ─── OPTION CARDS ───────────────────────── */
+    .options-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+
+    .option-card {
+      background: var(--s2);
+      border: 1.5px solid var(--border-hi);
+      border-radius: 11px;
+      padding: 13px 16px;
+      display: flex; align-items: flex-start; gap: 14px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s, transform .1s;
+      user-select: none;
+    }
+    .option-card:hover:not(.disabled) {
+      border-color: var(--primary); background: var(--primary-glow);
+      transform: translateY(-1px);
+    }
+    .option-card.selected  { border-color: var(--primary); background: var(--primary-glow); }
+    .option-card.correct   { border-color: var(--green); background: var(--green-bg); }
+    .option-card.wrong     { border-color: var(--border); background: var(--s1); opacity: .45; }
+    .option-card.partial   { border-color: var(--amber); background: var(--amber-bg); }
+    .option-card.disabled  { cursor: default; transform: none; }
+
+    .option-letter {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: var(--s3); color: var(--t2);
+      font-size: 12px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background .15s, color .15s;
+    }
+    .option-card.selected .option-letter  { background: var(--primary); color: #fff; }
+    .option-card.correct  .option-letter  { background: var(--green);   color: #fff; }
+    .option-card.partial  .option-letter  { background: var(--amber);   color: #fff; }
+    .option-card.wrong    .option-letter  { background: var(--border);  color: var(--t3); }
+    .option-text { font-size: 14px; color: var(--t1); line-height: 1.55; flex: 1; padding-top: 4px; }
+
+    /* ─── EVAL FEEDBACK ──────────────────────── */
+    .eval-card {
+      border-radius: 12px; padding: 18px 20px; margin-bottom: 16px;
+    }
+    .eval-card.passed { background: var(--green-bg); border: 1px solid rgba(16,217,160,.2); }
+    .eval-card.failed { background: var(--s1); border: 1px solid var(--border-hi); }
+    .eval-top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .eval-score { font-size: 22px; font-weight: 900; }
+    .eval-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; }
+    .eval-feedback { font-size: 13px; color: var(--t2); line-height: 1.6; }
+
+    /* ─── LOADING ────────────────────────────── */
+    .loading-wrap { text-align: center; padding: 80px 20px; }
+    .spinner {
+      width: 36px; height: 36px; margin: 0 auto 20px;
+      border: 2.5px solid var(--border-hi);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-wrap p { font-size: 14px; color: var(--t2); font-weight: 500; }
+
+    /* ─── SKILLS CARD ────────────────────────── */
+    .skills-card {
+      background: var(--s2);
+      border: 1px solid var(--border-hi);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .sc-header {
+      background: linear-gradient(135deg, #0e1130 0%, #151839 50%, #1a1040 100%);
+      padding: 24px 28px;
+      border-bottom: 1px solid rgba(111,99,255,.2);
+    }
+    .sc-header-row { display: flex; justify-content: space-between; align-items: flex-start; }
+    .sc-eyebrow {
+      font-size: 9px; font-weight: 700; letter-spacing: 3px;
+      color: #a78bfa; margin-bottom: 8px; text-transform: uppercase;
+    }
+    .sc-title { font-size: 20px; font-weight: 800; color: var(--t1); line-height: 1.2; }
+    .sc-isco  { font-size: 12px; color: #7c7ab5; margin-top: 5px; }
+    .sc-score-wrap { text-align: right; }
+    .sc-score { font-size: 44px; font-weight: 900; line-height: 1; }
+    .sc-score-label { font-size: 9px; color: #7c7ab5; letter-spacing: 1.5px; margin-top: 3px; }
+
+    .sc-verified {
+      padding: 11px 28px;
+      background: rgba(16,217,160,.06);
+      border-bottom: 1px solid rgba(16,217,160,.15);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .verified-left { display: flex; align-items: center; gap: 10px; }
+    .verified-dot {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--green);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .verified-text { font-size: 11px; font-weight: 800; color: var(--green); letter-spacing: 0.5px; }
+    .verified-sub  { font-size: 10px; color: rgba(16,217,160,.4); margin-top: 1px; }
+    .verified-id-label { font-size: 9px; color: rgba(16,217,160,.4); font-weight: 700; letter-spacing: 1px; text-align: right; }
+    .verified-id   { font-size: 10px; color: var(--green); font-family: monospace; text-align: right; }
+
+    .sc-section {
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sc-section:last-child { border-bottom: none; }
+    .sc-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 2px;
+      color: var(--t3); text-transform: uppercase; margin-bottom: 10px;
+    }
+
+    .sc-meta-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+    }
+    .sc-meta-item .meta-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+      color: var(--t3); text-transform: uppercase; margin-bottom: 3px;
+    }
+    .sc-meta-item .meta-val { font-size: 13px; color: var(--t2); font-weight: 500; }
+
+    .sc-summary { font-size: 14px; color: var(--t1); line-height: 1.7; }
+
+    .dim-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+    }
+    .dim-row:last-child { border-bottom: none; }
+    .dim-name { font-size: 13px; color: var(--t2); font-weight: 500; }
+    .dim-right { display: flex; align-items: center; gap: 10px; }
+    .dim-score { font-size: 12px; color: var(--t3); min-width: 42px; text-align: right; }
+    .dim-bar { width: 70px; height: 3px; background: var(--border); border-radius: 2px; }
+    .dim-bar-fill { height: 3px; border-radius: 2px; }
+    .tier-chip {
+      font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+      min-width: 78px; text-align: center;
+    }
+
+    .employer-signal-box {
+      font-size: 13px; color: var(--t2); line-height: 1.65; font-style: italic;
+      padding: 14px 18px;
+      background: var(--s1); border-left: 3px solid var(--primary);
       border-radius: 8px;
     }
-    .signal-item { text-align: center; }
-    .signal-value { font-size: 18px; font-weight: 800; }
-    .signal-label { font-size: 10px; color: #475569; margin-top: 2px; line-height: 1.3; }
-    .signal-source { font-size: 9px; color: #334155; margin-top: 2px; }
 
-    .opp-explanation {
-      font-size: 13px;
-      color: #94a3b8;
-      line-height: 1.65;
-      margin-bottom: 12px;
+    .portability-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .port-tag {
+      font-size: 10px; padding: 3px 9px;
+      background: var(--s1); border: 1px solid var(--border);
+      border-radius: 20px; color: var(--t3); font-weight: 500;
+    }
+    .sc-taxonomy { font-size: 11px; color: var(--t3); margin-bottom: 6px; }
+    .sc-profile-id { font-size: 10px; color: var(--t3); font-family: monospace; margin-top: 10px; }
+
+    /* ─── OPPORTUNITIES SCREEN ───────────────── */
+    .opp-header { margin-bottom: 28px; }
+
+    .score-banner {
+      padding: 14px 18px; border-radius: 10px;
+      font-size: 13px; line-height: 1.6;
+      margin-bottom: 24px;
     }
 
-    .opp-gaps {
-      margin: 10px 0;
+    .layer-header {
+      display: flex; align-items: center; gap: 10px;
+      margin: 32px 0 14px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .layer-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .layer-title { font-size: 11px; font-weight: 800; letter-spacing: 2px; }
+    .layer-count { font-size: 11px; color: var(--t3); margin-left: auto; }
+
+    .opp-card {
+      background: var(--s2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 22px;
+      margin-bottom: 12px; transition: border-color .18s;
+    }
+    .opp-card:hover { border-color: var(--border-hi); }
+
+    .opp-card-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .opp-title { font-size: 15px; font-weight: 700; color: var(--t1); line-height: 1.3; flex: 1; margin-right: 12px; }
+    .opp-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+      padding: 3px 10px; border-radius: 20px; flex-shrink: 0; white-space: nowrap;
+    }
+    .badge-self    { background: rgba(16,217,160,.1);  color: var(--green); border: 1px solid rgba(16,217,160,.2); }
+    .badge-gig     { background: rgba(77,158,255,.1);  color: var(--blue);  border: 1px solid rgba(77,158,255,.2); }
+    .badge-informal{ background: rgba(167,139,250,.1); color: #c4b5fd;      border: 1px solid rgba(167,139,250,.2); }
+    .badge-training{ background: rgba(245,166,35,.1);  color: var(--amber); border: 1px solid rgba(245,166,35,.2); }
+
+    .opp-signals {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+      padding: 14px; background: var(--s1); border-radius: 10px;
+      margin-bottom: 14px;
+    }
+    .signal-item { text-align: center; }
+    .signal-value { font-size: 17px; font-weight: 800; line-height: 1.2; }
+    .signal-label { font-size: 9px; color: var(--t3); margin-top: 3px; letter-spacing: 0.5px; line-height: 1.4; }
+    .signal-source { font-size: 8px; color: var(--border-hi); margin-top: 2px; letter-spacing: 0.5px; }
+
+    .opp-explanation { font-size: 13px; color: var(--t2); line-height: 1.65; margin-bottom: 10px; }
+
+    .opp-gaps { margin: 10px 0; }
+    .gap-label-row {
+      font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+      color: var(--t3); margin-bottom: 6px;
     }
     .gap-item {
-      display: flex;
-      justify-content: space-between;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 6px 0; border-bottom: 1px solid var(--border);
       font-size: 12px;
-      padding: 5px 0;
-      border-bottom: 1px solid #1e293b;
-      color: #64748b;
     }
-    .gap-item .gap-label { color: #94a3b8; }
-    .gap-badge { background: #451a03; color: #fb923c; padding: 2px 7px; border-radius: 3px; font-size: 10px; font-weight: 700; }
+    .gap-item:last-child { border-bottom: none; }
+    .gap-dim { color: var(--t2); }
+    .gap-badge {
+      font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+      background: rgba(245,166,35,.1); color: var(--amber); border: 1px solid rgba(245,166,35,.2);
+    }
 
     .opp-bridge {
-      margin-top: 12px;
-      padding: 10px 14px;
-      background: #0f172a;
-      border-radius: 6px;
-      border-left: 3px solid #6366f1;
-      font-size: 12px;
-      color: #64748b;
-      line-height: 1.5;
+      margin-top: 12px; padding: 11px 14px;
+      background: var(--s1); border-left: 3px solid var(--primary);
+      border-radius: 8px; font-size: 12px; color: var(--t2); line-height: 1.55;
     }
-    .opp-bridge strong { color: #a5b4fc; }
+    .opp-bridge strong { color: #a78bfa; }
 
-    .opp-tags {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
+    .opp-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
     .opp-tag {
-      font-size: 10px;
-      padding: 2px 8px;
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 4px;
-      color: #475569;
+      font-size: 10px; padding: 3px 9px;
+      background: var(--s1); border: 1px solid var(--border);
+      border-radius: 20px; color: var(--t3);
     }
 
     .opp-empty {
-      font-size: 13px;
-      color: #475569;
-      padding: 16px;
-      text-align: center;
-      border: 1px dashed #334155;
-      border-radius: 8px;
+      font-size: 13px; color: var(--t3);
+      padding: 18px; text-align: center;
+      border: 1px dashed var(--border); border-radius: 10px;
     }
 
     .sources-footer {
-      margin-top: 24px;
-      padding: 14px;
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 8px;
-      font-size: 11px;
-      color: #334155;
-      line-height: 1.6;
+      margin-top: 24px; padding: 14px 18px;
+      background: var(--s1); border: 1px solid var(--border);
+      border-radius: 10px; font-size: 11px; color: var(--t3); line-height: 1.7;
     }
-    .sources-footer strong { color: #475569; display: block; margin-bottom: 4px; }
+    .sources-footer strong { color: var(--t2); display: block; margin-bottom: 4px; font-size: 10px; letter-spacing: 1px; }
+
+    /* ─── DIVIDER ─────────────────────────────── */
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+    /* ─── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 480px) {
+      .container { padding: 28px 16px 60px; }
+      header { padding: 0 16px; }
+      .sc-header { padding: 20px; }
+      .sc-section { padding: 14px 20px; }
+      .sc-verified { padding: 10px 20px; }
+      .hero h1 { font-size: 28px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .sc-meta-grid { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">UNMAPPED <span>Skills Visibility Infrastructure</span></div>
-  <div class="region-selector">
+  <div>
+    <span class="logo">UNMAPPED</span>
+    <span class="logo-sub">Skills Visibility</span>
+  </div>
+  <div class="region-pill">
     <select id="regionSelect">
-      <option value="ghana_urban">Ghana — Urban Informal</option>
-      <option value="kenya_mixed">Kenya — Mixed Economy</option>
+      <option value="ghana_urban">🇬🇭 Ghana — English</option>
+      <option value="ghana_twi">🇬🇭 Ghana — Twi</option>
+      <option value="kenya_mixed">🇰🇪 Kenya — English</option>
+      <option value="kenya_swahili">🇰🇪 Kenya — Swahili</option>
     </select>
   </div>
 </header>
 
 <div class="container">
 
-  <!-- ── SCREEN: Start ── -->
+  <!-- ── START ── -->
   <div id="screen-start" class="screen active">
     <div class="hero">
       <h1>What do you do?</h1>
-      <p>Tell us in your own words. No certificates needed — just describe your work.</p>
+      <p>Tell us in your own words. No certificates or CVs needed — just describe your work and we'll handle the rest.</p>
     </div>
 
-    <div class="amara-card">
-      <div class="name">Meet Amara</div>
-      <p>She's 22, runs a phone repair business, speaks 3 languages, and taught herself coding from YouTube. By any measure, she has skills. But to the formal economy — she doesn't exist. UNMAPPED changes that.</p>
+    <div class="amara-quote">
+      <div class="quote-name">MEET AMARA</div>
+      <p>She's 22, repairs phones in Accra, speaks 3 languages, and taught herself everything from YouTube. By any measure — she has skills. But to the formal economy, she doesn't exist. UNMAPPED changes that.</p>
     </div>
 
-    <div class="input-group">
+    <div class="field">
       <label>Describe your work</label>
       <input type="text" id="descInput" placeholder="e.g. I fix phones, I sell at the market, I cut hair..." />
     </div>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-      <div class="input-group" style="margin-bottom:0">
+    <div class="form-grid" style="margin-bottom:14px;">
+      <div class="field" style="margin-bottom:0">
         <label>Highest education level</label>
-        <select id="educationLevel" style="width:100%; background:#1e293b; border:1px solid #334155; color:#f1f5f9; padding:13px 16px; border-radius:8px; font-size:14px; outline:none;">
+        <select id="educationLevel">
           <option value="none">No formal education</option>
           <option value="primary">Primary school</option>
           <option value="lower_secondary">Lower secondary (JSS/JHS)</option>
@@ -477,225 +587,233 @@
           <option value="tertiary">Tertiary / University</option>
         </select>
       </div>
-      <div class="input-group" style="margin-bottom:0">
+      <div class="field" style="margin-bottom:0">
         <label>Years doing this work</label>
-        <input type="number" id="experienceYears" min="0" max="50" value="2"
-          style="width:100%; background:#1e293b; border:1px solid #334155; color:#f1f5f9; padding:13px 16px; border-radius:8px; font-size:14px; outline:none;" />
+        <input type="number" id="experienceYears" min="0" max="50" value="2"/>
       </div>
     </div>
 
-    <div class="input-group" style="margin-top:12px;">
-      <label>Other skills or things you've taught yourself <span style="color:#475569">(optional)</span></label>
-      <input type="text" id="otherSkills" placeholder="e.g. basic coding, speak 3 languages, run a small business..." />
+    <div class="field">
+      <label>Other skills or things you've self-taught <span style="color:var(--t3); font-weight:400;">(optional)</span></label>
+      <input type="text" id="otherSkills" placeholder="e.g. basic coding, speak 3 languages, run a small business..."/>
     </div>
 
-    <div id="startError" class="error-msg" style="display:none"></div>
-    <button class="btn" id="startBtn" onclick="startAssessment()">Start Skills Assessment →</button>
+    <div id="startError" class="error-msg" style="display:none;"></div>
+    <button class="btn btn-primary" id="startBtn" onclick="startAssessment()">Start Skills Assessment →</button>
   </div>
 
-  <!-- ── SCREEN: Confirm Occupation ── -->
+  <!-- ── CONFIRM OCCUPATION ── -->
   <div id="screen-confirm" class="screen">
-    <div class="confirm-card">
-      <div class="isco">ISCO-08 · O*NET Classification</div>
-      <h2 id="confirmTitle"></h2>
-      <div class="meta" id="confirmMeta"></div>
-      <div class="confidence-bar"><div class="confidence-fill" id="confidenceFill"></div></div>
+    <div class="eyebrow">Step 1 of 3 — Occupation Identified</div>
+    <div class="section-title" style="margin-bottom:24px;">Is this you?</div>
+
+    <div class="classify-card">
+      <div class="classify-card-top">
+        <div class="classify-isco">ISCO-08 · O*NET CLASSIFICATION</div>
+        <div class="classify-title" id="confirmTitle"></div>
+        <div class="classify-meta" id="confirmMeta"></div>
+      </div>
+      <div class="confidence-wrap">
+        <div class="confidence-label">
+          <span>MATCH CONFIDENCE</span>
+          <span id="confidencePct"></span>
+        </div>
+        <div class="confidence-track"><div class="confidence-fill" id="confidenceFill"></div></div>
+      </div>
     </div>
-    <p style="color:#64748b; font-size:13px; margin-bottom:20px;">We've matched your work to a standard occupation code used by employers and labor agencies globally. Does this look right?</p>
+
+    <p style="font-size:13px; color:var(--t2); line-height:1.6; margin-bottom:20px;">We've matched your work to a standard occupation code used by the ILO, World Bank, and employers globally. Does this look right?</p>
+
     <div class="btn-row">
-      <button class="btn-secondary" onclick="goBack()">← Try again</button>
+      <button class="btn btn-ghost" onclick="goBack()">← Try again</button>
       <button class="btn btn-primary" onclick="beginChallenges()">Yes, begin assessment →</button>
     </div>
   </div>
 
-  <!-- ── SCREEN: Assessment ── -->
+  <!-- ── ASSESSMENT ── -->
   <div id="screen-assess" class="screen">
-    <div class="progress-bar-wrap">
-      <div class="progress-label">
+
+    <div class="assess-progress">
+      <div class="assess-progress-top">
         <span id="progressText">Question 1 of 10</span>
         <span id="tierText">Tier 1 — Entry</span>
       </div>
-      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     </div>
 
-    <div id="evalFeedback" style="display:none"></div>
+    <div id="evalFeedback" style="display:none;"></div>
 
-    <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
-      <div class="dimension-tag" id="dimensionTag"></div>
-      <div id="qNumTag" style="font-size:10px; font-weight:700; letter-spacing:1px; color:#64748b; padding:3px 8px; background:#0f172a; border:1px solid #334155; border-radius:4px;">Q1 OF 2</div>
-      <div id="langBadge" style="display:none; font-size:10px; font-weight:700; letter-spacing:1px; color:#f59e0b; padding:3px 8px; background:#0f172a; border:1px solid #92400e; border-radius:4px;"></div>
+    <div class="assess-tags">
+      <div class="dim-tag" id="dimensionTag"></div>
+      <div class="q-tag" id="qNumTag">Q1 OF 2</div>
+      <div class="lang-tag" id="langBadge"></div>
     </div>
-    <div class="challenge-box" id="challengeText"></div>
+
+    <div class="question-card" id="challengeText"></div>
 
     <div class="options-grid" id="optionsGrid"></div>
 
-    <div id="assessError" class="error-msg" style="display:none"></div>
-    <button class="btn" id="submitBtn" onclick="submitAnswer()" style="display:none;">Confirm Answer →</button>
-    <button class="btn" id="nextBtn" onclick="goToNextQuestion()" style="display:none; margin-top:12px; background:#1e293b; border:1px solid #6366f1; color:#a5b4fc;">Next Question →</button>
+    <div id="assessError" class="error-msg" style="display:none;"></div>
+    <button class="btn btn-primary" id="submitBtn" onclick="submitAnswer()" style="display:none;">Confirm Answer →</button>
+    <button class="btn btn-outline-primary" id="nextBtn" onclick="goToNextQuestion()" style="display:none; margin-top:10px;">Next Question →</button>
   </div>
 
-  <!-- ── SCREEN: Loading ── -->
+  <!-- ── LOADING ── -->
   <div id="screen-loading" class="screen">
-    <div class="loading">
+    <div class="loading-wrap">
       <div class="spinner"></div>
       <p id="loadingMsg">Processing...</p>
     </div>
   </div>
 
-  <!-- ── SCREEN: Profile ── -->
+  <!-- ── PROFILE / SKILLS CARD ── -->
   <div id="screen-profile" class="screen">
-    <div class="profile-header">
-      <h2>Your Skills Card</h2>
-      <p id="profileSubtitle"></p>
-    </div>
+    <div class="eyebrow">Step 3 of 3 — Skills Card Generated</div>
+    <div class="section-title" style="margin-bottom:6px;">Your Skills Card</div>
+    <div class="section-sub" id="profileSubtitle" style="margin-bottom:24px;"></div>
 
-    <!-- Skills Card -->
-    <div style="background:#1e293b; border:1px solid #6366f1; border-radius:12px; overflow:hidden; margin-bottom:24px;">
+    <!-- The Card -->
+    <div class="skills-card">
 
-      <!-- Card Header -->
-      <div style="background:#312e81; padding:20px 24px;">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <!-- Header -->
+      <div class="sc-header">
+        <div class="sc-eyebrow">UNMAPPED SKILLS CARD</div>
+        <div class="sc-header-row">
           <div>
-            <div style="font-size:10px; color:#a5b4fc; font-weight:700; letter-spacing:2px; margin-bottom:6px;">UNMAPPED SKILLS CARD</div>
-            <div style="font-size:20px; font-weight:800; color:#f1f5f9;" id="cardOccupation"></div>
-            <div style="font-size:12px; color:#818cf8; margin-top:4px;" id="cardIsco"></div>
+            <div class="sc-title" id="cardOccupation"></div>
+            <div class="sc-isco"  id="cardIsco"></div>
           </div>
-          <div style="text-align:right;">
-            <div style="font-size:36px; font-weight:900; color:#fff;" id="cardScore"></div>
-            <div style="font-size:10px; color:#a5b4fc;">OVERALL</div>
+          <div class="sc-score-wrap">
+            <div class="sc-score" id="cardScore"></div>
+            <div class="sc-score-label">OVERALL</div>
           </div>
         </div>
       </div>
 
-      <!-- Verified Banner -->
-      <div style="background:#052e16; border-bottom:2px solid #166534; padding:10px 24px; display:flex; align-items:center; justify-content:space-between;">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div style="width:22px; height:22px; background:#16a34a; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5L5 9.5L11 3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <!-- Verified strip -->
+      <div class="sc-verified">
+        <div class="verified-left">
+          <div class="verified-dot">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6L4.5 8.5L10 3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
           <div>
-            <div style="font-size:12px; font-weight:800; color:#4ade80; letter-spacing:0.5px;">UNMAPPED VERIFIED</div>
-            <div style="font-size:10px; color:#166534;" id="verifiedTimestamp"></div>
+            <div class="verified-text">UNMAPPED VERIFIED</div>
+            <div class="verified-sub" id="verifiedTimestamp"></div>
           </div>
         </div>
-        <div style="text-align:right;">
-          <div style="font-size:9px; color:#166534; font-weight:700; letter-spacing:1px;">ASSESSMENT ID</div>
-          <div style="font-size:10px; color:#4ade80; font-family:monospace;" id="verifiedProfileId"></div>
+        <div>
+          <div class="verified-id-label">ASSESSMENT ID</div>
+          <div class="verified-id" id="verifiedProfileId"></div>
         </div>
       </div>
 
-      <!-- Worker Details -->
-      <div style="padding:16px 24px; border-bottom:1px solid #334155; display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
-        <div>
-          <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:3px;">EDUCATION</div>
-          <div style="font-size:13px; color:#cbd5e1;" id="cardEducation"></div>
-        </div>
-        <div>
-          <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:3px;">EXPERIENCE</div>
-          <div style="font-size:13px; color:#cbd5e1;" id="cardExperience"></div>
-        </div>
-        <div>
-          <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:3px;">REGION</div>
-          <div style="font-size:13px; color:#cbd5e1;" id="cardRegion"></div>
+      <!-- Worker meta -->
+      <div class="sc-section">
+        <div class="sc-meta-grid">
+          <div class="sc-meta-item">
+            <div class="meta-label">Education</div>
+            <div class="meta-val" id="cardEducation"></div>
+          </div>
+          <div class="sc-meta-item">
+            <div class="meta-label">Experience</div>
+            <div class="meta-val" id="cardExperience"></div>
+          </div>
+          <div class="sc-meta-item">
+            <div class="meta-label">Region</div>
+            <div class="meta-val" id="cardRegion"></div>
+          </div>
         </div>
       </div>
 
       <!-- Summary -->
-      <div style="padding:16px 24px; border-bottom:1px solid #334155;">
-        <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:8px;">SUMMARY</div>
-        <div style="font-size:14px; color:#e2e8f0; line-height:1.6;" id="cardSummary"></div>
+      <div class="sc-section">
+        <div class="sc-label">Summary</div>
+        <div class="sc-summary" id="cardSummary"></div>
       </div>
 
       <!-- Skill Dimensions -->
-      <div style="padding:16px 24px; border-bottom:1px solid #334155;">
-        <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:12px;">SKILL DIMENSIONS</div>
+      <div class="sc-section">
+        <div class="sc-label">Skill Dimensions</div>
         <div id="cardDimensions"></div>
       </div>
 
       <!-- Employer Signal -->
-      <div style="padding:16px 24px; border-bottom:1px solid #334155; background:#0f172a;">
-        <div style="font-size:10px; color:#6366f1; font-weight:700; letter-spacing:1px; margin-bottom:6px;">EMPLOYER SIGNAL</div>
-        <div style="font-size:14px; color:#e2e8f0; font-style:italic;" id="cardEmployerSignal"></div>
+      <div class="sc-section" style="background:var(--s1);">
+        <div class="sc-label" style="color:var(--primary);">Employer Signal</div>
+        <div class="employer-signal-box" id="cardEmployerSignal"></div>
       </div>
 
-      <!-- Portability & Data Sources -->
-      <div style="padding:16px 24px;">
-        <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:8px;">PORTABILITY</div>
-        <div style="font-size:11px; color:#475569; margin-bottom:4px;">Taxonomy: ISCO-08 · O*NET 28.0 · ESCO v1.2.1</div>
-        <div style="font-size:10px; color:#334155; margin-bottom:6px;">Assessment method: Scenario-based multiple choice · Score: 0–100</div>
-        <div style="font-size:11px; color:#475569; margin-bottom:10px;" id="cardDataSources"></div>
-        <div style="display:flex; gap:6px; flex-wrap:wrap;" id="cardTransferTags"></div>
-        <div style="margin-top:12px; font-size:10px; color:#334155; font-family:monospace;" id="cardProfileId"></div>
+      <!-- Portability -->
+      <div class="sc-section">
+        <div class="sc-label">Portability</div>
+        <div class="sc-taxonomy">Taxonomy: ISCO-08 · O*NET 28.0 · ESCO v1.2.1</div>
+        <div style="font-size:11px; color:var(--t3); margin-bottom:10px;" id="cardDataSources"></div>
+        <div class="portability-row" id="cardTransferTags"></div>
+        <div class="sc-profile-id" id="cardProfileId"></div>
       </div>
     </div>
 
-    <div style="display:flex; flex-direction:column; gap:10px; margin-top:4px;">
-      <button class="btn" id="oppBtn" onclick="goToOpportunities()">See Your Matched Opportunities →</button>
-      <button class="btn" id="shareCardBtn" onclick="shareCard()" style="background:transparent; border:1px solid #6366f1; color:#a5b4fc; display:none;">
-        Share Verified Card 🔗
-      </button>
-      <button class="btn" onclick="resetApp()" style="background:transparent; border:1px solid #334155; color:#64748b;">Start New Assessment</button>
+    <!-- Actions -->
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button class="btn btn-primary" id="oppBtn" onclick="goToOpportunities()">See Matched Opportunities →</button>
+      <button class="btn btn-outline-primary" id="shareCardBtn" onclick="shareCard()" style="display:none;">Share Verified Card 🔗</button>
+      <button class="btn btn-ghost" onclick="resetApp()">Start New Assessment</button>
     </div>
   </div>
 
-  <!-- ── SCREEN: Opportunities ── -->
+  <!-- ── OPPORTUNITIES ── -->
   <div id="screen-opportunities" class="screen">
-    <div style="margin-bottom:28px;">
-      <div style="font-size:11px; color:#6366f1; font-weight:700; letter-spacing:2px; margin-bottom:6px;">MODULE 03 — OPPORTUNITY MATCHING</div>
-      <h2 style="font-size:22px; font-weight:800; color:#f1f5f9; margin-bottom:6px;">What's available to you</h2>
-      <p style="font-size:13px; color:#64748b;" id="oppSubtitle"></p>
+    <div class="opp-header">
+      <div class="eyebrow">Module 03 — Opportunity Matching</div>
+      <div class="section-title">What's available to you</div>
+      <div class="section-sub" id="oppSubtitle"></div>
     </div>
 
-    <!-- Score context banner -->
-    <div id="oppScoreBanner" style="margin-bottom:20px; padding:14px 18px; border-radius:10px; font-size:13px; line-height:1.5;"></div>
+    <div class="score-banner" id="oppScoreBanner"></div>
 
     <!-- Ready Now -->
-    <div class="opp-layer-header">
-      <div class="layer-dot" style="background:#4ade80;"></div>
-      <h3 style="color:#4ade80;">READY NOW</h3>
+    <div class="layer-header">
+      <div class="layer-dot" style="background:var(--green);"></div>
+      <div class="layer-title" style="color:var(--green);">READY NOW</div>
       <span class="layer-count" id="readyNowCount"></span>
     </div>
     <div id="readyNowList"></div>
 
     <!-- Close Gap -->
-    <div class="opp-layer-header">
-      <div class="layer-dot" style="background:#fbbf24;"></div>
-      <h3 style="color:#fbbf24;">CLOSE THE GAP</h3>
+    <div class="layer-header">
+      <div class="layer-dot" style="background:var(--amber);"></div>
+      <div class="layer-title" style="color:var(--amber);">CLOSE THE GAP</div>
       <span class="layer-count" id="closeGapCount"></span>
     </div>
     <div id="closeGapList"></div>
 
-    <!-- Training Pathway -->
-    <div class="opp-layer-header">
+    <!-- Training -->
+    <div class="layer-header">
       <div class="layer-dot" style="background:#fb923c;"></div>
-      <h3 style="color:#fb923c;">TRAINING PATHWAY</h3>
+      <div class="layer-title" style="color:#fb923c;">TRAINING PATHWAY</div>
       <span class="layer-count" id="trainingCount"></span>
     </div>
     <div id="trainingList"></div>
 
-    <div id="oppSources" class="sources-footer"></div>
+    <div id="oppSources" class="sources-footer" style="display:none;"></div>
 
-    <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
-      <button class="btn" onclick="showScreen('profile')" style="background:transparent; border:1px solid #334155; color:#64748b;">← Back to Skills Card</button>
-      <button class="btn" onclick="resetApp()" style="background:transparent; border:1px solid #1e293b; color:#475569;">Start New Assessment</button>
+    <div style="margin-top:28px; display:flex; flex-direction:column; gap:10px;">
+      <button class="btn btn-ghost" onclick="showScreen('profile')">← Back to Skills Card</button>
+      <button class="btn btn-ghost" style="border-color:var(--border);" onclick="resetApp()">Start New Assessment</button>
     </div>
   </div>
 
-</div>
+</div><!-- /container -->
 
 <script>
   const API = '';
   let state = {
-    sessionId: null,
-    occupation: null,
-    challengeData: null,
-    currentQuestion: 0,
-    totalQuestions: 0,
-    educationLevel: null,
-    experienceYears: null,
-    otherSkills: null,
-    selectedOption: null,
-    profileId: null
+    sessionId: null, occupation: null, challengeData: null,
+    currentQuestion: 0, totalQuestions: 0, currentQNum: 1,
+    educationLevel: null, experienceYears: null, otherSkills: null,
+    selectedOption: null, profileId: null
   };
 
   const TIER_LABELS = { 1: 'Entry', 2: 'Functional', 3: 'Mastery' };
@@ -703,6 +821,7 @@
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen-' + id).classList.add('active');
+    window.scrollTo(0, 0);
   }
 
   function showLoading(msg) {
@@ -710,22 +829,20 @@
     showScreen('loading');
   }
 
-  function goBack() {
-    showScreen('start');
-  }
+  function goBack() { showScreen('start'); }
 
   async function startAssessment() {
     const description = document.getElementById('descInput').value.trim();
     if (!description) return;
 
-    const region = document.getElementById('regionSelect').value;
+    const region          = document.getElementById('regionSelect').value;
     const education_level = document.getElementById('educationLevel').value;
-    const experience_years = parseInt(document.getElementById('experienceYears').value) || 0;
-    const other_skills = document.getElementById('otherSkills').value.trim();
+    const experience_years= parseInt(document.getElementById('experienceYears').value) || 0;
+    const other_skills    = document.getElementById('otherSkills').value.trim();
 
-    state.educationLevel = education_level;
+    state.educationLevel  = education_level;
     state.experienceYears = experience_years;
-    state.otherSkills = other_skills;
+    state.otherSkills     = other_skills;
 
     document.getElementById('startError').style.display = 'none';
     document.getElementById('startBtn').disabled = true;
@@ -741,20 +858,19 @@
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
 
-      state.sessionId = data.session_id;
-      state.occupation = data.occupation;
-      state.challengeData = data.challenge;
-      state.currentQuestion = 1;
-      // total_questions = 2 per dimension (Q1 + Q2 per skill)
+      state.sessionId      = data.session_id;
+      state.occupation     = data.occupation;
+      state.challengeData  = data.challenge;
+      state.currentQuestion= 1;
       state.totalQuestions = data.assessment.total_questions || (data.assessment.total_dimensions * 2);
-      state.currentQNum = 1;   // 1 or 2 within current dimension
+      state.currentQNum    = 1;
 
-      // Show confirmation screen
       document.getElementById('confirmTitle').textContent = data.occupation.title;
-      document.getElementById('confirmMeta').textContent =
+      document.getElementById('confirmMeta').textContent  =
         `ISCO ${data.occupation.isco_code} · Matched on: ${data.occupation.matched_on}`;
-      document.getElementById('confidenceFill').style.width =
-        Math.round(data.occupation.confidence * 100) + '%';
+      const pct = Math.round(data.occupation.confidence * 100);
+      document.getElementById('confidenceFill').style.width = pct + '%';
+      document.getElementById('confidencePct').textContent  = pct + '%';
 
       showScreen('confirm');
     } catch (e) {
@@ -766,14 +882,14 @@
   }
 
   function beginChallenges() {
-    state.currentQNum = 1;   // always Q1 of 2 on the very first question
+    state.currentQNum = 1;
     renderChallenge(state.challengeData);
     showScreen('assess');
   }
 
   function renderChallenge(challenge) {
     state.selectedOption = null;
-    document.getElementById('dimensionTag').textContent = challenge.dimension_label.toUpperCase();
+    document.getElementById('dimensionTag').textContent  = challenge.dimension_label.toUpperCase();
     document.getElementById('challengeText').textContent = challenge.question;
     document.getElementById('evalFeedback').style.display = 'none';
 
@@ -785,25 +901,20 @@
     document.getElementById('progressText').textContent =
       `Question ${state.currentQuestion} of ${state.totalQuestions}`;
 
-    // Q1/Q2 sub-indicator
-    const qn = state.currentQNum || 1;
+    const qn   = state.currentQNum || 1;
     const qTag = document.getElementById('qNumTag');
     qTag.textContent = `Q${qn} OF 2`;
-    qTag.style.color  = qn === 2 ? '#a5b4fc' : '#64748b';
-    qTag.style.borderColor = qn === 2 ? '#6366f1' : '#334155';
+    qTag.className   = qn === 2 ? 'q-tag active' : 'q-tag';
 
-    // Language badge — only shown when assessment is NOT in English
     const langBadge = document.getElementById('langBadge');
-    const lang = challenge.language || 'en';
-    const langName = challenge.language_name || 'English';
+    const lang      = challenge.language || 'en';
     if (lang !== 'en') {
-      langBadge.textContent = langName.toUpperCase();
-      langBadge.style.display = 'block';
+      langBadge.textContent     = (challenge.language_name || '').toUpperCase();
+      langBadge.style.display   = 'block';
     } else {
-      langBadge.style.display = 'none';
+      langBadge.style.display   = 'none';
     }
 
-    // Render option cards
     const grid = document.getElementById('optionsGrid');
     grid.innerHTML = (challenge.options || []).map(opt => `
       <div class="option-card" id="opt-${opt.id}" onclick="selectOption('${opt.id}')">
@@ -812,41 +923,33 @@
       </div>`).join('');
 
     document.getElementById('submitBtn').style.display = 'none';
-    document.getElementById('submitBtn').disabled = false;
-    document.getElementById('nextBtn').style.display = 'none';
+    document.getElementById('submitBtn').disabled      = false;
+    document.getElementById('nextBtn').style.display   = 'none';
     document.getElementById('assessError').style.display = 'none';
   }
 
   function selectOption(optionId) {
-    // If already submitted (cards are disabled), do nothing
     if (document.getElementById('opt-' + optionId).classList.contains('disabled')) return;
-
-    // Clear all selections — allow changing answer freely before confirming
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
-
     state.selectedOption = optionId;
     document.getElementById('opt-' + optionId).classList.add('selected');
-
-    // Show confirm button
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.style.display = 'block';
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Confirm Answer →';
+    const btn = document.getElementById('submitBtn');
+    btn.style.display = 'block';
+    btn.disabled      = false;
+    btn.textContent   = 'Confirm Answer →';
   }
 
   function renderEvalFeedback(evaluation) {
-    const passed = evaluation.passed;
-    const score = evaluation.score;
-    const scoreColor = score === 100 ? '#4ade80' : score === 50 ? '#fbbf24' : '#f87171';
+    const score      = evaluation.score;
+    const scoreColor = score === 100 ? 'var(--green)' : score === 50 ? 'var(--amber)' : 'var(--red)';
     const scoreLabel = score === 100 ? 'Correct' : score === 50 ? 'Partial' : 'Incorrect';
-    const cardClass = score === 100 ? 'passed' : 'failed';
+    const cardClass  = score === 100 ? 'passed' : 'failed';
 
-    // Highlight option cards post-answer
     document.querySelectorAll('.option-card').forEach(card => {
       const id = card.id.replace('opt-', '');
       card.classList.add('disabled');
       if (id === evaluation.correct_option) {
-        card.classList.remove('selected', 'wrong', 'partial');
+        card.classList.remove('selected','wrong','partial');
         card.classList.add('correct');
       } else if (id === evaluation.selected_option && id !== evaluation.correct_option) {
         card.classList.remove('selected');
@@ -859,9 +962,9 @@
     const el = document.getElementById('evalFeedback');
     el.innerHTML = `
       <div class="eval-card ${cardClass}">
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
-          <div class="eval-score ${cardClass}" style="color:${scoreColor};">${score}/100</div>
-          <div style="font-size:12px; font-weight:700; color:${scoreColor}; letter-spacing:1px;">${scoreLabel.toUpperCase()}</div>
+        <div class="eval-top">
+          <div class="eval-score" style="color:${scoreColor};">${score}/100</div>
+          <div class="eval-label" style="color:${scoreColor};">${scoreLabel.toUpperCase()}</div>
         </div>
         <div class="eval-feedback">${evaluation.feedback}</div>
       </div>`;
@@ -870,7 +973,6 @@
 
   async function submitAnswer() {
     if (!state.selectedOption) return;
-
     document.getElementById('submitBtn').disabled = true;
     document.getElementById('assessError').style.display = 'none';
     showLoading('Checking your answer...');
@@ -879,10 +981,7 @@
       const res = await fetch(`${API}/assess/answer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          session_id: state.sessionId,
-          selected_option: state.selectedOption
-        })
+        body: JSON.stringify({ session_id: state.sessionId, selected_option: state.selectedOption })
       });
 
       if (!res.ok) throw new Error(await res.text());
@@ -893,34 +992,26 @@
       document.getElementById('submitBtn').style.display = 'none';
 
       if (data.assessment_complete) {
-        const nextBtn = document.getElementById('nextBtn');
-        nextBtn.textContent = 'View My Skill Profile →';
-        nextBtn.style.background = '#6366f1';
-        nextBtn.style.color = 'white';
-        nextBtn.style.border = 'none';
-        nextBtn.style.display = 'block';
-        nextBtn.onclick = async () => {
+        const btn = document.getElementById('nextBtn');
+        btn.textContent  = 'View My Skill Profile →';
+        btn.className    = 'btn btn-primary';
+        btn.style.display= 'block';
+        btn.onclick = async () => {
           showLoading('Building your skill profile...');
           await loadProfile();
         };
       } else {
-        // question_number tells us whether next question is Q1 (new dimension) or Q2 (same dimension)
         const nextQNum = data.question_number || 1;
-        state.currentQNum = nextQNum;
+        state.currentQNum     = nextQNum;
         state.currentQuestion++;
-        state.challengeData = data.next_challenge;
+        state.challengeData   = data.next_challenge;
 
-        const nextBtn = document.getElementById('nextBtn');
-        if (nextQNum === 2) {
-          nextBtn.textContent = 'Second Question →';
-        } else {
-          nextBtn.textContent = 'Next Skill →';
-        }
-        nextBtn.style.background = '#1e293b';
-        nextBtn.style.color = '#a5b4fc';
-        nextBtn.style.border = '1px solid #6366f1';
-        nextBtn.style.display = 'block';
-        nextBtn.onclick = goToNextQuestion;
+        const btn = document.getElementById('nextBtn');
+        btn.textContent   = nextQNum === 2 ? 'Second Question →' : 'Next Skill →';
+        btn.className     = 'btn btn-outline-primary';
+        btn.style.display = 'block';
+        btn.style.marginTop = '10px';
+        btn.onclick = goToNextQuestion;
       }
     } catch (e) {
       document.getElementById('submitBtn').disabled = false;
@@ -930,9 +1021,7 @@
     }
   }
 
-  function goToNextQuestion() {
-    renderChallenge(state.challengeData);
-  }
+  function goToNextQuestion() { renderChallenge(state.challengeData); }
 
   async function loadProfile() {
     try {
@@ -941,78 +1030,78 @@
       const data = await res.json();
       renderProfile(data.profile);
       showScreen('profile');
-    } catch (e) {
-      showScreen('assess');
-    }
+    } catch (e) { showScreen('assess'); }
+  }
+
+  function scoreColor(s) {
+    if (s >= 70) return 'var(--green)';
+    if (s >= 45) return 'var(--amber)';
+    return 'var(--red)';
   }
 
   function renderProfile(profile) {
     document.getElementById('profileSubtitle').textContent =
       `${profile.occupation_title} · ${profile.location}`;
 
-    // Card header
+    const sc = scoreColor(profile.overall_score);
     document.getElementById('cardOccupation').textContent = profile.occupation_title;
     document.getElementById('cardIsco').textContent =
       `ISCO-08 · ${profile.skills_card?.worker?.isco_code || ''}`;
-    document.getElementById('cardScore').textContent = profile.overall_score;
+    document.getElementById('cardScore').textContent      = profile.overall_score;
+    document.getElementById('cardScore').style.color      = sc;
 
-    // Worker details
-    document.getElementById('cardEducation').textContent = profile.education || '—';
+    document.getElementById('cardEducation').textContent  = profile.education || '—';
     document.getElementById('cardExperience').textContent =
-      profile.experience_years ? `${profile.experience_years} years` : '—';
-    document.getElementById('cardRegion').textContent = profile.region;
-
-    // Summary
-    document.getElementById('cardSummary').textContent = profile.summary || '';
+      profile.experience_years ? `${profile.experience_years} yrs` : '—';
+    document.getElementById('cardRegion').textContent     = profile.region;
+    document.getElementById('cardSummary').textContent    = profile.summary || '';
 
     // Dimensions
     const dimContainer = document.getElementById('cardDimensions');
     dimContainer.innerHTML = '';
     profile.dimension_summary.forEach(dim => {
+      const dc = scoreColor(dim.score);
       const row = document.createElement('div');
-      row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #1e293b;';
+      row.className = 'dim-row';
       row.innerHTML = `
-        <div style="font-size:13px; color:#cbd5e1;">${dim.label}</div>
-        <div style="display:flex; align-items:center; gap:8px;">
-          <div style="font-size:11px; color:#64748b;">${dim.score}/100</div>
-          <div style="background:${dim.tier_color}22; color:${dim.tier_color}; font-size:11px; font-weight:700; padding:3px 10px; border-radius:4px; border:1px solid ${dim.tier_color}44;">${dim.tier_label.toUpperCase()}</div>
+        <div class="dim-name">${dim.label}</div>
+        <div class="dim-right">
+          <div class="dim-score">${dim.score}/100</div>
+          <div class="dim-bar">
+            <div class="dim-bar-fill" style="width:${dim.score}%; background:${dc};"></div>
+          </div>
+          <div class="tier-chip" style="background:${dc}18; color:${dc}; border:1px solid ${dc}33;">
+            ${dim.tier_label.toUpperCase()}
+          </div>
         </div>`;
       dimContainer.appendChild(row);
     });
 
-    // Employer signal
     document.getElementById('cardEmployerSignal').textContent = profile.employer_signal || '';
 
-    // Data sources
     const sources = profile.data_sources || {};
     document.getElementById('cardDataSources').textContent =
       [sources.labor_market, sources.skills_taxonomy, sources.localisation].filter(Boolean).join(' · ');
 
-    // Portability tags
     const tagContainer = document.getElementById('cardTransferTags');
     tagContainer.innerHTML = '';
-    const tags = profile.skills_card?.portability?.transferable_to || [];
-    tags.forEach(tag => {
+    (profile.skills_card?.portability?.transferable_to || []).forEach(tag => {
       const t = document.createElement('span');
-      t.style.cssText = 'background:#1e293b; border:1px solid #334155; color:#64748b; font-size:10px; padding:3px 8px; border-radius:4px;';
+      t.className   = 'port-tag';
       t.textContent = tag;
       tagContainer.appendChild(t);
     });
 
-    // Profile ID
     document.getElementById('cardProfileId').textContent = `Profile ID: ${profile.profile_id || ''}`;
 
-    // Show share button now that profile_id is available
     if (profile.profile_id) {
       state.profileId = profile.profile_id;
       document.getElementById('shareCardBtn').style.display = 'block';
     }
 
-    // Verified banner
     const now = new Date();
-    const verifiedAt = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
-      ' · ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' UTC';
-    document.getElementById('verifiedTimestamp').textContent = `Assessed & verified ${verifiedAt}`;
+    document.getElementById('verifiedTimestamp').textContent =
+      `Assessed ${now.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' })}`;
     document.getElementById('verifiedProfileId').textContent = profile.profile_id || '';
   }
 
@@ -1022,19 +1111,17 @@
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url).then(() => {
         const btn = document.getElementById('shareCardBtn');
-        const original = btn.textContent;
-        btn.textContent = '✓ Link copied!';
-        btn.style.borderColor = '#4ade80';
-        btn.style.color = '#4ade80';
+        const orig = btn.textContent;
+        btn.textContent = '✓ Link copied to clipboard';
+        btn.style.borderColor = 'var(--green)';
+        btn.style.color       = 'var(--green)';
         setTimeout(() => {
-          btn.textContent = original;
-          btn.style.borderColor = '#6366f1';
-          btn.style.color = '#a5b4fc';
+          btn.textContent       = orig;
+          btn.style.borderColor = '';
+          btn.style.color       = '';
         }, 2500);
       });
-    } else {
-      window.open(`/card/${state.profileId}`, '_blank');
-    }
+    } else { window.open(`/card/${state.profileId}`, '_blank'); }
   }
 
   async function goToOpportunities() {
@@ -1045,14 +1132,12 @@
       const data = await res.json();
       renderOpportunities(data);
       showScreen('opportunities');
-    } catch(e) {
-      showScreen('profile');
-    }
+    } catch(e) { showScreen('profile'); }
   }
 
-  function oppTypeBadgeClass(type) {
+  function oppBadgeClass(type) {
     if (type === 'self_employment') return 'badge-self';
-    if (type === 'gig') return 'badge-gig';
+    if (type === 'gig')            return 'badge-gig';
     if (type === 'training_pathway') return 'badge-training';
     return 'badge-informal';
   }
@@ -1065,50 +1150,51 @@
   }
 
   function buildOppCard(opp, currency) {
-    const sig = opp.econometric_signals || {};
-    const badgeClass = oppTypeBadgeClass(opp.type);
-    const hasGaps = opp.gaps && opp.gaps.length > 0;
-
-    const gapsHTML = hasGaps ? `
-      <div class="opp-gaps">
-        <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:4px;">GAPS TO CLOSE</div>
-        ${opp.gaps.map(g => `
-          <div class="gap-item">
-            <span class="gap-label">${g.label}</span>
-            <span><span style="color:#64748b; font-size:11px;">${g.actual_label}</span> → <span class="gap-badge">${g.required_label} needed</span></span>
-          </div>`).join('')}
-      </div>` : '';
-
-    const bridge = opp.bridge || {};
-    const bridgeHTML = bridge.training_option ? `
-      <div class="opp-bridge">
-        <strong>Next step:</strong> ${bridge.training_option}
-        ${bridge.gap_to_close ? `<br><span style="color:#64748b">${bridge.gap_to_close}</span>` : ''}
-      </div>` : '';
-
-    const tagsHTML = (opp.tags || []).length > 0 ? `
-      <div class="opp-tags">${opp.tags.map(t => `<span class="opp-tag">${t}</span>`).join('')}</div>` : '';
-
-    const wageDisplay = opp.type === 'training_pathway' && sig.post_training_wage_floor
+    const sig       = opp.econometric_signals || {};
+    const hasGaps   = opp.gaps && opp.gaps.length > 0;
+    const wageLabel = opp.type === 'training_pathway' ? 'POST-TRAINING WAGE' : 'WAGE FLOOR / MO';
+    const wageVal   = opp.type === 'training_pathway' && sig.post_training_wage_floor
       ? `${currency} ${sig.post_training_wage_floor.toLocaleString()}+`
       : formatWage(sig, currency);
 
-    const wageLabel = opp.type === 'training_pathway' ? 'POST-TRAINING WAGE' : 'WAGE FLOOR / MO';
+    const gapsHTML = hasGaps ? `
+      <div class="opp-gaps">
+        <div class="gap-label-row">GAPS TO CLOSE</div>
+        ${opp.gaps.map(g => `
+          <div class="gap-item">
+            <span class="gap-dim">${g.label}</span>
+            <span style="display:flex; align-items:center; gap:6px;">
+              <span style="font-size:11px; color:var(--t3);">${g.actual_label}</span>
+              <span style="color:var(--t3);">→</span>
+              <span class="gap-badge">${g.required_label}</span>
+            </span>
+          </div>`).join('')}
+      </div>` : '';
+
+    const bridge    = opp.bridge || {};
+    const bridgeHTML = bridge.training_option ? `
+      <div class="opp-bridge">
+        <strong>Next step:</strong> ${bridge.training_option}
+        ${bridge.gap_to_close ? `<br><span style="color:var(--t3); font-size:11px;">${bridge.gap_to_close}</span>` : ''}
+      </div>` : '';
+
+    const tagsHTML = (opp.tags || []).length ? `
+      <div class="opp-tags">${opp.tags.map(t => `<span class="opp-tag">${t}</span>`).join('')}</div>` : '';
 
     return `
       <div class="opp-card">
         <div class="opp-card-top">
           <div class="opp-title">${opp.title}</div>
-          <span class="opp-type-badge ${badgeClass}">${opp.type_label}</span>
+          <span class="opp-badge ${oppBadgeClass(opp.type)}">${opp.type_label}</span>
         </div>
         <div class="opp-signals">
           <div class="signal-item">
-            <div class="signal-value" style="color:#4ade80;">${wageDisplay}</div>
+            <div class="signal-value" style="color:var(--green);">${wageVal}</div>
             <div class="signal-label">${wageLabel}</div>
             <div class="signal-source">ILOSTAT</div>
           </div>
           <div class="signal-item">
-            <div class="signal-value" style="color:#60a5fa;">${sig.employer_demand_pct != null ? sig.employer_demand_pct + '%' : '—'}</div>
+            <div class="signal-value" style="color:var(--blue);">${sig.employer_demand_pct != null ? sig.employer_demand_pct + '%' : '—'}</div>
             <div class="signal-label">EMPLOYER DEMAND</div>
             <div class="signal-source">WBES</div>
           </div>
@@ -1126,36 +1212,35 @@
   }
 
   function renderOpportunities(data) {
-    const opps = data.opportunities;
-    const currency = data.currency || opps.currency || '';
+    const opps         = data.opportunities;
+    const currency     = data.currency || '';
     const overallScore = opps.overall_score || 0;
 
     document.getElementById('oppSubtitle').textContent =
       `${data.occupation_title} · ${data.region}`;
 
-    // Score context banner — honest framing of what the score means
     const banner = document.getElementById('oppScoreBanner');
     if (overallScore < 30) {
-      banner.style.cssText = 'background:#1c1917; border:1px solid #44403c; color:#a8a29e;';
-      banner.innerHTML = `<strong style="color:#f97316">Overall score: ${overallScore}/100</strong> — Your current skill level isn't yet at the threshold for employment or self-employment opportunities. The training pathways below are the most honest starting point. Focus on one skill, build it to functional level, then reassess.`;
+      banner.style.cssText = 'background:rgba(255,95,110,.06); border:1px solid rgba(255,95,110,.2); color:var(--t2);';
+      banner.innerHTML = `<strong style="color:var(--red);">Score: ${overallScore}/100</strong> — Your current level isn't at the threshold for employment or self-employment yet. The training pathways below are the honest starting point.`;
     } else if (overallScore < 50) {
-      banner.style.cssText = 'background:#1c1917; border:1px solid #44403c; color:#a8a29e;';
-      banner.innerHTML = `<strong style="color:#fbbf24">Overall score: ${overallScore}/100</strong> — Your skills are developing but not yet at a consistent level for most opportunities in your region. A few targeted gaps to close are shown below. Training pathways will move you there fastest.`;
+      banner.style.cssText = 'background:rgba(245,166,35,.06); border:1px solid rgba(245,166,35,.18); color:var(--t2);';
+      banner.innerHTML = `<strong style="color:var(--amber);">Score: ${overallScore}/100</strong> — Skills are developing. A few targeted gaps to close shown below. Training pathways will move you there fastest.`;
     } else if (overallScore < 70) {
-      banner.style.cssText = 'background:#172554; border:1px solid #1d4ed8; color:#93c5fd;';
-      banner.innerHTML = `<strong style="color:#60a5fa">Overall score: ${overallScore}/100</strong> — You have a working skill base. Some opportunities are within reach now, others need 1-2 areas developed. The matches below reflect what's realistic for your current profile.`;
+      banner.style.cssText = 'background:rgba(77,158,255,.06); border:1px solid rgba(77,158,255,.18); color:var(--t2);';
+      banner.innerHTML = `<strong style="color:var(--blue);">Score: ${overallScore}/100</strong> — Solid foundation. Some opportunities are within reach now, others need 1–2 areas developed.`;
     } else {
-      banner.style.cssText = 'background:#052e16; border:1px solid #166534; color:#86efac;';
-      banner.innerHTML = `<strong style="color:#4ade80">Overall score: ${overallScore}/100</strong> — Strong profile. The opportunities below are genuine matches for your verified skill level.`;
+      banner.style.cssText = 'background:var(--green-bg); border:1px solid rgba(16,217,160,.2); color:var(--t2);';
+      banner.innerHTML = `<strong style="color:var(--green);">Score: ${overallScore}/100</strong> — Strong profile. The opportunities below are genuine matches for your verified skill level.`;
     }
 
     const readyNow = opps.ready_now || [];
     const closeGap = opps.close_gap || [];
-    const training = opps.training_pathway || [];
+    const training  = opps.training_pathway || [];
 
     document.getElementById('readyNowCount').textContent = `${readyNow.length} match${readyNow.length !== 1 ? 'es' : ''}`;
     document.getElementById('closeGapCount').textContent = `${closeGap.length} match${closeGap.length !== 1 ? 'es' : ''}`;
-    document.getElementById('trainingCount').textContent = `${training.length} pathway${training.length !== 1 ? 's' : ''}`;
+    document.getElementById('trainingCount').textContent  = `${training.length} pathway${training.length !== 1 ? 's' : ''}`;
 
     document.getElementById('readyNowList').innerHTML = readyNow.length
       ? readyNow.map(o => buildOppCard(o, currency)).join('')
@@ -1169,28 +1254,28 @@
       ? training.map(o => buildOppCard(o, currency)).join('')
       : '<div class="opp-empty">No training pathways available for this region.</div>';
 
-    // Econometric sources citation
-    const sources = opps.econometric_sources || {};
+    const sources  = opps.econometric_sources || {};
     const srcLines = Object.values(sources).filter(Boolean);
-    document.getElementById('oppSources').innerHTML = srcLines.length
-      ? `<strong>Data Sources</strong>${srcLines.map(s => `<span>${s}</span>`).join('<br>')}`
-      : '';
+    const srcEl    = document.getElementById('oppSources');
+    if (srcLines.length) {
+      srcEl.style.display = 'block';
+      srcEl.innerHTML = `<strong>DATA SOURCES</strong>${srcLines.map(s => `<span>${s}</span>`).join('<br>')}`;
+    }
   }
 
   function resetApp() {
     state = {
       sessionId: null, occupation: null, challengeData: null,
-      currentQuestion: 0, totalQuestions: 0,
+      currentQuestion: 0, totalQuestions: 0, currentQNum: 1,
       educationLevel: null, experienceYears: null, otherSkills: null,
       selectedOption: null, profileId: null
     };
-    document.getElementById('descInput').value = '';
-    document.getElementById('startBtn').disabled = false;
+    document.getElementById('descInput').value    = '';
+    document.getElementById('startBtn').disabled   = false;
     document.getElementById('shareCardBtn').style.display = 'none';
     showScreen('start');
   }
 
-  // Allow Enter key to start
   document.getElementById('descInput').addEventListener('keypress', e => {
     if (e.key === 'Enter') startAssessment();
   });
