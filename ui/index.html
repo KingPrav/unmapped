@@ -793,16 +793,17 @@
   }
 
   function selectOption(optionId) {
-    if (state.selectedOption) return; // already locked after confirm
-    const submitBtn = document.getElementById('submitBtn');
+    // If already submitted (cards are disabled), do nothing
+    if (document.getElementById('opt-' + optionId).classList.contains('disabled')) return;
 
-    // Clear previous selection highlight
+    // Clear all selections — allow changing answer freely before confirming
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
 
     state.selectedOption = optionId;
     document.getElementById('opt-' + optionId).classList.add('selected');
 
     // Show confirm button
+    const submitBtn = document.getElementById('submitBtn');
     submitBtn.style.display = 'block';
     submitBtn.disabled = false;
     submitBtn.textContent = 'Confirm Answer →';
