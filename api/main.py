@@ -1,13 +1,15 @@
 """
 UNMAPPED — FastAPI Backend
-Wires all 6 pipelines into a clean REST API.
+Wires all 7 pipelines into a clean REST API.
 
 Endpoints:
-  GET  /regions                    — List available country configs
-  POST /assess/start               — Start assessment (classify occupation)
-  POST /assess/answer              — Submit answer, get next challenge
-  GET  /assess/profile/{session_id} — Get final skill profile
-  GET  /health                     — Health check
+  GET  /regions                         — List available country configs
+  POST /assess/start                    — Start assessment (classify occupation)
+  POST /assess/answer                   — Submit answer, get next challenge
+  GET  /assess/profile/{session_id}     — Get final skill profile
+  GET  /opportunities/{session_id}      — Get matched opportunities (Module 3)
+  GET  /dashboard/{region}             — Policymaker aggregate signals (Module 3)
+  GET  /health                          — Health check
 """
 
 import os
@@ -38,6 +40,7 @@ from pipelines.p3_dimension_mapper import map_dimensions
 from pipelines.p4_challenge_generator import generate_challenge, evaluate_answer
 from pipelines.p5_difficulty import create_session, get_session, record_answer
 from pipelines.p6_localiser import generate_profile
+from pipelines.p7_opportunity_matcher import match_opportunities
 
 BASE_DIR = Path(__file__).parent.parent
 CONFIG_DIR = BASE_DIR / "config"
@@ -66,8 +69,11 @@ def load_config(region_id: str) -> dict:
 # ─────────────────────────────────────────────
 
 class StartRequest(BaseModel):
-    description: str           # "I fix phones"
-    region: str = "ghana_urban"  # config file name without .yaml
+    description: str                        # "I fix phones"
+    region: str = "ghana_urban"             # config file name without .yaml
+    education_level: str = "upper_secondary"
+    experience_years: int = 0
+    other_skills: str = ""
 
 class AnswerRequest(BaseModel):
     session_id: str
@@ -142,9 +148,12 @@ def start_assessment(req: StartRequest):
         dimensions_to_assess=dimensions_to_assess
     )
 
-    # Store dimension plan in session for later use
+    # Store dimension plan, config, and user context in session
     session._dimension_plan = dimension_result["dimension_plan"]
     session._config = config
+    session._education_level = req.education_level
+    session._experience_years = req.experience_years
+    session._other_skills = req.other_skills
 
     # P4: Generate first challenge
     first_dim_id = session.current_dimension()
@@ -252,7 +261,11 @@ def get_profile(session_id: str):
     profile = generate_profile(
         occupation_title=session.occupation_title,
         dimension_results=session.dimension_results,
-        country_config=config
+        country_config=config,
+        education_level=getattr(session, '_education_level', 'upper_secondary'),
+        experience_years=getattr(session, '_experience_years', 0),
+        other_skills=getattr(session, '_other_skills', ''),
+        isco_code=session.isco_code
     )
 
     return {
@@ -261,7 +274,131 @@ def get_profile(session_id: str):
     }
 
 
+@app.get("/opportunities/{session_id}")
+def get_opportunities(session_id: str):
+    """
+    Module 3 — Amara's view: match skill profile to local opportunities.
+    Runs Pipeline 7 (opportunity matcher)
+    Returns 3 layers: ready_now, close_gap, training_pathway
+    """
+    session = get_session(session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    if not session.completed:
+        raise HTTPException(status_code=400, detail="Assessment not yet complete")
+
+    config = session._config
+
+    opportunities = match_opportunities(
+        dimension_results=session.dimension_results,
+        isco_code=session.isco_code,
+        region_id=session.region_id,
+        occupation_title=session.occupation_title,
+        education=getattr(session, '_education_level', ''),
+        experience_years=getattr(session, '_experience_years', 0)
+    )
+
+    return {
+        "session_id": session_id,
+        "occupation_title": session.occupation_title,
+        "region": config["region_name"],
+        "currency": config["currency"],
+        "opportunities": opportunities
+    }
+
+
+@app.get("/dashboard/{region}")
+def get_dashboard(region: str):
+    """
+    Module 3 — Policymaker view: aggregate skill and opportunity signals.
+    Returns skill gap heatmap, sector demand, opportunity distribution, country comparison.
+    """
+    import json
+    from pathlib import Path as P
+
+    config = load_config(region)
+
+    # Load opportunity seed data for econometric signals
+    seed_dir = BASE_DIR / "data" / "seed"
+    country = region.split("_")[0]
+    opp_file = seed_dir / f"opportunities_{country}.json"
+
+    opportunities_data = {}
+    if opp_file.exists():
+        with open(opp_file) as f:
+            opportunities_data = json.load(f)
+
+    opportunities = opportunities_data.get("opportunities", [])
+    meta = opportunities_data.get("meta", {})
+
+    # Aggregate from live sessions (anonymised)
+    from pipelines.p5_difficulty import _sessions
+    region_sessions = [s for s in _sessions.values() if s.region_id == region and s.completed]
+
+    # Skill gap aggregate
+    dimension_aggregates = {}
+    for session in region_sessions:
+        for dim_id, result in session.dimension_results.items():
+            if dim_id not in dimension_aggregates:
+                dimension_aggregates[dim_id] = {
+                    "label": result["dimension_label"],
+                    "scores": [],
+                    "tiers": []
+                }
+            dimension_aggregates[dim_id]["scores"].append(result["score"])
+            dimension_aggregates[dim_id]["tiers"].append(result["tier_achieved"])
+
+    skill_gaps = []
+    for dim_id, agg in dimension_aggregates.items():
+        scores = agg["scores"]
+        avg_score = int(sum(scores) / len(scores)) if scores else 0
+        avg_tier = round(sum(agg["tiers"]) / len(agg["tiers"]), 1) if agg["tiers"] else 1.0
+        skill_gaps.append({
+            "dimension": dim_id,
+            "label": agg["label"],
+            "avg_score": avg_score,
+            "avg_tier": avg_tier,
+            "assessed_workers": len(scores)
+        })
+
+    # Sector demand signals from seed data
+    sector_signals = []
+    for opp in opportunities:
+        sig = opp.get("econometric_signals", {})
+        if opp.get("type") != "training_pathway":
+            sector_signals.append({
+                "sector": sig.get("sector_label", ""),
+                "employer_demand_pct": sig.get("employer_demand_pct", 0),
+                "sector_growth_pct": sig.get("sector_growth_pct", 0),
+                "wage_floor": sig.get("wage_floor_monthly", 0),
+                "currency": meta.get("currency", ""),
+                "opportunity_type": opp.get("type_label", "")
+            })
+
+    # Opportunity type distribution from seed
+    type_distribution = {}
+    for opp in opportunities:
+        t = opp.get("type_label", "Other")
+        type_distribution[t] = type_distribution.get(t, 0) + 1
+
+    return {
+        "region": config["region_name"],
+        "country": config["country"],
+        "total_assessed_workers": len(region_sessions),
+        "skill_gaps": skill_gaps,
+        "sector_signals": sector_signals,
+        "opportunity_type_distribution": type_distribution,
+        "econometric_sources": meta.get("econometric_sources", {}),
+        "isco_priority_groups": config.get("isco_priority_groups", [])
+    }
+
+
 # Serve the UI
 @app.get("/")
 def serve_ui():
     return FileResponse(UI_DIR / "index.html")
+
+
+@app.get("/dashboard")
+def serve_dashboard():
+    return FileResponse(UI_DIR / "dashboard.html")

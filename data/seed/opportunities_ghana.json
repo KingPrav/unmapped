@@ -1,0 +1,174 @@
+{
+  "meta": {
+    "region": "ghana_urban",
+    "country": "Ghana",
+    "currency": "GHS",
+    "econometric_sources": {
+      "wage_floor": "ILOSTAT — Ghana Labour Force Survey 2022, median monthly earnings by occupation",
+      "employer_demand": "World Bank Enterprise Survey (WBES) Ghana 2022 — % firms reporting difficulty finding qualified workers by sector",
+      "sector_growth": "ILOSTAT — Ghana sectoral employment growth rate 2019-2022"
+    }
+  },
+  "opportunities": [
+    {
+      "id": "gh_001",
+      "title": "Independent Electronics & Phone Repair Technician",
+      "type": "self_employment",
+      "type_label": "Self-Employment",
+      "isco_groups": [7],
+      "required_dimensions": {
+        "fault_diagnosis": 2,
+        "communication": 1,
+        "resource_judgment": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 920,
+        "wage_ceiling_monthly": 1800,
+        "currency": "GHS",
+        "employer_demand_pct": 71,
+        "sector_growth_pct": 3.4,
+        "sector_label": "Repair & Maintenance Services"
+      },
+      "honest_description": "Strong and stable demand in urban Ghana. Suame Magazine cluster in Kumasi and similar hubs in Accra show consistent footfall for repair services. Entry requires own basic toolkit (est. GHS 300-500). Income varies with volume — peak earnings possible during back-to-school periods.",
+      "bridge": {
+        "ready_if": "Fault Diagnosis at Functional level or above",
+        "gap_to_close": "If at Entry level: 3-6 months supervised practice on common fault types closes the gap",
+        "training_option": "NVTI Electronics Servicing Certificate — 12 months, GHS 800 fees"
+      },
+      "tags": ["technical", "self-managed", "urban", "growing"]
+    },
+    {
+      "id": "gh_002",
+      "title": "Construction Trades Worker (Mason / Finisher)",
+      "type": "informal_employment",
+      "type_label": "Informal Employment",
+      "isco_groups": [7, 9],
+      "required_dimensions": {
+        "process_quality": 1,
+        "operational_organization": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 1100,
+        "wage_ceiling_monthly": 2200,
+        "currency": "GHS",
+        "employer_demand_pct": 68,
+        "sector_growth_pct": 4.8,
+        "sector_label": "Construction"
+      },
+      "honest_description": "Construction is the fastest-growing informal employer in urban Ghana, driven by real estate and infrastructure expansion. Work is typically project-based (2-8 weeks per site). Income is among the highest in the informal sector but irregular between projects. Physical demands are high.",
+      "bridge": {
+        "ready_if": "Process & Quality and Operational Organization at Entry level or above",
+        "gap_to_close": "Most entry-level roles require on-site orientation only — no prior construction experience needed",
+        "training_option": "NVTI Building Construction — 6 months. Increases earning ceiling significantly."
+      },
+      "tags": ["physical", "project-based", "high-earning", "growing"]
+    },
+    {
+      "id": "gh_003",
+      "title": "Market Trader / Micro-Enterprise Operator",
+      "type": "self_employment",
+      "type_label": "Self-Employment",
+      "isco_groups": [5, 9],
+      "required_dimensions": {
+        "resource_judgment": 1,
+        "communication": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 650,
+        "wage_ceiling_monthly": 1400,
+        "currency": "GHS",
+        "employer_demand_pct": 45,
+        "sector_growth_pct": 2.1,
+        "sector_label": "Informal Trade & Retail"
+      },
+      "honest_description": "The most accessible entry point in the Ghanaian urban economy — low capital requirement and no credential barrier. Income is modest and highly variable. Growth depends heavily on location quality and product differentiation. Kantamanto and Makola markets have high competition but high volume.",
+      "bridge": {
+        "ready_if": "Resource Judgment and Communication at any level",
+        "gap_to_close": "No skill gap — this is accessible now. Capital requirement is the real barrier (est. GHS 200-500 starting stock)",
+        "training_option": "GRATIS Foundation Business Skills Program — free, 2 weeks"
+      },
+      "tags": ["accessible", "low-capital", "flexible", "competitive"]
+    },
+    {
+      "id": "gh_004",
+      "title": "Mobile Platform Service Agent (Gig / Digital)",
+      "type": "gig",
+      "type_label": "Gig / Platform Work",
+      "isco_groups": [5, 7, 8],
+      "required_dimensions": {
+        "communication": 1,
+        "operational_organization": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 600,
+        "wage_ceiling_monthly": 1600,
+        "currency": "GHS",
+        "employer_demand_pct": 82,
+        "sector_growth_pct": 12.0,
+        "sector_label": "Digital Platform & Gig Economy"
+      },
+      "honest_description": "Ghana's fastest-growing informal opportunity driven by Jumia, Bolt, and local logistics platforms. Requires a smartphone and reliable mobile data. Income is highly variable — top earners work full-time and build repeat customer relationships. No formal hiring process — register via app.",
+      "bridge": {
+        "ready_if": "Communication and Operational Organization at any level, plus smartphone access",
+        "gap_to_close": "Platform literacy (2-3 days self-learning). Smartphone is the main barrier if not already owned.",
+        "training_option": "No formal training required — platform onboarding is self-directed"
+      },
+      "tags": ["digital", "flexible", "fast-growing", "smartphone-required"]
+    },
+    {
+      "id": "gh_005",
+      "title": "NVTI Technical Skills Certificate Program",
+      "type": "training_pathway",
+      "type_label": "Training Pathway",
+      "isco_groups": [7, 8],
+      "required_dimensions": {
+        "fault_diagnosis": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": null,
+        "wage_ceiling_monthly": null,
+        "currency": "GHS",
+        "employer_demand_pct": 71,
+        "sector_growth_pct": 3.4,
+        "sector_label": "Technical & Repair Trades",
+        "post_training_wage_floor": 1200,
+        "training_duration_months": 12,
+        "training_cost_ghs": 800
+      },
+      "honest_description": "National Vocational Training Institute (NVTI) certificates are recognised by formal employers across Ghana and neighbouring countries. Completing a technical program typically raises earning floor by 30-40% and opens formal employment pathways. Scholarships available for qualifying candidates.",
+      "bridge": {
+        "ready_if": "Any skill level — this is a development pathway",
+        "gap_to_close": "No prerequisite. Your UNMAPPED Skills Card can substitute for an entry requirement at some NVTI centres.",
+        "training_option": "NVTI Ghana — nvti.gov.gh. Multiple trade options available."
+      },
+      "tags": ["credential", "formal-pathway", "higher-earning", "cross-border"]
+    },
+    {
+      "id": "gh_006",
+      "title": "Hairdressing / Beauty Services Operator",
+      "type": "self_employment",
+      "type_label": "Self-Employment",
+      "isco_groups": [5],
+      "required_dimensions": {
+        "communication": 1,
+        "process_quality": 1,
+        "operational_organization": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 700,
+        "wage_ceiling_monthly": 1500,
+        "currency": "GHS",
+        "employer_demand_pct": 54,
+        "sector_growth_pct": 2.8,
+        "sector_label": "Personal Services"
+      },
+      "honest_description": "Consistent demand in all urban neighbourhoods. Low startup capital if renting chair space (vs. owning salon). Female-dominated sector with strong community trust networks. Income scales significantly with clientele size and service range.",
+      "bridge": {
+        "ready_if": "Communication and Process & Quality at Entry or above",
+        "gap_to_close": "If new to the trade: 3-6 months apprenticeship under an established operator is the standard entry path",
+        "training_option": "NVTI Hairdressing Certificate — 12 months"
+      },
+      "tags": ["community-based", "low-capital", "relationship-driven", "stable"]
+    }
+  ]
+}

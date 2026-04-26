@@ -277,6 +277,135 @@
     .loading p { color: #64748b; font-size: 14px; }
 
     .error-msg { color: #f87171; font-size: 13px; margin-top: 8px; text-align: center; }
+
+    /* ── Opportunities screen ── */
+    .opp-layer-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 28px 0 14px;
+    }
+    .opp-layer-header .layer-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .opp-layer-header h3 { font-size: 13px; font-weight: 700; letter-spacing: 1px; }
+    .opp-layer-header .layer-count {
+      font-size: 11px; color: #475569; margin-left: auto;
+    }
+
+    .opp-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .opp-card:hover { border-color: #475569; }
+
+    .opp-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .opp-title { font-size: 15px; font-weight: 700; color: #f1f5f9; line-height: 1.3; flex: 1; margin-right: 12px; }
+    .opp-type-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 3px 9px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .badge-self { background: #1e3a1e; color: #4ade80; border: 1px solid #166534; }
+    .badge-gig  { background: #1e2a3a; color: #60a5fa; border: 1px solid #1d4ed8; }
+    .badge-informal { background: #2a1e3a; color: #c084fc; border: 1px solid #7c3aed; }
+    .badge-training { background: #3a2a1e; color: #fb923c; border: 1px solid #c2410c; }
+
+    .opp-signals {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 14px 0;
+      padding: 12px;
+      background: #0f172a;
+      border-radius: 8px;
+    }
+    .signal-item { text-align: center; }
+    .signal-value { font-size: 18px; font-weight: 800; }
+    .signal-label { font-size: 10px; color: #475569; margin-top: 2px; line-height: 1.3; }
+    .signal-source { font-size: 9px; color: #334155; margin-top: 2px; }
+
+    .opp-explanation {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+
+    .opp-gaps {
+      margin: 10px 0;
+    }
+    .gap-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 5px 0;
+      border-bottom: 1px solid #1e293b;
+      color: #64748b;
+    }
+    .gap-item .gap-label { color: #94a3b8; }
+    .gap-badge { background: #451a03; color: #fb923c; padding: 2px 7px; border-radius: 3px; font-size: 10px; font-weight: 700; }
+
+    .opp-bridge {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: #0f172a;
+      border-radius: 6px;
+      border-left: 3px solid #6366f1;
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+    .opp-bridge strong { color: #a5b4fc; }
+
+    .opp-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .opp-tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      color: #475569;
+    }
+
+    .opp-empty {
+      font-size: 13px;
+      color: #475569;
+      padding: 16px;
+      text-align: center;
+      border: 1px dashed #334155;
+      border-radius: 8px;
+    }
+
+    .sources-footer {
+      margin-top: 24px;
+      padding: 14px;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      font-size: 11px;
+      color: #334155;
+      line-height: 1.6;
+    }
+    .sources-footer strong { color: #475569; display: block; margin-bottom: 4px; }
   </style>
 </head>
 <body>
@@ -309,6 +438,31 @@
       <label>Describe your work</label>
       <input type="text" id="descInput" placeholder="e.g. I fix phones, I sell at the market, I cut hair..." />
     </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div class="input-group" style="margin-bottom:0">
+        <label>Highest education level</label>
+        <select id="educationLevel" style="width:100%; background:#1e293b; border:1px solid #334155; color:#f1f5f9; padding:13px 16px; border-radius:8px; font-size:14px; outline:none;">
+          <option value="none">No formal education</option>
+          <option value="primary">Primary school</option>
+          <option value="lower_secondary">Lower secondary (JSS/JHS)</option>
+          <option value="upper_secondary" selected>Upper secondary (SSS/SHS)</option>
+          <option value="vocational">Vocational / Technical</option>
+          <option value="tertiary">Tertiary / University</option>
+        </select>
+      </div>
+      <div class="input-group" style="margin-bottom:0">
+        <label>Years doing this work</label>
+        <input type="number" id="experienceYears" min="0" max="50" value="2"
+          style="width:100%; background:#1e293b; border:1px solid #334155; color:#f1f5f9; padding:13px 16px; border-radius:8px; font-size:14px; outline:none;" />
+      </div>
+    </div>
+
+    <div class="input-group" style="margin-top:12px;">
+      <label>Other skills or things you've taught yourself <span style="color:#475569">(optional)</span></label>
+      <input type="text" id="otherSkills" placeholder="e.g. basic coding, speak 3 languages, run a small business..." />
+    </div>
+
     <div id="startError" class="error-msg" style="display:none"></div>
     <button class="btn" id="startBtn" onclick="startAssessment()">Start Skills Assessment →</button>
   </div>
@@ -363,22 +517,116 @@
   <!-- ── SCREEN: Profile ── -->
   <div id="screen-profile" class="screen">
     <div class="profile-header">
-      <h2>Your Skill Profile</h2>
+      <h2>Your Skills Card</h2>
       <p id="profileSubtitle"></p>
     </div>
 
-    <div class="overall-score">
-      <div class="score-num" id="overallScore"></div>
-      <div class="score-label">Overall Score · <span id="profileRegion"></span></div>
+    <!-- Skills Card -->
+    <div style="background:#1e293b; border:1px solid #6366f1; border-radius:12px; overflow:hidden; margin-bottom:24px;">
+
+      <!-- Card Header -->
+      <div style="background:#312e81; padding:20px 24px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <div style="font-size:10px; color:#a5b4fc; font-weight:700; letter-spacing:2px; margin-bottom:6px;">UNMAPPED SKILLS CARD</div>
+            <div style="font-size:20px; font-weight:800; color:#f1f5f9;" id="cardOccupation"></div>
+            <div style="font-size:12px; color:#818cf8; margin-top:4px;" id="cardIsco"></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:36px; font-weight:900; color:#fff;" id="cardScore"></div>
+            <div style="font-size:10px; color:#a5b4fc;">OVERALL</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Worker Details -->
+      <div style="padding:16px 24px; border-bottom:1px solid #334155; display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+        <div>
+          <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:3px;">EDUCATION</div>
+          <div style="font-size:13px; color:#cbd5e1;" id="cardEducation"></div>
+        </div>
+        <div>
+          <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:3px;">EXPERIENCE</div>
+          <div style="font-size:13px; color:#cbd5e1;" id="cardExperience"></div>
+        </div>
+        <div>
+          <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:3px;">REGION</div>
+          <div style="font-size:13px; color:#cbd5e1;" id="cardRegion"></div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div style="padding:16px 24px; border-bottom:1px solid #334155;">
+        <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:8px;">SUMMARY</div>
+        <div style="font-size:14px; color:#e2e8f0; line-height:1.6;" id="cardSummary"></div>
+      </div>
+
+      <!-- Skill Dimensions -->
+      <div style="padding:16px 24px; border-bottom:1px solid #334155;">
+        <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:12px;">SKILL DIMENSIONS</div>
+        <div id="cardDimensions"></div>
+      </div>
+
+      <!-- Employer Signal -->
+      <div style="padding:16px 24px; border-bottom:1px solid #334155; background:#0f172a;">
+        <div style="font-size:10px; color:#6366f1; font-weight:700; letter-spacing:1px; margin-bottom:6px;">EMPLOYER SIGNAL</div>
+        <div style="font-size:14px; color:#e2e8f0; font-style:italic;" id="cardEmployerSignal"></div>
+      </div>
+
+      <!-- Portability & Data Sources -->
+      <div style="padding:16px 24px;">
+        <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:8px;">PORTABILITY</div>
+        <div style="font-size:11px; color:#475569; margin-bottom:6px;">Taxonomy: ISCO-08 · O*NET 28.0 · ESCO v1.2.1</div>
+        <div style="font-size:11px; color:#475569; margin-bottom:10px;" id="cardDataSources"></div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;" id="cardTransferTags"></div>
+        <div style="margin-top:12px; font-size:10px; color:#334155; font-family:monospace;" id="cardProfileId"></div>
+      </div>
     </div>
 
-    <div class="profile-text" id="profileText"></div>
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top:4px;">
+      <button class="btn" id="oppBtn" onclick="goToOpportunities()">See Your Matched Opportunities →</button>
+      <button class="btn" onclick="resetApp()" style="background:transparent; border:1px solid #334155; color:#64748b;">Start New Assessment</button>
+    </div>
+  </div>
 
-    <div class="dimension-grid" id="dimensionGrid"></div>
+  <!-- ── SCREEN: Opportunities ── -->
+  <div id="screen-opportunities" class="screen">
+    <div style="margin-bottom:28px;">
+      <div style="font-size:11px; color:#6366f1; font-weight:700; letter-spacing:2px; margin-bottom:6px;">MODULE 03 — OPPORTUNITY MATCHING</div>
+      <h2 style="font-size:22px; font-weight:800; color:#f1f5f9; margin-bottom:6px;">What's available to you</h2>
+      <p style="font-size:13px; color:#64748b;" id="oppSubtitle"></p>
+    </div>
 
-    <div class="data-sources" id="dataSources"></div>
+    <!-- Ready Now -->
+    <div class="opp-layer-header">
+      <div class="layer-dot" style="background:#4ade80;"></div>
+      <h3 style="color:#4ade80;">READY NOW</h3>
+      <span class="layer-count" id="readyNowCount"></span>
+    </div>
+    <div id="readyNowList"></div>
 
-    <button class="btn" onclick="resetApp()">Start New Assessment</button>
+    <!-- Close Gap -->
+    <div class="opp-layer-header">
+      <div class="layer-dot" style="background:#fbbf24;"></div>
+      <h3 style="color:#fbbf24;">CLOSE THE GAP</h3>
+      <span class="layer-count" id="closeGapCount"></span>
+    </div>
+    <div id="closeGapList"></div>
+
+    <!-- Training Pathway -->
+    <div class="opp-layer-header">
+      <div class="layer-dot" style="background:#fb923c;"></div>
+      <h3 style="color:#fb923c;">TRAINING PATHWAY</h3>
+      <span class="layer-count" id="trainingCount"></span>
+    </div>
+    <div id="trainingList"></div>
+
+    <div id="oppSources" class="sources-footer"></div>
+
+    <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
+      <button class="btn" onclick="showScreen('profile')" style="background:transparent; border:1px solid #334155; color:#64748b;">← Back to Skills Card</button>
+      <button class="btn" onclick="resetApp()" style="background:transparent; border:1px solid #1e293b; color:#475569;">Start New Assessment</button>
+    </div>
   </div>
 
 </div>
@@ -390,7 +638,10 @@
     occupation: null,
     challengeData: null,
     currentQuestion: 0,
-    totalQuestions: 0
+    totalQuestions: 0,
+    educationLevel: null,
+    experienceYears: null,
+    otherSkills: null
   };
 
   const TIER_LABELS = { 1: 'Entry', 2: 'Functional', 3: 'Mastery' };
@@ -414,6 +665,14 @@
     if (!description) return;
 
     const region = document.getElementById('regionSelect').value;
+    const education_level = document.getElementById('educationLevel').value;
+    const experience_years = parseInt(document.getElementById('experienceYears').value) || 0;
+    const other_skills = document.getElementById('otherSkills').value.trim();
+
+    state.educationLevel = education_level;
+    state.experienceYears = experience_years;
+    state.otherSkills = other_skills;
+
     document.getElementById('startError').style.display = 'none';
     document.getElementById('startBtn').disabled = true;
     showLoading('Identifying your occupation...');
@@ -422,7 +681,7 @@
       const res = await fetch(`${API}/assess/start`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ description, region })
+        body: JSON.stringify({ description, region, education_level, experience_years, other_skills })
       });
 
       if (!res.ok) throw new Error(await res.text());
@@ -565,27 +824,181 @@
   function renderProfile(profile) {
     document.getElementById('profileSubtitle').textContent =
       `${profile.occupation_title} · ${profile.location}`;
-    document.getElementById('overallScore').textContent = profile.overall_score;
-    document.getElementById('profileRegion').textContent = profile.region;
-    document.getElementById('profileText').textContent = profile.profile_text;
 
-    // Dimension cards
-    const grid = document.getElementById('dimensionGrid');
-    grid.innerHTML = '';
+    // Card header
+    document.getElementById('cardOccupation').textContent = profile.occupation_title;
+    document.getElementById('cardIsco').textContent =
+      `ISCO-08 · ${profile.skills_card?.worker?.isco_code || ''}`;
+    document.getElementById('cardScore').textContent = profile.overall_score;
+
+    // Worker details
+    document.getElementById('cardEducation').textContent = profile.education || '—';
+    document.getElementById('cardExperience').textContent =
+      profile.experience_years ? `${profile.experience_years} years` : '—';
+    document.getElementById('cardRegion').textContent = profile.region;
+
+    // Summary
+    document.getElementById('cardSummary').textContent = profile.summary || '';
+
+    // Dimensions
+    const dimContainer = document.getElementById('cardDimensions');
+    dimContainer.innerHTML = '';
     profile.dimension_summary.forEach(dim => {
-      const card = document.createElement('div');
-      card.className = 'dimension-card';
-      card.innerHTML = `
-        <div class="dim-label">${dim.label.toUpperCase()}</div>
-        <div class="dim-tier">${dim.tier_label} · ${dim.score}/100</div>
-        <div class="dim-signal">${dim.employer_signal}</div>`;
-      grid.appendChild(card);
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #1e293b;';
+      row.innerHTML = `
+        <div style="font-size:13px; color:#cbd5e1;">${dim.label}</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="font-size:11px; color:#64748b;">${dim.score}/100</div>
+          <div style="background:${dim.tier_color}22; color:${dim.tier_color}; font-size:11px; font-weight:700; padding:3px 10px; border-radius:4px; border:1px solid ${dim.tier_color}44;">${dim.tier_label.toUpperCase()}</div>
+        </div>`;
+      dimContainer.appendChild(row);
     });
 
+    // Employer signal
+    document.getElementById('cardEmployerSignal').textContent = profile.employer_signal || '';
+
     // Data sources
-    const sources = profile.data_sources;
-    document.getElementById('dataSources').innerHTML = `
-      <strong>Data sources:</strong> ${sources.labor_market || ''} &nbsp;·&nbsp; ${sources.skills_taxonomy || ''} &nbsp;·&nbsp; ${sources.localisation || ''}`;
+    const sources = profile.data_sources || {};
+    document.getElementById('cardDataSources').textContent =
+      [sources.labor_market, sources.skills_taxonomy, sources.localisation].filter(Boolean).join(' · ');
+
+    // Portability tags
+    const tagContainer = document.getElementById('cardTransferTags');
+    tagContainer.innerHTML = '';
+    const tags = profile.skills_card?.portability?.transferable_to || [];
+    tags.forEach(tag => {
+      const t = document.createElement('span');
+      t.style.cssText = 'background:#1e293b; border:1px solid #334155; color:#64748b; font-size:10px; padding:3px 8px; border-radius:4px;';
+      t.textContent = tag;
+      tagContainer.appendChild(t);
+    });
+
+    // Profile ID
+    document.getElementById('cardProfileId').textContent = `Profile ID: ${profile.profile_id || ''}`;
+  }
+
+  async function goToOpportunities() {
+    showLoading('Matching your skills to local opportunities...');
+    try {
+      const res = await fetch(`${API}/opportunities/${state.sessionId}`);
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      renderOpportunities(data);
+      showScreen('opportunities');
+    } catch(e) {
+      showScreen('profile');
+    }
+  }
+
+  function oppTypeBadgeClass(type) {
+    if (type === 'self_employment') return 'badge-self';
+    if (type === 'gig') return 'badge-gig';
+    if (type === 'training_pathway') return 'badge-training';
+    return 'badge-informal';
+  }
+
+  function formatWage(signals, currency) {
+    if (!signals || signals.wage_floor_monthly == null) return '—';
+    const floor = signals.wage_floor_monthly.toLocaleString();
+    const ceil  = signals.wage_ceiling_monthly ? signals.wage_ceiling_monthly.toLocaleString() : null;
+    return ceil ? `${currency} ${floor}–${ceil}` : `${currency} ${floor}+`;
+  }
+
+  function buildOppCard(opp, currency) {
+    const sig = opp.econometric_signals || {};
+    const badgeClass = oppTypeBadgeClass(opp.type);
+    const hasGaps = opp.gaps && opp.gaps.length > 0;
+
+    const gapsHTML = hasGaps ? `
+      <div class="opp-gaps">
+        <div style="font-size:10px; color:#475569; font-weight:700; letter-spacing:1px; margin-bottom:4px;">GAPS TO CLOSE</div>
+        ${opp.gaps.map(g => `
+          <div class="gap-item">
+            <span class="gap-label">${g.label}</span>
+            <span><span style="color:#64748b; font-size:11px;">${g.actual_label}</span> → <span class="gap-badge">${g.required_label} needed</span></span>
+          </div>`).join('')}
+      </div>` : '';
+
+    const bridge = opp.bridge || {};
+    const bridgeHTML = bridge.training_option ? `
+      <div class="opp-bridge">
+        <strong>Next step:</strong> ${bridge.training_option}
+        ${bridge.gap_to_close ? `<br><span style="color:#64748b">${bridge.gap_to_close}</span>` : ''}
+      </div>` : '';
+
+    const tagsHTML = (opp.tags || []).length > 0 ? `
+      <div class="opp-tags">${opp.tags.map(t => `<span class="opp-tag">${t}</span>`).join('')}</div>` : '';
+
+    const wageDisplay = opp.type === 'training_pathway' && sig.post_training_wage_floor
+      ? `${currency} ${sig.post_training_wage_floor.toLocaleString()}+`
+      : formatWage(sig, currency);
+
+    const wageLabel = opp.type === 'training_pathway' ? 'POST-TRAINING WAGE' : 'WAGE FLOOR / MO';
+
+    return `
+      <div class="opp-card">
+        <div class="opp-card-top">
+          <div class="opp-title">${opp.title}</div>
+          <span class="opp-type-badge ${badgeClass}">${opp.type_label}</span>
+        </div>
+        <div class="opp-signals">
+          <div class="signal-item">
+            <div class="signal-value" style="color:#4ade80;">${wageDisplay}</div>
+            <div class="signal-label">${wageLabel}</div>
+            <div class="signal-source">ILOSTAT</div>
+          </div>
+          <div class="signal-item">
+            <div class="signal-value" style="color:#60a5fa;">${sig.employer_demand_pct != null ? sig.employer_demand_pct + '%' : '—'}</div>
+            <div class="signal-label">EMPLOYER DEMAND</div>
+            <div class="signal-source">WBES</div>
+          </div>
+          <div class="signal-item">
+            <div class="signal-value" style="color:#a78bfa;">${sig.sector_growth_pct != null ? '+' + sig.sector_growth_pct + '%' : '—'}</div>
+            <div class="signal-label">SECTOR GROWTH</div>
+            <div class="signal-source">ILOSTAT</div>
+          </div>
+        </div>
+        <div class="opp-explanation">${opp.explanation || opp.honest_description || ''}</div>
+        ${gapsHTML}
+        ${bridgeHTML}
+        ${tagsHTML}
+      </div>`;
+  }
+
+  function renderOpportunities(data) {
+    const opps = data.opportunities;
+    const currency = data.currency || opps.currency || '';
+
+    document.getElementById('oppSubtitle').textContent =
+      `${data.occupation_title} · ${data.region}`;
+
+    const readyNow = opps.ready_now || [];
+    const closeGap = opps.close_gap || [];
+    const training = opps.training_pathway || [];
+
+    document.getElementById('readyNowCount').textContent = `${readyNow.length} match${readyNow.length !== 1 ? 'es' : ''}`;
+    document.getElementById('closeGapCount').textContent = `${closeGap.length} match${closeGap.length !== 1 ? 'es' : ''}`;
+    document.getElementById('trainingCount').textContent = `${training.length} pathway${training.length !== 1 ? 's' : ''}`;
+
+    document.getElementById('readyNowList').innerHTML = readyNow.length
+      ? readyNow.map(o => buildOppCard(o, currency)).join('')
+      : '<div class="opp-empty">No immediate matches — develop skills below to unlock these.</div>';
+
+    document.getElementById('closeGapList').innerHTML = closeGap.length
+      ? closeGap.map(o => buildOppCard(o, currency)).join('')
+      : '<div class="opp-empty">No near-gap opportunities identified.</div>';
+
+    document.getElementById('trainingList').innerHTML = training.length
+      ? training.map(o => buildOppCard(o, currency)).join('')
+      : '<div class="opp-empty">No training pathways available for this region.</div>';
+
+    // Econometric sources citation
+    const sources = opps.econometric_sources || {};
+    const srcLines = Object.values(sources).filter(Boolean);
+    document.getElementById('oppSources').innerHTML = srcLines.length
+      ? `<strong>Data Sources</strong>${srcLines.map(s => `<span>${s}</span>`).join('<br>')}`
+      : '';
   }
 
   function resetApp() {

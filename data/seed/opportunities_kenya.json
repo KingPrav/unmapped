@@ -1,0 +1,176 @@
+{
+  "meta": {
+    "region": "kenya_mixed",
+    "country": "Kenya",
+    "currency": "KES",
+    "econometric_sources": {
+      "wage_floor": "ILOSTAT — Kenya Labour Force Survey 2022, median monthly earnings by occupation",
+      "employer_demand": "World Bank Enterprise Survey (WBES) Kenya 2022 — % firms reporting difficulty finding qualified workers by sector",
+      "sector_growth": "ILOSTAT — Kenya sectoral employment growth rate 2019-2022"
+    }
+  },
+  "opportunities": [
+    {
+      "id": "ke_001",
+      "title": "Jua Kali Artisan — Metal / Electronics Fabrication",
+      "type": "self_employment",
+      "type_label": "Self-Employment",
+      "isco_groups": [7],
+      "required_dimensions": {
+        "fault_diagnosis": 2,
+        "process_quality": 1,
+        "resource_judgment": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 18000,
+        "wage_ceiling_monthly": 38000,
+        "currency": "KES",
+        "employer_demand_pct": 69,
+        "sector_growth_pct": 3.1,
+        "sector_label": "Jua Kali Manufacturing & Repair"
+      },
+      "honest_description": "Kenya's Jua Kali sector is a recognised and growing informal manufacturing ecosystem — Nairobi's Industrial Area and Kamukunji market are established hubs. Artisans with verified technical skills command premium rates. The sector is increasingly formalising through county government registration.",
+      "bridge": {
+        "ready_if": "Fault Diagnosis at Functional level, Process & Quality at Entry",
+        "gap_to_close": "If at Entry: apprenticeship in Jua Kali cluster is the recognised pathway — typically 6-12 months",
+        "training_option": "Kenya Industrial Training Institute (KITI) — trade test certification available"
+      },
+      "tags": ["technical", "fabrication", "formalising", "hub-based"]
+    },
+    {
+      "id": "ke_002",
+      "title": "M-PESA / Mobile Money Agent",
+      "type": "self_employment",
+      "type_label": "Self-Employment",
+      "isco_groups": [5],
+      "required_dimensions": {
+        "communication": 1,
+        "resource_judgment": 2,
+        "process_quality": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 15000,
+        "wage_ceiling_monthly": 45000,
+        "currency": "KES",
+        "employer_demand_pct": 88,
+        "sector_growth_pct": 14.2,
+        "sector_label": "Digital Financial Services"
+      },
+      "honest_description": "Kenya leads Africa in mobile money penetration — M-PESA agents are embedded in every urban and peri-urban neighbourhood. Float capital is the primary barrier (est. KES 20,000-50,000 working capital). Commission-based earnings are consistent. Safaricom agent registration is the pathway.",
+      "bridge": {
+        "ready_if": "Resource Judgment at Functional level — float management is the core competency",
+        "gap_to_close": "Float capital access is the real barrier, not skill. Saccos and microfinance can bridge this.",
+        "training_option": "Safaricom M-PESA agent onboarding — free, 2-day programme"
+      },
+      "tags": ["digital", "financial", "high-growth", "capital-required"]
+    },
+    {
+      "id": "ke_003",
+      "title": "Agricultural Value Chain Worker / Aggregator",
+      "type": "informal_employment",
+      "type_label": "Informal Employment",
+      "isco_groups": [6, 9],
+      "required_dimensions": {
+        "resource_judgment": 1,
+        "operational_organization": 1,
+        "communication": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 12000,
+        "wage_ceiling_monthly": 28000,
+        "currency": "KES",
+        "employer_demand_pct": 62,
+        "sector_growth_pct": 2.6,
+        "sector_label": "Agriculture & Food Value Chain"
+      },
+      "honest_description": "Kenya's agriculture sector is evolving from subsistence to value chain participation — aggregating produce, quality sorting, and logistics coordination are growing roles. NGO-backed programmes like Twiga Foods and Apollo Agriculture actively recruit rural youth with organisational skills.",
+      "bridge": {
+        "ready_if": "Resource Judgment and Operational Organization at any level",
+        "gap_to_close": "Programme-specific onboarding provided — no prior agricultural experience required for coordination roles",
+        "training_option": "Kenya Agricultural and Livestock Research Organization (KALRO) — value chain training available"
+      },
+      "tags": ["agricultural", "value-chain", "rural-urban", "NGO-backed"]
+    },
+    {
+      "id": "ke_004",
+      "title": "Bodaboda Operator / Last-Mile Logistics",
+      "type": "gig",
+      "type_label": "Gig / Platform Work",
+      "isco_groups": [8],
+      "required_dimensions": {
+        "operational_organization": 1,
+        "communication": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 16000,
+        "wage_ceiling_monthly": 35000,
+        "currency": "KES",
+        "employer_demand_pct": 76,
+        "sector_growth_pct": 8.4,
+        "sector_label": "Transport & Last-Mile Logistics"
+      },
+      "honest_description": "Bodaboda remains one of the most accessible entry points into Kenya's urban economy. Platform integration via Uber, Bolt, and local apps is growing rapidly. Bike ownership or hire-purchase is the main barrier. Sacco membership provides access to credit for bike acquisition.",
+      "bridge": {
+        "ready_if": "Operational Organization and Communication at any level, valid driving licence",
+        "gap_to_close": "Motorcycle licence is the primary requirement — available in 2-3 weeks",
+        "training_option": "NTSA-accredited riding school — est. KES 5,000-8,000"
+      },
+      "tags": ["transport", "platform-based", "growing", "licence-required"]
+    },
+    {
+      "id": "ke_005",
+      "title": "Kenya Industrial Training Institute (KITI) Certificate",
+      "type": "training_pathway",
+      "type_label": "Training Pathway",
+      "isco_groups": [7, 8],
+      "required_dimensions": {
+        "fault_diagnosis": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": null,
+        "wage_ceiling_monthly": null,
+        "currency": "KES",
+        "employer_demand_pct": 69,
+        "sector_growth_pct": 3.1,
+        "sector_label": "Technical Trades",
+        "post_training_wage_floor": 22000,
+        "training_duration_months": 12,
+        "training_cost_kes": 15000
+      },
+      "honest_description": "KITI trade test certificates are nationally and regionally recognised — East African Community mutual recognition means your credential is portable across Kenya, Uganda, Tanzania, and Rwanda. Qualifying opens formal employment pathways and significantly raises your earning floor.",
+      "bridge": {
+        "ready_if": "Any skill level — this is a development pathway",
+        "gap_to_close": "No formal prerequisite. UNMAPPED Skills Card accepted as evidence of prior learning at participating centres.",
+        "training_option": "KITI Kenya — kiti.go.ke. Bursaries available for youth under 30."
+      },
+      "tags": ["credential", "EAC-portable", "formal-pathway", "bursary-available"]
+    },
+    {
+      "id": "ke_006",
+      "title": "Community Health Promoter / Social Services Worker",
+      "type": "informal_employment",
+      "type_label": "Informal Employment",
+      "isco_groups": [5, 3],
+      "required_dimensions": {
+        "communication": 2,
+        "process_quality": 1,
+        "operational_organization": 1
+      },
+      "econometric_signals": {
+        "wage_floor_monthly": 14000,
+        "wage_ceiling_monthly": 25000,
+        "currency": "KES",
+        "employer_demand_pct": 64,
+        "sector_growth_pct": 5.2,
+        "sector_label": "Health & Community Services"
+      },
+      "honest_description": "Kenya's community health volunteer and promoter network is expanding under the government's Universal Health Coverage agenda. NGOs including Amref, PATH, and county health departments actively recruit. Roles require strong communication and process-following but no medical background.",
+      "bridge": {
+        "ready_if": "Communication at Functional level, Process & Quality at Entry",
+        "gap_to_close": "If Communication is at Entry: structured community outreach volunteer experience (3-6 months) bridges the gap",
+        "training_option": "Ministry of Health Community Health Promoter Training — free, county-administered"
+      },
+      "tags": ["community", "health", "government-backed", "growing"]
+    }
+  ]
+}
