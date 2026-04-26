@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UNMAPPED — Skill Card Verification</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 60px;
+    }
+
+    /* Header bar */
+    .top-bar {
+      width: 100%;
+      max-width: 560px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    .logo { font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #6366f1; }
+    .employer-label {
+      font-size: 11px; color: #475569;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 4px 10px;
+    }
+
+    /* Card */
+    .card {
+      width: 100%;
+      max-width: 560px;
+      background: #1e293b;
+      border: 1px solid #6366f1;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    /* Card header */
+    .card-header {
+      background: #312e81;
+      padding: 22px 26px;
+    }
+    .card-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .card-label {
+      font-size: 9px; color: #a5b4fc;
+      font-weight: 700; letter-spacing: 2px; margin-bottom: 8px;
+    }
+    .card-occupation {
+      font-size: 21px; font-weight: 800; color: #f1f5f9; line-height: 1.2;
+    }
+    .card-isco { font-size: 12px; color: #818cf8; margin-top: 5px; }
+    .card-score-wrap { text-align: right; }
+    .card-score { font-size: 40px; font-weight: 900; color: #fff; line-height: 1; }
+    .card-score-label { font-size: 9px; color: #a5b4fc; margin-top: 3px; }
+
+    /* Verified strip */
+    .verified-strip {
+      background: #052e16;
+      border-top: 1px solid #166534;
+      border-bottom: 2px solid #16a34a;
+      padding: 10px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .verified-left { display: flex; align-items: center; gap: 10px; }
+    .check-circle {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: #16a34a;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .verified-text { font-size: 13px; font-weight: 800; color: #4ade80; }
+    .verified-sub  { font-size: 10px; color: #166534; margin-top: 1px; }
+    .verified-id   { font-size: 10px; color: #4ade80; font-family: monospace; text-align: right; }
+    .verified-id-label { font-size: 9px; color: #166534; margin-bottom: 2px; text-align: right; font-weight: 700; letter-spacing: 1px; }
+
+    /* Sections */
+    .section {
+      padding: 16px 26px;
+      border-bottom: 1px solid #334155;
+    }
+    .section:last-child { border-bottom: none; }
+    .section-label {
+      font-size: 9px; font-weight: 700; color: #475569;
+      letter-spacing: 1.5px; margin-bottom: 12px;
+    }
+
+    /* Dimension rows */
+    .dim-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid #0f172a;
+    }
+    .dim-row:last-child { border-bottom: none; }
+    .dim-name { font-size: 13px; color: #cbd5e1; }
+    .dim-right { display: flex; align-items: center; gap: 10px; }
+    .dim-score { font-size: 12px; color: #64748b; min-width: 40px; text-align: right; }
+    .bar-track { width: 80px; height: 5px; background: #0f172a; border-radius: 3px; }
+    .bar-fill  { height: 5px; border-radius: 3px; }
+    .tier-badge {
+      font-size: 10px; font-weight: 700;
+      padding: 3px 9px; border-radius: 3px;
+      min-width: 72px; text-align: center;
+    }
+
+    /* Employer signal */
+    .signal-box {
+      background: #0f172a;
+      border-left: 3px solid #6366f1;
+      padding: 12px 14px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #cbd5e1;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* Tags */
+    .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag {
+      font-size: 10px;
+      padding: 3px 9px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      color: #475569;
+    }
+
+    /* Footer meta */
+    .card-footer {
+      background: #0f172a;
+      padding: 14px 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-taxonomy { font-size: 10px; color: #334155; line-height: 1.6; }
+    .footer-issuer   { font-size: 10px; color: #334155; text-align: right; }
+
+    /* Action buttons */
+    .actions {
+      width: 100%;
+      max-width: 560px;
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .btn-print {
+      flex: 1;
+      padding: 12px;
+      background: transparent;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn-print:hover { border-color: #475569; }
+
+    /* Not found */
+    .not-found {
+      text-align: center;
+      padding: 60px 20px;
+      max-width: 400px;
+    }
+    .not-found h2 { font-size: 20px; color: #f1f5f9; margin-bottom: 10px; }
+    .not-found p  { font-size: 14px; color: #64748b; line-height: 1.6; }
+    .not-found .id-shown { font-family: monospace; color: #475569; font-size: 12px; margin-top: 12px; }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6366f1;
+    }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid #1e293b;
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media print {
+      body { background: white; padding: 20px; }
+      .top-bar, .actions { display: none; }
+      .card { border-color: #000; max-width: 100%; }
+      .card-header { background: #1a1060; }
+      .verified-strip { border-bottom-color: #15803d; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="logo">UNMAPPED</div>
+  <div class="employer-label">Employer Verification Portal</div>
+</div>
+
+<div id="content">
+  <div class="loading">
+    <div class="spinner"></div>
+    <p style="color:#64748b; font-size:14px;">Verifying skill card...</p>
+  </div>
+</div>
+
+<script>
+  const API = '';
+
+  function scoreColor(s) {
+    if (s >= 70) return '#4ade80';
+    if (s >= 45) return '#fbbf24';
+    return '#f87171';
+  }
+
+  function formatDate(iso) {
+    try {
+      const d = new Date(iso + (iso.includes('Z') ? '' : 'Z'));
+      return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
+             ' · ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' UTC';
+    } catch { return iso; }
+  }
+
+  function renderCard(p) {
+    const sc = scoreColor(p.overall_score);
+    const dims = (p.dimensions || []).map(d => {
+      const dc = scoreColor(d.score);
+      const tc = d.tier_color || dc;
+      return `
+        <div class="dim-row">
+          <div class="dim-name">${d.label}</div>
+          <div class="dim-right">
+            <div class="dim-score">${d.score}/100</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${d.score}%; background:${dc};"></div>
+            </div>
+            <div class="tier-badge" style="background:${tc}22; color:${tc}; border:1px solid ${tc}44;">
+              ${d.tier_label}
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    const tags = (p.transferable_to || []).map(t =>
+      `<span class="tag">${t}</span>`
+    ).join('');
+
+    document.getElementById('content').innerHTML = `
+      <div class="card">
+
+        <!-- Header -->
+        <div class="card-header">
+          <div class="card-label">UNMAPPED SKILLS CARD</div>
+          <div class="card-header-top">
+            <div>
+              <div class="card-occupation">${p.occupation_title}</div>
+              <div class="card-isco">ISCO-08 · ${p.isco_code} · ${p.region}</div>
+            </div>
+            <div class="card-score-wrap">
+              <div class="card-score" style="color:${sc};">${p.overall_score}</div>
+              <div class="card-score-label">OVERALL</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verified strip -->
+        <div class="verified-strip">
+          <div class="verified-left">
+            <div class="check-circle">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <path d="M2 6.5L5 9.5L11 3.5" stroke="white" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="verified-text">UNMAPPED VERIFIED</div>
+              <div class="verified-sub">Assessed ${formatDate(p.verified_at)}</div>
+            </div>
+          </div>
+          <div>
+            <div class="verified-id-label">PROFILE ID</div>
+            <div class="verified-id">${p.profile_id}</div>
+          </div>
+        </div>
+
+        <!-- Skill Dimensions -->
+        <div class="section">
+          <div class="section-label">SKILL DIMENSIONS</div>
+          ${dims || '<div style="color:#475569; font-size:13px;">No dimension data available.</div>'}
+        </div>
+
+        <!-- Employer signal -->
+        ${p.employer_signal ? `
+        <div class="section">
+          <div class="section-label">EMPLOYER SIGNAL</div>
+          <div class="signal-box">${p.employer_signal}</div>
+        </div>` : ''}
+
+        <!-- Portability -->
+        ${tags ? `
+        <div class="section">
+          <div class="section-label">TRANSFERABLE TO</div>
+          <div class="tag-row">${tags}</div>
+        </div>` : ''}
+
+        <!-- Footer -->
+        <div class="card-footer">
+          <div class="footer-taxonomy">
+            Taxonomy: ${p.taxonomy}<br>
+            Issued by: ${p.issued_by}
+          </div>
+          <div class="footer-issuer">
+            Verify at:<br>
+            unmapped.io/verify/${p.profile_id}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="actions">
+        <button class="btn-print" onclick="window.print()">Print / Save PDF</button>
+      </div>
+
+      <div style="margin-top:16px; font-size:11px; color:#334155; text-align:center; max-width:560px;">
+        This card was generated by a live, adaptive skills assessment. The score reflects
+        demonstrated performance across standardised work tasks — not self-reported claims.
+        Profile ID <span style="font-family:monospace;">${p.profile_id}</span> is the unique
+        verification reference for this assessment.
+      </div>`;
+  }
+
+  function renderNotFound(profileId) {
+    document.getElementById('content').innerHTML = `
+      <div class="not-found">
+        <div style="font-size:40px; margin-bottom:16px;">🔍</div>
+        <h2>Profile not found</h2>
+        <p>This profile ID doesn't match any completed assessment in our system.
+           Check that the ID is correct and that the assessment was fully completed.</p>
+        <div class="id-shown">Searched for: ${profileId}</div>
+        <a href="/" style="display:inline-block; margin-top:24px; color:#6366f1; font-size:13px;">
+          ← Worker Assessment Portal
+        </a>
+      </div>`;
+  }
+
+  async function load() {
+    // Extract profile_id from URL path: /card/UNM-GHA-7421-...
+    const parts = window.location.pathname.split('/');
+    const profileId = parts[parts.length - 1];
+
+    if (!profileId) { renderNotFound('(none)'); return; }
+
+    try {
+      const res = await fetch(`${API}/verify/${profileId}`);
+      if (res.status === 404) { renderNotFound(profileId); return; }
+      if (!res.ok) throw new Error('Server error');
+      const data = await res.json();
+      renderCard(data);
+    } catch(e) {
+      document.getElementById('content').innerHTML = `
+        <div class="not-found">
+          <h2>Verification unavailable</h2>
+          <p>Could not connect to the verification service. Please try again in a moment.</p>
+        </div>`;
+    }
+  }
+
+  load();
+</script>
+</body>
+</html>

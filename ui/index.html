@@ -602,6 +602,9 @@
 
     <div style="display:flex; flex-direction:column; gap:10px; margin-top:4px;">
       <button class="btn" id="oppBtn" onclick="goToOpportunities()">See Your Matched Opportunities →</button>
+      <button class="btn" id="shareCardBtn" onclick="shareCard()" style="background:transparent; border:1px solid #6366f1; color:#a5b4fc; display:none;">
+        Share Verified Card 🔗
+      </button>
       <button class="btn" onclick="resetApp()" style="background:transparent; border:1px solid #334155; color:#64748b;">Start New Assessment</button>
     </div>
   </div>
@@ -897,12 +900,39 @@
     // Profile ID
     document.getElementById('cardProfileId').textContent = `Profile ID: ${profile.profile_id || ''}`;
 
+    // Show share button now that profile_id is available
+    if (profile.profile_id) {
+      state.profileId = profile.profile_id;
+      document.getElementById('shareCardBtn').style.display = 'block';
+    }
+
     // Verified banner
     const now = new Date();
     const verifiedAt = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
       ' · ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' UTC';
     document.getElementById('verifiedTimestamp').textContent = `Assessed & verified ${verifiedAt}`;
     document.getElementById('verifiedProfileId').textContent = profile.profile_id || '';
+  }
+
+  function shareCard() {
+    if (!state.profileId) return;
+    const url = `${window.location.origin}/card/${state.profileId}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(() => {
+        const btn = document.getElementById('shareCardBtn');
+        const original = btn.textContent;
+        btn.textContent = '✓ Link copied!';
+        btn.style.borderColor = '#4ade80';
+        btn.style.color = '#4ade80';
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.style.borderColor = '#6366f1';
+          btn.style.color = '#a5b4fc';
+        }, 2500);
+      });
+    } else {
+      window.open(`/card/${state.profileId}`, '_blank');
+    }
   }
 
   async function goToOpportunities() {

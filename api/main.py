@@ -40,7 +40,8 @@ from pipelines.p1_classifier import classify_occupation
 from pipelines.p2_dwa_retriever import retrieve_dwas
 from pipelines.p3_dimension_mapper import map_dimensions
 from pipelines.p4_challenge_generator import generate_challenge, evaluate_answer
-from pipelines.p5_difficulty import create_session, get_session, record_answer
+from pipelines.p5_difficulty import create_session, get_session, record_answer, persist_session
+from database.db import save_profile, get_profile as db_get_profile, profile_exists
 from pipelines.p6_localiser import generate_profile
 from pipelines.p7_opportunity_matcher import match_opportunities
 
@@ -151,11 +152,12 @@ def start_assessment(req: StartRequest):
     )
 
     # Store dimension plan, config, and user context in session
-    session._dimension_plan = dimension_result["dimension_plan"]
-    session._config = config
-    session._education_level = req.education_level
+    session._dimension_plan   = dimension_result["dimension_plan"]
+    session._config           = config
+    session._education_level  = req.education_level
     session._experience_years = req.experience_years
-    session._other_skills = req.other_skills
+    session._other_skills     = req.other_skills
+    persist_session(session_id)   # flush dynamic attrs to SQLite
 
     # P4: Generate first challenge
     first_dim_id = session.current_dimension()
@@ -273,6 +275,21 @@ def get_profile(session_id: str):
     # Store profile ID on session so worker registry can surface it
     if profile.get("profile_id"):
         session._profile_id = profile["profile_id"]
+        persist_session(session_id)   # flush profile_id to SQLite
+
+    # Persist profile permanently for employer verification lookup
+    from pipelines.p7_opportunity_matcher import _compute_overall_score
+    overall_score = _compute_overall_score(session.dimension_results)
+    if profile.get("profile_id"):
+        save_profile(
+            profile_id      = profile["profile_id"],
+            session_id      = session_id,
+            region_id       = session.region_id,
+            occupation_title= session.occupation_title,
+            isco_code       = session.isco_code,
+            overall_score   = overall_score,
+            profile_data    = profile
+        )
 
     return {
         "session_id": session_id,
@@ -505,6 +522,64 @@ def get_worker_registry(
         "available_dimensions": all_dims,
         "workers": workers
     }
+
+
+@app.get("/verify/{profile_id}")
+def verify_profile(profile_id: str):
+    """
+    Public employer verification endpoint.
+    Returns a sanitised skill card — no PII, no session data.
+    An employer pastes the profile ID and gets back verifiable facts.
+    """
+    record = db_get_profile(profile_id)
+    if not record:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Profile '{profile_id}' not found. The ID may be incorrect or the assessment was not completed."
+        )
+
+    profile_data = record["data"]
+
+    # Sanitised response — only what an employer needs to see
+    TIER_LABELS = {0: "Not assessed", 1: "Entry", 2: "Functional", 3: "Mastery"}
+    TIER_COLORS = {0: "#334155",      1: "#64748b", 2: "#3b82f6",   3: "#22c55e"}
+
+    dimensions = []
+    for dim in profile_data.get("dimension_summary", []):
+        dimensions.append({
+            "id":         dim.get("id", ""),
+            "label":      dim.get("label", ""),
+            "score":      dim.get("score", 0),
+            "tier":       dim.get("tier", 0),
+            "tier_label": dim.get("tier_label", TIER_LABELS.get(dim.get("tier", 0))),
+            "tier_color": TIER_COLORS.get(dim.get("tier", 0), "#334155")
+        })
+
+    return {
+        "verified":         True,
+        "profile_id":       profile_id,
+        "issued_by":        "UNMAPPED Skills Verification System",
+        "taxonomy":         "ISCO-08 · O*NET 28.0 · ESCO v1.2.1",
+        "verified_at":      record["created_at"],
+        "occupation_title": record["occupation_title"],
+        "isco_code":        record["isco_code"],
+        "region":           profile_data.get("region", record["region_id"]),
+        "overall_score":    record["overall_score"],
+        "employer_signal":  profile_data.get("employer_signal", ""),
+        "dimensions":       dimensions,
+        # Portability metadata
+        "transferable_to":  profile_data.get("skills_card", {})
+                                        .get("portability", {})
+                                        .get("transferable_to", [])
+    }
+
+
+@app.get("/card/{profile_id}")
+def serve_card(profile_id: str):
+    """Serve the shareable verification card page for a given profile ID."""
+    if not profile_exists(profile_id):
+        raise HTTPException(status_code=404, detail="Profile not found.")
+    return FileResponse(UI_DIR / "verify.html")
 
 
 # Serve the UI
