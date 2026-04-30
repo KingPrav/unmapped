@@ -4,222 +4,277 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UNMAPPED — Skill Card Verification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:           #07080f;
+      --s1:           #0c0e1a;
+      --s2:           #101221;
+      --s3:           #161829;
+      --border:       #1a1d2e;
+      --border-hi:    #252840;
+      --primary:      #6f63ff;
+      --primary-dim:  #3d3799;
+      --primary-glow: rgba(111,99,255,.12);
+      --green:        #10d9a0;
+      --green-bg:     rgba(16,217,160,.08);
+      --amber:        #f5a623;
+      --amber-bg:     rgba(245,166,35,.08);
+      --red:          #ff5f6e;
+      --red-bg:       rgba(255,95,110,.08);
+      --blue:         #4d9eff;
+      --t1:           #eef0f8;
+      --t2:           #7b85a8;
+      --t3:           #3a3f58;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #0f172a;
-      color: #e2e8f0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--t1);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px 60px;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Header bar */
-    .top-bar {
-      width: 100%;
-      max-width: 560px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 32px;
+    /* ─── HEADER ────────────────────────────────────── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(7,8,15,.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .logo { font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #6366f1; }
-    .employer-label {
-      font-size: 11px; color: #475569;
-      border: 1px solid #334155;
-      border-radius: 4px;
-      padding: 4px 10px;
+    .logo {
+      font-size: 15px; font-weight: 900;
+      letter-spacing: 4px; color: var(--primary);
+      text-decoration: none;
+    }
+    .portal-badge {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 1.5px; color: var(--t2);
+      border: 1px solid var(--border-hi);
+      border-radius: 20px;
+      padding: 4px 12px;
+      text-transform: uppercase;
     }
 
-    /* Card */
+    /* ─── PAGE LAYOUT ───────────────────────────────── */
+    .page {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    /* ─── LOADING / NOT FOUND ───────────────────────── */
+    .state-center {
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--s3);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .state-title { font-size: 18px; font-weight: 700; color: var(--t1); margin-bottom: 8px; }
+    .state-sub   { font-size: 14px; color: var(--t2); line-height: 1.6; }
+    .state-id    { font-family: monospace; font-size: 12px; color: var(--t3); margin-top: 10px; }
+    .back-link {
+      display: inline-block; margin-top: 24px;
+      font-size: 13px; color: var(--primary);
+      text-decoration: none;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    /* ─── CARD ──────────────────────────────────────── */
     .card {
-      width: 100%;
-      max-width: 560px;
-      background: #1e293b;
-      border: 1px solid #6366f1;
-      border-radius: 14px;
+      background: var(--s1);
+      border: 1px solid var(--border-hi);
+      border-radius: 16px;
       overflow: hidden;
     }
 
     /* Card header */
     .card-header {
-      background: #312e81;
-      padding: 22px 26px;
+      background: linear-gradient(135deg, #1a1540 0%, #0f0d2a 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 28px 28px 24px;
     }
-    .card-header-top {
+    .card-eyebrow {
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 2.5px; color: var(--primary);
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+    .card-header-row {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-    }
-    .card-label {
-      font-size: 9px; color: #a5b4fc;
-      font-weight: 700; letter-spacing: 2px; margin-bottom: 8px;
+      gap: 16px;
     }
     .card-occupation {
-      font-size: 21px; font-weight: 800; color: #f1f5f9; line-height: 1.2;
+      font-size: 22px; font-weight: 800;
+      color: var(--t1); line-height: 1.2;
     }
-    .card-isco { font-size: 12px; color: #818cf8; margin-top: 5px; }
-    .card-score-wrap { text-align: right; }
-    .card-score { font-size: 40px; font-weight: 900; color: #fff; line-height: 1; }
-    .card-score-label { font-size: 9px; color: #a5b4fc; margin-top: 3px; }
+    .card-isco {
+      font-size: 12px; color: var(--t2);
+      margin-top: 6px; font-weight: 500;
+    }
+    .score-bubble {
+      flex-shrink: 0;
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      border: 3px solid var(--primary-dim);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: rgba(111,99,255,.1);
+    }
+    .score-num   { font-size: 26px; font-weight: 900; line-height: 1; }
+    .score-label { font-size: 8px; font-weight: 700; letter-spacing: 1px; color: var(--t2); margin-top: 2px; }
 
     /* Verified strip */
     .verified-strip {
-      background: #052e16;
-      border-top: 1px solid #166534;
-      border-bottom: 2px solid #16a34a;
-      padding: 10px 26px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: rgba(16,217,160,.06);
+      border-bottom: 1px solid rgba(16,217,160,.15);
+      padding: 12px 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
     }
     .verified-left { display: flex; align-items: center; gap: 10px; }
     .check-circle {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: #16a34a;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--green);
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-    .verified-text { font-size: 13px; font-weight: 800; color: #4ade80; }
-    .verified-sub  { font-size: 10px; color: #166534; margin-top: 1px; }
-    .verified-id   { font-size: 10px; color: #4ade80; font-family: monospace; text-align: right; }
-    .verified-id-label { font-size: 9px; color: #166534; margin-bottom: 2px; text-align: right; font-weight: 700; letter-spacing: 1px; }
+    .verified-text { font-size: 12px; font-weight: 800; color: var(--green); letter-spacing: .5px; }
+    .verified-sub  { font-size: 10px; color: rgba(16,217,160,.5); margin-top: 2px; }
+    .profile-id-wrap { text-align: right; }
+    .profile-id-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--t3); margin-bottom: 3px; }
+    .profile-id-val   { font-size: 11px; font-family: monospace; color: var(--green); }
 
     /* Sections */
     .section {
-      padding: 16px 26px;
-      border-bottom: 1px solid #334155;
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
     }
-    .section:last-child { border-bottom: none; }
+    .section:last-of-type { border-bottom: none; }
     .section-label {
-      font-size: 9px; font-weight: 700; color: #475569;
-      letter-spacing: 1.5px; margin-bottom: 12px;
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 2px; color: var(--t3);
+      text-transform: uppercase; margin-bottom: 14px;
     }
 
     /* Dimension rows */
     .dim-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 9px 0;
-      border-bottom: 1px solid #0f172a;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
     }
     .dim-row:last-child { border-bottom: none; }
-    .dim-name { font-size: 13px; color: #cbd5e1; }
-    .dim-right { display: flex; align-items: center; gap: 10px; }
-    .dim-score { font-size: 12px; color: #64748b; min-width: 40px; text-align: right; }
-    .bar-track { width: 80px; height: 5px; background: #0f172a; border-radius: 3px; }
-    .bar-fill  { height: 5px; border-radius: 3px; }
-    .tier-badge {
+    .dim-name  { font-size: 13px; font-weight: 500; color: var(--t1); flex: 1; }
+    .dim-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .dim-score { font-size: 12px; color: var(--t2); min-width: 42px; text-align: right; }
+    .bar-track { width: 72px; height: 4px; background: var(--s3); border-radius: 2px; }
+    .bar-fill  { height: 4px; border-radius: 2px; transition: width .4s ease; }
+    .tier-pill {
       font-size: 10px; font-weight: 700;
-      padding: 3px 9px; border-radius: 3px;
-      min-width: 72px; text-align: center;
+      padding: 3px 10px; border-radius: 20px;
+      min-width: 74px; text-align: center;
     }
 
     /* Employer signal */
     .signal-box {
-      background: #0f172a;
-      border-left: 3px solid #6366f1;
-      padding: 12px 14px;
-      border-radius: 4px;
-      font-size: 13px;
-      color: #cbd5e1;
-      font-style: italic;
-      line-height: 1.6;
+      background: var(--s2);
+      border-left: 3px solid var(--primary);
+      border-radius: 6px;
+      padding: 14px 16px;
+      font-size: 13px; font-style: italic;
+      color: var(--t1); line-height: 1.65;
     }
 
-    /* Tags */
+    /* Transferable tags */
     .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
     .tag {
-      font-size: 10px;
-      padding: 3px 9px;
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 4px;
-      color: #475569;
+      font-size: 10px; font-weight: 600;
+      padding: 4px 11px;
+      background: var(--s2);
+      border: 1px solid var(--border-hi);
+      border-radius: 20px;
+      color: var(--t2);
     }
 
-    /* Footer meta */
+    /* Card footer */
     .card-footer {
-      background: #0f172a;
-      padding: 14px 26px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background: var(--s2);
+      border-top: 1px solid var(--border);
+      padding: 14px 28px;
+      display: flex; justify-content: space-between; align-items: center;
     }
-    .footer-taxonomy { font-size: 10px; color: #334155; line-height: 1.6; }
-    .footer-issuer   { font-size: 10px; color: #334155; text-align: right; }
+    .footer-meta  { font-size: 10px; color: var(--t3); line-height: 1.7; }
+    .footer-right { font-size: 10px; color: var(--t3); text-align: right; line-height: 1.7; }
 
-    /* Action buttons */
+    /* Actions */
     .actions {
-      width: 100%;
-      max-width: 560px;
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
+      margin-top: 16px;
+      display: flex; gap: 10px;
     }
     .btn-print {
       flex: 1;
-      padding: 12px;
-      background: transparent;
-      border: 1px solid #334155;
-      color: #94a3b8;
-      border-radius: 8px;
-      font-size: 14px;
+      padding: 12px 20px;
+      background: var(--s1);
+      border: 1px solid var(--border-hi);
+      color: var(--t2);
+      border-radius: 10px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 13px; font-weight: 600;
       cursor: pointer;
+      transition: border-color .15s, color .15s;
     }
-    .btn-print:hover { border-color: #475569; }
+    .btn-print:hover { border-color: var(--primary); color: var(--t1); }
 
-    /* Not found */
-    .not-found {
-      text-align: center;
-      padding: 60px 20px;
-      max-width: 400px;
+    /* Disclaimer */
+    .disclaimer {
+      margin-top: 20px;
+      font-size: 11px; color: var(--t3);
+      text-align: center; line-height: 1.7;
     }
-    .not-found h2 { font-size: 20px; color: #f1f5f9; margin-bottom: 10px; }
-    .not-found p  { font-size: 14px; color: #64748b; line-height: 1.6; }
-    .not-found .id-shown { font-family: monospace; color: #475569; font-size: 12px; margin-top: 12px; }
 
-    /* Loading */
-    .loading {
-      text-align: center;
-      padding: 60px 20px;
-      color: #6366f1;
-    }
-    .spinner {
-      width: 32px; height: 32px;
-      border: 3px solid #1e293b;
-      border-top-color: #6366f1;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
+    /* ─── PRINT ─────────────────────────────────────── */
     @media print {
-      body { background: white; padding: 20px; }
-      .top-bar, .actions { display: none; }
-      .card { border-color: #000; max-width: 100%; }
+      body { background: white; }
+      header, .actions, .disclaimer { display: none; }
+      .card { border-color: #ddd; max-width: 100%; }
       .card-header { background: #1a1060; }
-      .verified-strip { border-bottom-color: #15803d; }
+      .verified-strip { background: #f0fdf4; border-color: #bbf7d0; }
+      .section { border-color: #e2e8f0; }
+      .dim-row { border-color: #f1f5f9; }
     }
   </style>
 </head>
 <body>
 
-<div class="top-bar">
-  <div class="logo">UNMAPPED</div>
-  <div class="employer-label">Employer Verification Portal</div>
-</div>
+<header>
+  <a class="logo" href="/">UNMAPPED</a>
+  <div class="portal-badge">Employer Verification</div>
+</header>
 
-<div id="content">
-  <div class="loading">
-    <div class="spinner"></div>
-    <p style="color:#64748b; font-size:14px;">Verifying skill card...</p>
+<div class="page">
+  <div id="content">
+    <div class="state-center">
+      <div class="spinner"></div>
+      <div class="state-sub">Verifying skill card...</div>
+    </div>
   </div>
 </div>
 
@@ -227,24 +282,33 @@
   const API = '';
 
   function scoreColor(s) {
-    if (s >= 70) return '#4ade80';
-    if (s >= 45) return '#fbbf24';
-    return '#f87171';
+    if (s >= 70) return 'var(--green)';
+    if (s >= 45) return 'var(--amber)';
+    return 'var(--red)';
+  }
+
+  function scoreHex(s) {
+    if (s >= 70) return '#10d9a0';
+    if (s >= 45) return '#f5a623';
+    return '#ff5f6e';
   }
 
   function formatDate(iso) {
+    if (!iso) return '—';
     try {
       const d = new Date(iso + (iso.includes('Z') ? '' : 'Z'));
-      return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
-             ' · ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' UTC';
+      return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+           + ' · ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' UTC';
     } catch { return iso; }
   }
 
   function renderCard(p) {
-    const sc = scoreColor(p.overall_score);
+    const sc     = scoreColor(p.overall_score);
+    const scHex  = scoreHex(p.overall_score);
+
     const dims = (p.dimensions || []).map(d => {
-      const dc = scoreColor(d.score);
-      const tc = d.tier_color || dc;
+      const dc  = scoreHex(d.score);
+      const tc  = d.tier_color || dc;
       return `
         <div class="dim-row">
           <div class="dim-name">${d.label}</div>
@@ -253,7 +317,7 @@
             <div class="bar-track">
               <div class="bar-fill" style="width:${d.score}%; background:${dc};"></div>
             </div>
-            <div class="tier-badge" style="background:${tc}22; color:${tc}; border:1px solid ${tc}44;">
+            <div class="tier-pill" style="background:${tc}18; color:${tc}; border:1px solid ${tc}35;">
               ${d.tier_label}
             </div>
           </div>
@@ -269,15 +333,15 @@
 
         <!-- Header -->
         <div class="card-header">
-          <div class="card-label">UNMAPPED SKILLS CARD</div>
-          <div class="card-header-top">
+          <div class="card-eyebrow">UNMAPPED · Verified Skills Card</div>
+          <div class="card-header-row">
             <div>
               <div class="card-occupation">${p.occupation_title}</div>
-              <div class="card-isco">ISCO-08 · ${p.isco_code} · ${p.region}</div>
+              <div class="card-isco">ISCO-08 ${p.isco_code} &nbsp;·&nbsp; ${p.region}</div>
             </div>
-            <div class="card-score-wrap">
-              <div class="card-score" style="color:${sc};">${p.overall_score}</div>
-              <div class="card-score-label">OVERALL</div>
+            <div class="score-bubble" style="border-color:${scHex}55; background:${scHex}12;">
+              <div class="score-num" style="color:${scHex};">${p.overall_score}</div>
+              <div class="score-label">OVERALL</div>
             </div>
           </div>
         </div>
@@ -287,7 +351,7 @@
           <div class="verified-left">
             <div class="check-circle">
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M2 6.5L5 9.5L11 3.5" stroke="white" stroke-width="2"
+                <path d="M2 6.5L5 9.5L11 3.5" stroke="#07080f" stroke-width="2.2"
                       stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
@@ -296,75 +360,74 @@
               <div class="verified-sub">Assessed ${formatDate(p.verified_at)}</div>
             </div>
           </div>
-          <div>
-            <div class="verified-id-label">PROFILE ID</div>
-            <div class="verified-id">${p.profile_id}</div>
+          <div class="profile-id-wrap">
+            <div class="profile-id-label">PROFILE ID</div>
+            <div class="profile-id-val">${p.profile_id}</div>
           </div>
         </div>
 
         <!-- Skill Dimensions -->
         <div class="section">
-          <div class="section-label">SKILL DIMENSIONS</div>
-          ${dims || '<div style="color:#475569; font-size:13px;">No dimension data available.</div>'}
+          <div class="section-label">Skill Dimensions</div>
+          ${dims || '<div style="color:var(--t3); font-size:13px;">No dimension data available.</div>'}
         </div>
 
-        <!-- Employer signal -->
+        <!-- Employer Signal -->
         ${p.employer_signal ? `
         <div class="section">
-          <div class="section-label">EMPLOYER SIGNAL</div>
+          <div class="section-label">Employer Signal</div>
           <div class="signal-box">${p.employer_signal}</div>
         </div>` : ''}
 
-        <!-- Portability -->
+        <!-- Transferable To -->
         ${tags ? `
         <div class="section">
-          <div class="section-label">TRANSFERABLE TO</div>
+          <div class="section-label">Transferable To</div>
           <div class="tag-row">${tags}</div>
         </div>` : ''}
 
         <!-- Footer -->
         <div class="card-footer">
-          <div class="footer-taxonomy">
-            Taxonomy: ${p.taxonomy}<br>
-            Issued by: ${p.issued_by}
+          <div class="footer-meta">
+            Taxonomy: ${p.taxonomy || 'ISCO-08 / O*NET / ESCO v1.2.1'}<br>
+            Issued by: ${p.issued_by || 'UNMAPPED Skills Infrastructure v1.0'}
           </div>
-          <div class="footer-issuer">
+          <div class="footer-right">
             Verify at:<br>
-            unmapped.io/verify/${p.profile_id}
+            unmapped.io/card/${p.profile_id}
           </div>
         </div>
 
       </div>
 
       <div class="actions">
-        <button class="btn-print" onclick="window.print()">Print / Save PDF</button>
+        <button class="btn-print" onclick="window.print()">↓ &nbsp;Print / Save as PDF</button>
       </div>
 
-      <div style="margin-top:16px; font-size:11px; color:#334155; text-align:center; max-width:560px;">
-        This card was generated by a live, adaptive skills assessment. The score reflects
-        demonstrated performance across standardised work tasks — not self-reported claims.
-        Profile ID <span style="font-family:monospace;">${p.profile_id}</span> is the unique
-        verification reference for this assessment.
+      <div class="disclaimer">
+        This card was generated by a live, adaptive skills assessment. The score reflects demonstrated
+        performance across standardised work tasks — not self-reported claims.<br>
+        <span style="font-family:monospace; color:var(--t3);">${p.profile_id}</span>
+        is the unique verification reference for this assessment.
       </div>`;
   }
 
   function renderNotFound(profileId) {
     document.getElementById('content').innerHTML = `
-      <div class="not-found">
-        <div style="font-size:40px; margin-bottom:16px;">🔍</div>
-        <h2>Profile not found</h2>
-        <p>This profile ID doesn't match any completed assessment in our system.
-           Check that the ID is correct and that the assessment was fully completed.</p>
-        <div class="id-shown">Searched for: ${profileId}</div>
-        <a href="/" style="display:inline-block; margin-top:24px; color:#6366f1; font-size:13px;">
-          ← Worker Assessment Portal
-        </a>
+      <div class="state-center">
+        <div style="font-size:36px; margin-bottom:18px;">🔍</div>
+        <div class="state-title">Profile not found</div>
+        <div class="state-sub">
+          This profile ID doesn't match any completed assessment.<br>
+          Check the ID is correct and the assessment was fully completed.
+        </div>
+        <div class="state-id">Searched: ${profileId}</div>
+        <a class="back-link" href="/">← Worker Assessment Portal</a>
       </div>`;
   }
 
   async function load() {
-    // Extract profile_id from URL path: /card/UNM-GHA-7421-...
-    const parts = window.location.pathname.split('/');
+    const parts     = window.location.pathname.split('/');
     const profileId = parts[parts.length - 1];
 
     if (!profileId) { renderNotFound('(none)'); return; }
@@ -373,13 +436,12 @@
       const res = await fetch(`${API}/verify/${profileId}`);
       if (res.status === 404) { renderNotFound(profileId); return; }
       if (!res.ok) throw new Error('Server error');
-      const data = await res.json();
-      renderCard(data);
-    } catch(e) {
+      renderCard(await res.json());
+    } catch {
       document.getElementById('content').innerHTML = `
-        <div class="not-found">
-          <h2>Verification unavailable</h2>
-          <p>Could not connect to the verification service. Please try again in a moment.</p>
+        <div class="state-center">
+          <div class="state-title">Verification unavailable</div>
+          <div class="state-sub">Could not connect to the verification service.<br>Please try again in a moment.</div>
         </div>`;
     }
   }
